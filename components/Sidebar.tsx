@@ -20,16 +20,6 @@ function SidebarNavContent({ onNavigate }: { onNavigate?: () => void }) {
       >
         Home
       </Link>
-      <Link
-        href="/setup"
-        onClick={onNavigate}
-        className={cn(
-          "uppercase hover:text-grayscale-11 transition-colors duration-200 font-semibold text-xs font-mono text-grayscale-9 px-2 py-1",
-          pathname === "/setup" ? "text-grayscale-11" : "text-grayscale-9",
-        )}
-      >
-        Setup
-      </Link>
       <div className="flex flex-col mt-8 px-2">
         <div className="flex flex-row items-center gap-2">
           <span className="text-xs font-mono text-grayscale-9 font-medium uppercase">
