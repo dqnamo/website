@@ -4,7 +4,6 @@ import { Dialog } from "@base-ui/react/dialog";
 import { ListIcon, MoonStarsIcon, XIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { useState } from "react";
-import Logo from "@/components/Logo";
 import { SidebarNavContent } from "@/components/Sidebar";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
@@ -45,9 +44,8 @@ export default function MobileHeader() {
         <Dialog.Popup className="fixed inset-y-0 left-0 z-100 flex h-dvh w-80 max-w-[calc(100vw-2rem)] flex-col gap-px border-r border-grayscale-3 bg-grayscale-1 px-4 py-4 shadow-xl outline-none md:hidden dark:border-grayscale-2">
           <div className="mb-4 flex items-center justify-between px-2">
             <Dialog.Title className="sr-only">Navigation</Dialog.Title>
-            <div className="flex items-center gap-2 font-mono text-sm font-bold uppercase text-grayscale-12">
-              <Logo />
-              Personal
+            <div className="font-pirata text-2xl font-bold text-grayscale-12">
+              dqnamo
             </div>
             <Dialog.Close
               aria-label="Close navigation"

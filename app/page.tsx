@@ -97,11 +97,14 @@ export default function Home() {
 
         <Card
           layer={0}
-          className="mt-4 grid w-full grid-cols-1 gap-1.5 rounded-xl border border-grayscale-3 bg-grayscale-2 p-1.5 sm:grid-cols-2 lg:grid-cols-3"
+          className="mt-4 grid w-full grid-cols-2 gap-1.5 rounded-xl border border-grayscale-3 bg-grayscale-2 p-1.5 lg:grid-cols-3"
         >
           <SlotCard />
           <SlotCard />
-          <SlotCard available />
+          <SlotCard
+            available
+            className="col-span-2 aspect-[2/1] lg:col-span-1 lg:aspect-square"
+          />
         </Card>
 
         <div className="mt-16 flex flex-col gap-1 p-2">
