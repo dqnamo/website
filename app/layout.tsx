@@ -22,8 +22,19 @@ const pirataOne = Pirata_One({
 });
 
 export const metadata: Metadata = {
-  title: "Personal Website",
-  description: "A personal Next.js website built with Chord UI.",
+  title: "dqnamo",
+  description: "The personal website of dqnamo.",
+  openGraph: {
+    title: "dqnamo",
+    description: "The personal website of dqnamo.",
+    siteName: "dqnamo",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "dqnamo",
+    description: "The personal website of dqnamo.",
+  },
 };
 
 export default function RootLayout({

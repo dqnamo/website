@@ -1,5 +1,4 @@
 import {
-  DiamondsFourIcon,
   HexagonIcon,
   MusicNotesSimpleIcon,
 } from "@phosphor-icons/react/dist/ssr";
@@ -86,8 +85,8 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="mt-16 flex flex-col gap-1 p-2">
-          <h2 className="font-medium text-grayscale-11">
+        <div className="mt-16 flex flex-col gap-px p-2">
+          <h2 className="font-medium text-grayscale-11 text-sm">
             Fractional Design Engineering
           </h2>
           <p className="max-w-xl text-balance text-sm text-grayscale-10">
@@ -97,18 +96,18 @@ export default function Home() {
 
         <Card
           layer={0}
-          className="mt-4 grid w-full grid-cols-2 gap-1.5 rounded-xl border border-grayscale-3 bg-grayscale-2 p-1.5 lg:grid-cols-3"
+          className="mt-4 grid w-full grid-cols-2 gap-1.5 rounded-xl border border-grayscale-3 bg-grayscale-2 p-1.5 sm:grid-cols-3"
         >
           <SlotCard />
           <SlotCard />
           <SlotCard
             available
-            className="col-span-2 aspect-[2/1] lg:col-span-1 lg:aspect-square"
+            className="col-span-2 aspect-[2/1] sm:col-span-1 sm:aspect-square"
           />
         </Card>
 
-        <div className="mt-16 flex flex-col gap-1 p-2">
-          <h2 className="font-medium text-grayscale-11">Projects</h2>
+        <div className="mt-16 flex flex-col gap-px p-2">
+          <h2 className="font-medium text-grayscale-11 text-sm">Projects</h2>
           <p className="max-w-xl text-balance text-sm text-grayscale-10">
             Selected tools and products I am building, maintaining, or
             exploring.
@@ -120,10 +119,12 @@ export default function Home() {
           className="mt-4 grid w-full grid-cols-1 gap-1.5 sm:grid-cols-2 lg:grid-cols-3"
         >
           <Link href="https://chord.so" target="_blank">
-            <Card layer={1} hoverable>
-              <div className="flex flex-col items-center justify-center size-8 rounded-lg bg-grayscale-2 dark:bg-grayscale-5 border border-grayscale-3 dark:border-grayscale-6 small-shadow">
-                <MusicNotesSimpleIcon weight="fill" className="text-teal-9" />
+            <Card layer={1} hoverable className="h-full">
+              <div className="flex flex-col items-center justify-center size-8 rounded-lg bg-white dark:bg-grayscale-5 border border-grayscale-3 dark:border-grayscale-6 small-shadow">
+                <MusicNotesSimpleIcon weight="bold" className="text-teal-9" />
+                {/* <ChordLogo /> */}
               </div>
+
               <p className="text-grayscale-11 text-sm font-medium mt-3">
                 Chord
               </p>
@@ -135,7 +136,7 @@ export default function Home() {
           </Link>
           <Link href="https://base.dqnamo.com" target="_blank">
             <Card layer={1} hoverable>
-              <div className="flex flex-col items-center justify-center size-8 rounded-lg bg-grayscale-2 dark:bg-grayscale-5 border border-grayscale-3 dark:border-grayscale-6 small-shadow">
+              <div className="flex flex-col items-center justify-center size-8 rounded-lg bg-white dark:bg-grayscale-5 border border-grayscale-3 dark:border-grayscale-6 small-shadow">
                 <HexagonIcon weight="fill" className="text-blue-9" />
               </div>
               <p className="text-grayscale-11 text-sm font-medium mt-3">Base</p>
@@ -145,9 +146,9 @@ export default function Home() {
               </p>
             </Card>
           </Link>
-          <Link href="https://hyperaide.com" target="_blank">
+          {/* <Link href="https://hyperaide.com" target="_blank">
             <Card layer={1} hoverable>
-              <div className="flex flex-col items-center justify-center size-8 rounded-lg bg-grayscale-2 dark:bg-grayscale-5 border border-grayscale-3 dark:border-grayscale-6 small-shadow">
+              <div className="flex flex-col items-center justify-center size-8 rounded-lg bg-white dark:bg-grayscale-5 border border-grayscale-3 dark:border-grayscale-6 small-shadow">
                 <DiamondsFourIcon weight="fill" className="text-teal-9" />
               </div>
               <p className="text-grayscale-11 text-sm font-medium mt-3">
@@ -157,6 +158,21 @@ export default function Home() {
                 Omakase and open source personal assistant meta harness for your
                 coding agents.
               </p>
+            </Card>
+          </Link> */}
+          <Link href="https://growdoro.com" target="_blank">
+            <Card layer={1} hoverable className="h-full">
+              <div className="flex flex-col items-center overflow-hidden justify-center size-8 rounded-lg bg-white dark:bg-grayscale-5 border border-grayscale-3 dark:border-grayscale-6 small-shadow">
+                <p className="text-grass-9 text-sm font-semibold">G</p>
+              </div>
+              <div className="flex flex-col mt-auto">
+                <p className="text-grayscale-11 text-sm font-medium mt-3">
+                  Growdoro
+                </p>
+                <p className="text-grayscale-10 text-xs font-medium text-pretty">
+                  gamified focus timer where you can grow an infinite garden.
+                </p>
+              </div>
             </Card>
           </Link>
         </Card>
