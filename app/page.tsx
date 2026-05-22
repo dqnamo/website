@@ -41,7 +41,7 @@ function SlotCard({
         {available ? (
           <div className="flex items-center gap-3 rounded-full border border-grayscale-4 bg-white p-1 pl-3 small-shadow backdrop-blur-sm dark:bg-grayscale-4 dark:border-grayscale-5">
             <p className="text-xs font-medium text-grayscale-11">
-              <span className="text-green-9 mr-0.5">$</span>5000
+              <span className="text-green-9 mr-0.5">$</span>10,000
             </p>
             <Button
               href="https://buy.stripe.com/dRm14o7Sxg31cqj8BY4ow08"
