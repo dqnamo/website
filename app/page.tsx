@@ -2,6 +2,7 @@ import {
   HexagonIcon,
   MusicNotesSimpleIcon,
 } from "@phosphor-icons/react/dist/ssr";
+import Image from "next/image";
 import Link from "next/link";
 import { DqnamoPanel } from "@/components/DqnamoPanel";
 import MobileHeader from "@/components/MobileHeader";
@@ -146,20 +147,45 @@ export default function Home() {
               </p>
             </Card>
           </Link>
-          {/* <Link href="https://hyperaide.com" target="_blank">
-            <Card layer={1} hoverable>
-              <div className="flex flex-col items-center justify-center size-8 rounded-lg bg-white dark:bg-grayscale-5 border border-grayscale-3 dark:border-grayscale-6 small-shadow">
-                <DiamondsFourIcon weight="fill" className="text-teal-9" />
+          <Link href="https://factoryplane.com" target="_blank">
+            <Card layer={1} hoverable className="h-full">
+              <div className="flex flex-col items-center justify-center size-8 overflow-hidden rounded-lg bg-white border border-grayscale-3 dark:border-grayscale-6 small-shadow">
+                <Image
+                  src="/logos/factoryplane.svg"
+                  alt=""
+                  width={24}
+                  height={24}
+                  className="size-6"
+                />
+              </div>
+              <p className="text-grayscale-11 text-sm font-medium mt-3">
+                FactoryPlane
+              </p>
+              <p className="text-grayscale-10 text-xs font-medium text-pretty">
+                Open source, collaborative software factory running in the cloud
+                using your existing coding agents.
+              </p>
+            </Card>
+          </Link>
+          <Link href="https://hyperaide.com" target="_blank">
+            <Card layer={1} hoverable className="h-full">
+              <div className="flex flex-col items-center justify-center size-8 rounded-lg bg-white border border-grayscale-3 dark:border-grayscale-6 small-shadow">
+                <Image
+                  src="/logos/hyperaide.svg"
+                  alt=""
+                  width={24}
+                  height={24}
+                  className="size-5 object-contain"
+                />
               </div>
               <p className="text-grayscale-11 text-sm font-medium mt-3">
                 Hyperaide
               </p>
-              <p className="text-grayscale-10 text-xs font-medium">
-                Omakase and open source personal assistant meta harness for your
-                coding agents.
+              <p className="text-grayscale-10 text-xs font-medium text-pretty">
+                Single threaded personal assistant with infinite memory.
               </p>
             </Card>
-          </Link> */}
+          </Link>
           <Link href="https://growdoro.com" target="_blank">
             <Card layer={1} hoverable className="h-full">
               <div className="flex flex-col items-center overflow-hidden justify-center size-8 rounded-lg bg-white dark:bg-grayscale-5 border border-grayscale-3 dark:border-grayscale-6 small-shadow">
