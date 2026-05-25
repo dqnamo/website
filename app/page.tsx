@@ -149,7 +149,7 @@ export default function Home() {
           </Link>
           <Link href="https://factoryplane.com" target="_blank">
             <Card layer={1} hoverable className="h-full">
-              <div className="flex flex-col items-center justify-center size-8 overflow-hidden rounded-lg bg-white border border-grayscale-3 dark:border-grayscale-6 small-shadow">
+              <div className="flex flex-col items-center justify-center size-8 overflow-hidden rounded-lg bg-white dark:bg-grayscale-5 border border-grayscale-3 dark:border-grayscale-6 small-shadow">
                 <Image
                   src="/logos/factoryplane.svg"
                   alt=""
@@ -169,13 +169,13 @@ export default function Home() {
           </Link>
           <Link href="https://hyperaide.com" target="_blank">
             <Card layer={1} hoverable className="h-full">
-              <div className="flex flex-col items-center justify-center size-8 rounded-lg bg-white border border-grayscale-3 dark:border-grayscale-6 small-shadow">
+              <div className="flex flex-col items-center justify-center size-8 rounded-lg bg-white dark:bg-grayscale-5 border border-grayscale-3 dark:border-grayscale-6 small-shadow">
                 <Image
                   src="/logos/hyperaide.svg"
                   alt=""
                   width={24}
                   height={24}
-                  className="size-5 object-contain"
+                  className="size-5 object-contain dark:invert"
                 />
               </div>
               <p className="text-grayscale-11 text-sm font-medium mt-3">
