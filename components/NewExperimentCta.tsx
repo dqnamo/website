@@ -11,11 +11,11 @@ export function NewExperimentCta({ className }: NewExperimentCtaProps) {
   return (
     <section
       className={cn(
-        "grid min-h-0 grid-cols-2 gap-1.5 rounded-[20px] border border-grayscale-3 bg-grayscale-2 p-1.5",
+        "grid min-h-0 grid-cols-2 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5",
         className,
       )}
     >
-      <div className="flex w-full flex-col items-center justify-center gap-1.5 rounded-[17px] border border-grayscale-3 bg-grayscale-1 small-shadow dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none">
+      <div className="flex w-full flex-col items-center justify-center gap-1.5 rounded-[13px] border border-grayscale-3 bg-grayscale-1 small-shadow dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none">
         <div className="flex flex-col gap-1.5 p-8">
           <div className="flex flex-row items-center gap-2">
             <p className="text-balance text-grayscale-12 text-sm">
@@ -41,7 +41,7 @@ export function NewExperimentCta({ className }: NewExperimentCtaProps) {
           </Button>
         </div>
       </div>
-      <div className="flex min-h-[12rem] w-full items-center justify-center overflow-hidden rounded-[17px] border border-grayscale-3 bg-grayscale-1 dark:bg-grayscale-2 p-8 small-shadow dark:border-transparent dark:shadow-none">
+      <div className="flex min-h-[12rem] w-full items-center justify-center overflow-hidden rounded-[13px] border border-grayscale-3 bg-grayscale-1 dark:bg-grayscale-2 p-8 small-shadow dark:border-transparent dark:shadow-none">
         <IridescentFoil
           aria-label="Interactive iridescent foil sticker"
           className="group h-28 w-full max-w-48 cursor-pointer rounded-xl shadow-sm"

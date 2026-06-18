@@ -68,8 +68,8 @@ export default async function IridescentFoilPage() {
           <CopyActions agentPrompt={agentPrompt} markdown={markdown} />
         </div>
 
-        <section className="flex flex-col gap-1.5 items-center justify-center bg-grayscale-2 rounded-[20px] p-1.5 border border-grayscale-3">
-          <div className="w-full p-28 flex items-center justify-center bg-grayscale-1 dark:bg-grayscale-2 dark:border-transparent dark:shadow-none rounded-[17px] small-shadow border border-grayscale-3">
+        <section className="flex flex-col gap-1.5 items-center justify-center bg-grayscale-2 rounded-[16px] p-1.5 border border-grayscale-3">
+          <div className="w-full p-28 flex items-center justify-center bg-grayscale-1 dark:bg-grayscale-2 dark:border-transparent dark:shadow-none rounded-[13px] small-shadow border border-grayscale-3">
             <IridescentFoil
               aria-label="Interactive iridescent foil sticker"
               className="group h-40 w-72 cursor-pointer rounded-xl shadow-sm"
@@ -109,7 +109,7 @@ export default async function IridescentFoilPage() {
               </div>
             </IridescentFoil>
           </div>
-          <div className="w-full overflow-hidden bg-grayscale-1 dark:bg-grayscale-3 dark:border-grayscale-4 rounded-[17px] small-shadow border border-grayscale-3">
+          <div className="w-full overflow-hidden bg-grayscale-1 dark:bg-grayscale-3 dark:border-grayscale-4 rounded-[13px] small-shadow border border-grayscale-3">
             <SourcePanel
               cssLines={cssLines}
               cssSource={cssSource}

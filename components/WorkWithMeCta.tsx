@@ -16,11 +16,11 @@ export function WorkWithMeCta({ className }: WorkWithMeCtaProps) {
   return (
     <section
       className={cn(
-        "grid min-h-0 grid-cols-2 gap-1.5 rounded-[20px] border border-grayscale-3 bg-grayscale-2 p-1.5",
+        "grid min-h-0 grid-cols-2 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5",
         className,
       )}
     >
-      <div className="flex w-full flex-col items-center justify-center gap-1.5 rounded-[17px] border border-grayscale-3 bg-grayscale-1 small-shadow dark:border-transparent dark:bg-grayscale-2 dark:shadow-none">
+      <div className="flex w-full flex-col items-center justify-center gap-1.5 rounded-[13px] border border-grayscale-3 bg-grayscale-1 small-shadow dark:border-transparent dark:bg-grayscale-2 dark:shadow-none">
         <div className="flex flex-col gap-1.5 p-8">
           <p className="text-balance text-grayscale-12 text-sm">
             Want to work with me?
@@ -40,7 +40,7 @@ export function WorkWithMeCta({ className }: WorkWithMeCtaProps) {
           </Button>
         </div>
       </div>
-      <div className="relative flex min-h-[12rem] w-full overflow-hidden rounded-[17px] border border-grayscale-3 bg-grayscale-1 small-shadow dark:border-grayscale-4 dark:bg-grayscale-3">
+      <div className="relative flex min-h-[12rem] w-full overflow-hidden rounded-[13px] border border-grayscale-3 bg-grayscale-1 small-shadow dark:border-grayscale-4 dark:bg-grayscale-3">
         <GameOfLife
           aria-hidden
           cellSize={14}
