@@ -6,63 +6,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { DqnamoPanel } from "@/components/DqnamoPanel";
 import MobileHeader from "@/components/MobileHeader";
-import Button from "@/components/public/Button";
 import Card from "@/components/public/Card";
-import { GameOfLife } from "@/components/random/GameOfLife";
-import { cn } from "@/helpers/classname-helper";
-
-function SlotCard({
-  available = false,
-  className,
-}: {
-  available?: boolean;
-  className?: string;
-}) {
-  return (
-    <Card
-      layer={1}
-      className={cn(
-        "small-shadow relative flex aspect-square min-w-0 flex-col items-center justify-center overflow-hidden rounded-lg border border-grayscale-3 bg-grayscale-1 p-5",
-        className,
-      )}
-    >
-      <GameOfLife
-        aria-hidden
-        cellSize={14}
-        density={0.24}
-        fadeDuration={520}
-        maxOpacity={1}
-        stepInterval={520}
-        className="absolute inset-0 [--game-of-life-color:var(--color-grayscale-3)] dark:[--game-of-life-color:var(--color-grayscale-4)]"
-      />
-      <div className="relative z-10 flex flex-col items-center justify-center gap-4">
-        {/*<div className="flex size-8 flex-col items-center justify-center rounded-lg border border-grayscale-3 bg-white dark:bg-grayscale-2 small-shadow backdrop-blur-sm">
-          <DiamondsFourIcon className="text-grayscale-10" weight="fill" />
-        </div>*/}
-        {available ? (
-          <div className="flex items-center gap-3 rounded-full border border-grayscale-4 bg-white p-1 pl-3 small-shadow backdrop-blur-sm dark:bg-grayscale-4 dark:border-grayscale-5">
-            <p className="text-xs font-medium text-grayscale-11">
-              <span className="text-green-9 mr-0.5">$</span>10,000
-            </p>
-            <Button
-              href="https://buy.stripe.com/dRm14o7Sxg31cqj8BY4ow08"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full px-2.5 border-b-1 py-1 text-xs"
-              variant="primary"
-            >
-              Book
-            </Button>
-          </div>
-        ) : (
-          <p className="rounded-full border border-grayscale-4 bg-white px-2.5 py-1 text-xs font-medium text-grayscale-10 small-shadow backdrop-blur-sm dark:bg-grayscale-4 dark:border-grayscale-5">
-            Slot Taken
-          </p>
-        )}
-      </div>
-    </Card>
-  );
-}
+import { NewExperimentCta } from "@/components/NewExperimentCta";
+import { WorkWithMeCta } from "@/components/WorkWithMeCta";
 
 export default function Home() {
   return (
@@ -86,26 +32,11 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="mt-16 flex flex-col gap-px p-2">
-          <h2 className="font-medium text-grayscale-11 text-sm">
-            Fractional Design Engineering
-          </h2>
-          <p className="max-w-xl text-balance text-sm text-grayscale-10">
-            I take on a small number of design engineering projects each month.
-          </p>
-        </div>
+        <div className="mt-16 flex flex-col gap-10 p-2">
+          <WorkWithMeCta />
 
-        <Card
-          layer={0}
-          className="mt-4 grid w-full grid-cols-2 gap-1.5 rounded-xl border border-grayscale-3 bg-grayscale-2 p-1.5 sm:grid-cols-3"
-        >
-          <SlotCard />
-          <SlotCard />
-          <SlotCard
-            available
-            className="col-span-2 aspect-[2/1] sm:col-span-1 sm:aspect-square"
-          />
-        </Card>
+          <NewExperimentCta />
+        </div>
 
         <div className="mt-16 flex flex-col gap-px p-2">
           <h2 className="font-medium text-grayscale-11 text-sm">Projects</h2>
