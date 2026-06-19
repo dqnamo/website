@@ -1,0 +1,24 @@
+.screenFrame {
+  filter: drop-shadow(0 18px 30px rgb(0 0 0 / 0.1));
+}
+
+.screenImage {
+  filter: saturate(1.12) contrast(1.08) brightness(0.92);
+}
+
+.scanlines {
+  mix-blend-mode: multiply;
+}
+
+.vignette {
+  mix-blend-mode: multiply;
+}
+
+.darkOverlay {
+  mix-blend-mode: multiply;
+}
+
+.noise {
+  mix-blend-mode: soft-light;
+  opacity: 0.18;
+}

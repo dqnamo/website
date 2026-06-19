@@ -63,11 +63,11 @@ export function WorldCupCard() {
   };
 
   return (
-    <Card className="p-2 lg:col-span-3">
+    <Card className="rounded-[16px] p-2 lg:col-span-3">
       <Link
         href="/worldcup"
         aria-label="Open World Cup 2026 prediction markets"
-        className="group relative block overflow-hidden rounded-surface bg-grayscale-3 [--worldcup-overlay:var(--color-grass-8)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grass-9 dark:bg-grayscale-3 dark:[--worldcup-overlay:var(--color-grayscale-3)]"
+        className="group relative block overflow-hidden rounded-[13px] bg-grayscale-3 [--worldcup-overlay:var(--color-grass-8)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grass-9 dark:bg-grayscale-3 dark:[--worldcup-overlay:var(--color-grayscale-3)]"
         onBlur={pauseVideo}
         onFocus={playVideo}
         onMouseEnter={playVideo}

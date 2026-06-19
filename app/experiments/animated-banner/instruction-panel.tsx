@@ -3,12 +3,21 @@
 import { CheckCircleIcon, CopyIcon } from "@phosphor-icons/react/dist/ssr";
 import { useState } from "react";
 import Button from "@/components/public/Button";
+import TextLink from "@/components/public/TextLink";
 
 type InstructionPanelProps = {
   copyText: string;
   instructions: readonly {
     title: string;
-    text: string;
+    text:
+      | string
+      | readonly (
+          | string
+          | {
+              href: string;
+              label: string;
+            }
+        )[];
   }[];
 };
 
@@ -64,7 +73,24 @@ export function InstructionPanel({
             <h2 className="font-medium text-grayscale-12 text-sm">
               {instruction.title}
             </h2>
-            <p className="mt-1 text-grayscale-10">{instruction.text}</p>
+            <p className="mt-1 text-grayscale-10">
+              {typeof instruction.text === "string"
+                ? instruction.text
+                : instruction.text.map((part) =>
+                    typeof part === "string" ? (
+                      part
+                    ) : (
+                      <TextLink
+                        href={part.href}
+                        key={`${instruction.title}-${part.href}`}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        {part.label}
+                      </TextLink>
+                    ),
+                  )}
+            </p>
           </li>
         ))}
       </ol>

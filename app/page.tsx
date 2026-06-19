@@ -6,8 +6,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { DqnamoPanel } from "@/components/DqnamoPanel";
 import MobileHeader from "@/components/MobileHeader";
-import Card from "@/components/public/Card";
 import { NewExperimentCta } from "@/components/NewExperimentCta";
+import Card from "@/components/public/Card";
 import { WorkWithMeCta } from "@/components/WorkWithMeCta";
 
 export default function Home() {
@@ -78,11 +78,11 @@ export default function Home() {
               </p>
             </Card>
           </Link>
-          <Link href="https://factoryplane.com" target="_blank">
+          <Link href="https://chaterface.com" target="_blank">
             <Card layer={1} hoverable className="h-full">
               <div className="flex flex-col items-center justify-center size-8 overflow-hidden rounded-lg bg-white dark:bg-grayscale-5 border border-grayscale-3 dark:border-grayscale-6 small-shadow">
                 <Image
-                  src="/logos/factoryplane.svg"
+                  src="/logos/chaterface.svg"
                   alt=""
                   width={24}
                   height={24}
@@ -90,11 +90,10 @@ export default function Home() {
                 />
               </div>
               <p className="text-grayscale-11 text-sm font-medium mt-3">
-                FactoryPlane
+                Chaterface
               </p>
               <p className="text-grayscale-10 text-xs font-medium text-pretty">
-                Open source, collaborative software factory running in the cloud
-                using your existing coding agents.
+                Open source multiplayer cloud workspace for background agents.
               </p>
             </Card>
           </Link>

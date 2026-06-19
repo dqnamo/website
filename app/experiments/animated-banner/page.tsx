@@ -66,7 +66,7 @@ export default function AnimatedBannerPage() {
           </div>
         </section>
 
-        <section className="flex flex-col items-start gap-2 px-2 py-16 text-left">
+        <section className="flex flex-col items-start gap-2 px-2 pt-10 text-left">
           <p className="text-grayscale-10 text-xs leading-5">
             Built as part of my work on
           </p>
@@ -95,7 +95,7 @@ export default function AnimatedBannerPage() {
           </div>
         </section>
 
-        <WorkWithMeCta className="my-16" />
+        <WorkWithMeCta className="mt-10 mb-16" />
       </div>
     </main>
   );
