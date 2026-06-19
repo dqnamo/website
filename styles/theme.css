@@ -6,6 +6,10 @@
   --font-sans: var(--font-inter);
   --font-mono: var(--font-jetbrains-mono);
   --font-pirata: var(--font-pirata-one);
+  --font-number: var(--font-inter);
+
+  --radius-control: 6px;
+  --radius-surface: 8px;
 
   --text-tiny: 0.625rem;
 
@@ -21,6 +25,8 @@
   --color-grayscale-10: var(--sand-10);
   --color-grayscale-11: var(--sand-11);
   --color-grayscale-12: var(--sand-12);
+  --color-foreground: var(--color-grayscale-12);
+  --color-muted-foreground: var(--color-grayscale-10);
 
   --color-gray-1: var(--gray-1);
   --color-gray-2: var(--gray-2);
