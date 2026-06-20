@@ -30,7 +30,7 @@ export function WorkWithMeCta({ className }: WorkWithMeCtaProps) {
             fractional design engineering for startups.
           </p>
           <Button
-            href="https://cal.com/interface.london/15min"
+            href="https://cal.com/interface.london/20min"
             target="_blank"
             rel="noopener noreferrer"
             variant="primary"

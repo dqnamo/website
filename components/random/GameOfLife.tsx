@@ -11,6 +11,7 @@ type CanvasProps = Omit<
 
 export type GameOfLifeProps = CanvasProps & {
   cellColor?: string;
+  cellRadius?: number;
   cellSize?: number;
   density?: number;
   fadeDuration?: number;
@@ -23,6 +24,7 @@ export type GameOfLifeProps = CanvasProps & {
 };
 
 const DEFAULT_CELL_SIZE = 16;
+const DEFAULT_CELL_RADIUS = 0;
 const DEFAULT_DENSITY = 0.2;
 const DEFAULT_FADE_DURATION = 400;
 const DEFAULT_GAP = 2;
@@ -40,6 +42,7 @@ function clamp(value: number, min: number, max: number) {
 
 export function GameOfLife({
   cellColor,
+  cellRadius = DEFAULT_CELL_RADIUS,
   cellSize = DEFAULT_CELL_SIZE,
   className,
   density = DEFAULT_DENSITY,
@@ -72,6 +75,11 @@ export function GameOfLife({
     const resolvedCellSize = Math.max(
       2,
       Math.floor(finiteOr(cellSize, DEFAULT_CELL_SIZE)),
+    );
+    const resolvedCellRadius = clamp(
+      finiteOr(cellRadius, DEFAULT_CELL_RADIUS),
+      0,
+      resolvedCellSize / 2,
     );
     const resolvedDensity = clamp(finiteOr(density, DEFAULT_DENSITY), 0, 1);
     const resolvedFadeDuration = Math.max(
@@ -252,12 +260,17 @@ export function GameOfLife({
 
           if (opacity > 0.001) {
             activeContext.globalAlpha = opacity * resolvedMaxOpacity;
-            activeContext.fillRect(
-              column * resolvedCellSize,
-              row * resolvedCellSize,
-              drawSize,
-              drawSize,
-            );
+            const x = column * resolvedCellSize;
+            const y = row * resolvedCellSize;
+            const radius = Math.min(resolvedCellRadius, drawSize / 2);
+
+            if (radius > 0) {
+              activeContext.beginPath();
+              activeContext.roundRect(x, y, drawSize, drawSize, radius);
+              activeContext.fill();
+            } else {
+              activeContext.fillRect(x, y, drawSize, drawSize);
+            }
           }
 
           index += 1;
@@ -403,6 +416,7 @@ export function GameOfLife({
     };
   }, [
     cellColor,
+    cellRadius,
     cellSize,
     density,
     fadeDuration,

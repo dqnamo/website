@@ -1,0 +1,78 @@
+.viewport {
+  width: 100%;
+  min-width: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.canvas {
+  display: block;
+  max-width: none;
+  touch-action: pan-x pan-y;
+  user-select: none;
+}
+
+.fitCanvas {
+  width: 100%;
+  height: auto;
+}
+
+.segment {
+  cursor: default;
+  outline: none;
+}
+
+.interactive {
+  cursor: pointer;
+}
+
+.segmentPath {
+  fill: none;
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.08));
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.segmentHitPath {
+  fill: none;
+  stroke: transparent;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 28px;
+}
+
+.selectedSegment .segmentPath {
+  filter: drop-shadow(0 0 0 var(--color-grayscale-1, #ffffff))
+    drop-shadow(0 0 4px rgba(0, 0, 0, 0.32));
+}
+
+.station {
+  cursor: default;
+  outline: none;
+}
+
+.stationOuterCircle {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.16));
+}
+
+.stationInnerCircle {
+  fill: var(--color-grayscale-1, #ffffff);
+  stroke: var(--color-grayscale-1, #ffffff);
+  stroke-width: 2px;
+}
+
+.selectedStation .stationOuterCircle {
+  filter: drop-shadow(0 0 0 var(--color-grayscale-1, #ffffff))
+    drop-shadow(0 0 5px rgba(0, 0, 0, 0.35));
+}
+
+.stationLabel {
+  fill: var(--color-grayscale-12, #202020);
+  font-size: 18px;
+  font-weight: 700;
+  paint-order: stroke;
+  pointer-events: none;
+  stroke: var(--color-grayscale-1, #ffffff);
+  stroke-linejoin: round;
+  stroke-width: 4px;
+}

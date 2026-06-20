@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ClipPathDemo } from "@/components/clip-demo/ClipPathDemo";
 import { DqnamoPanel } from "@/components/DqnamoPanel";
+import { TubeMapEditor } from "./tube-map-editor";
 
 export const metadata: Metadata = {
-  title: "Clip path demo | dqnamo",
-  description: "A small polygon clip-path preview tool.",
+  title: "Tube map demo | dqnamo",
+  description: "A manual London tube map editor built with React Flow.",
 };
 
-export default function ClipDemoPage() {
+export default function TubeDemoPage() {
   return (
-    <main className="min-h-dvh w-full">
+    <main className="min-h-dvh w-full bg-grayscale-1">
       <DqnamoPanel />
 
-      <div className="mx-auto flex w-full max-w-6xl flex-col border-grayscale-3 border-x px-4 pb-8 dark:border-grayscale-2 md:px-8 lg:px-16">
+      <div className="mx-auto flex w-full max-w-7xl flex-col border-grayscale-3 border-x px-4 pb-6 dark:border-grayscale-2 md:px-8 lg:px-10">
         <div className="flex flex-col gap-3 py-8">
           <Link
             href="/"
@@ -23,15 +23,16 @@ export default function ClipDemoPage() {
           </Link>
           <div className="flex flex-col gap-1">
             <h1 className="font-medium text-grayscale-12 text-xl">
-              Clip path demo
+              Tube map demo
             </h1>
             <p className="max-w-xl text-grayscale-10 text-sm leading-6">
-              Paste a CSS polygon and inspect the clipped box it creates.
+              A small canvas for sketching station nodes and coloured line
+              connections.
             </p>
           </div>
         </div>
 
-        <ClipPathDemo />
+        <TubeMapEditor />
       </div>
     </main>
   );

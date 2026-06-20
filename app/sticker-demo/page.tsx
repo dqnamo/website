@@ -4,7 +4,6 @@ import { Arvo } from "next/font/google";
 import Link from "next/link";
 import { DqnamoPanel } from "@/components/DqnamoPanel";
 import { IridescentFoil } from "@/components/IridescentFoil";
-import MobileHeader from "@/components/MobileHeader";
 
 const arvo = Arvo({
   subsets: ["latin"],
@@ -19,12 +18,11 @@ export const metadata: Metadata = {
 export default function StickerDemoPage() {
   return (
     <main className="min-h-[180dvh] w-full bg-grayscale-1">
-      <MobileHeader />
       <DqnamoPanel />
 
       <Link
         href="/"
-        className="fixed top-[4.5rem] left-4 z-20 font-pirata font-bold text-2xl text-grayscale-12 transition-colors hover:text-grayscale-10 md:left-8 lg:left-16"
+        className="fixed top-4 left-4 z-20 font-pirata font-bold text-2xl text-grayscale-12 transition-colors hover:text-grayscale-10 md:left-8 lg:left-16"
       >
         dqnamo
       </Link>

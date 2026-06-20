@@ -2,7 +2,6 @@ import { MoonStarsIcon } from "@phosphor-icons/react/dist/ssr";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import MobileHeader from "@/components/MobileHeader";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { WorkWithMeCta } from "@/components/WorkWithMeCta";
 import { WorldCupCard } from "@/components/worldcup/world-cup-card";
@@ -17,7 +16,6 @@ export const metadata: Metadata = {
 export default function AnimatedBannerPage() {
   return (
     <main className="w-full bg-grayscale-1">
-      <MobileHeader />
       <div className="mx-auto flex w-full max-w-4xl flex-col border-grayscale-3 border-x px-4 dark:border-grayscale-2 md:px-8 lg:px-16">
         <div className="flex flex-row items-center justify-between px-2">
           <div className="flex flex-col gap-1.5 py-10">

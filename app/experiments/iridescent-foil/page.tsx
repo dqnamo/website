@@ -1,16 +1,15 @@
-import { ArrowRightIcon, MoonStarsIcon } from "@phosphor-icons/react/dist/ssr";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { ArrowRightIcon, MoonStarsIcon } from "@phosphor-icons/react/dist/ssr";
 import { Arvo } from "next/font/google";
+import Link from "next/link";
 import { IridescentFoil } from "@/components/IridescentFoil";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import MobileHeader from "@/components/MobileHeader";
-import { tokenize } from "@/helpers/syntax";
-import Link from "next/link";
-import { buildAgentPrompt, buildMarkdown } from "./copy-content";
-import { CopyActions } from "./copy-actions";
-import { SourcePanel } from "./source-panel";
 import { WorkWithMeCta } from "@/components/WorkWithMeCta";
+import { tokenize } from "@/helpers/syntax";
+import { CopyActions } from "./copy-actions";
+import { buildAgentPrompt, buildMarkdown } from "./copy-content";
+import { SourcePanel } from "./source-panel";
 
 const arvo = Arvo({
   subsets: ["latin"],
@@ -34,15 +33,17 @@ export default async function IridescentFoilPage() {
 
   return (
     <main className=" w-full bg-grayscale-1">
-      <MobileHeader />
       <div className="mx-auto flex w-full max-w-4xl flex-col border-grayscale-3 border-x px-4 dark:border-grayscale-2 md:px-8 lg:px-16">
         <div className="flex flex-row justify-between items-center px-2">
           <div className="flex flex-col  gap-1.5 py-10">
-            <Link href="/" className="font-pirata w-max font-bold text-2xl text-grayscale-11 hover:text-grayscale-12 transition-colors duration-200">
+            <Link
+              href="/"
+              className="font-pirata w-max font-bold text-2xl text-grayscale-11 hover:text-grayscale-12 transition-colors duration-200"
+            >
               dqnamo
             </Link>
             <span className="font-mono font-semibold text-[10px] text-grayscale-10 uppercase leading-none">
-            experiments / iridescent-foil
+              experiments / iridescent-foil
             </span>
           </div>
           <div className="flex items-center gap-1.5 p-1 text-grayscale-10 bg-grayscale-3 rounded-full">
@@ -62,8 +63,9 @@ export default async function IridescentFoilPage() {
             Iridescent Foil
           </h1>
           <p className="text-grayscale-11 text-sm leading-6 text-balance">
-            Holographic foil built from layered CSS gradients. Scroll the page and move your pointer to shift the
-            iridescent colour and specular glare across the sticker.
+            Holographic foil built from layered CSS gradients. Scroll the page
+            and move your pointer to shift the iridescent colour and specular
+            glare across the sticker.
           </p>
           <CopyActions agentPrompt={agentPrompt} markdown={markdown} />
         </div>
@@ -118,7 +120,6 @@ export default async function IridescentFoilPage() {
             />
           </div>
         </section>
-
 
         <WorkWithMeCta className="my-16" />
       </div>

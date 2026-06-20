@@ -5,7 +5,6 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { DqnamoPanel } from "@/components/DqnamoPanel";
-import MobileHeader from "@/components/MobileHeader";
 import { NewExperimentCta } from "@/components/NewExperimentCta";
 import Card from "@/components/public/Card";
 import { WorkWithMeCta } from "@/components/WorkWithMeCta";
@@ -13,10 +12,9 @@ import { WorkWithMeCta } from "@/components/WorkWithMeCta";
 export default function Home() {
   return (
     <main className="flex w-full flex-col divide-y divide-grayscale-3 dark:divide-grayscale-2">
-      <MobileHeader />
       <DqnamoPanel />
 
-      <div className="relative mx-auto max-w-4xl flex w-full flex-col border-x border-grayscale-3 p-4 pt-[4.5rem] dark:border-grayscale-2 md:p-8 lg:p-16">
+      <div className="relative mx-auto max-w-4xl flex w-full flex-col border-x border-grayscale-3 p-4 dark:border-grayscale-2 md:p-8 lg:p-16">
         <div className="flex flex-col gap-px p-2">
           {/*<div className="flex aspect-square w-8 shrink-0 flex-col items-center justify-center overflow-hidden rounded-md border border-grayscale-3 bg-grayscale-1 dark:border-grayscale-4 dark:bg-grayscale-3">
             <HexagonIcon size={20} weight="fill" className="text-accent-9" />
@@ -32,7 +30,7 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="mt-16 flex flex-col gap-3 p-2">
+        <div className="mt-16 flex flex-col gap-16">
           <WorkWithMeCta />
 
           <NewExperimentCta />
