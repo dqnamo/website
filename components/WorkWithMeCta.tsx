@@ -1,4 +1,7 @@
+"use client";
+
 import { Arvo } from "next/font/google";
+import posthog from "posthog-js";
 import Button from "@/components/public/Button";
 import { GameOfLife } from "@/components/random/GameOfLife";
 import { cn } from "@/helpers/classname-helper";
@@ -35,6 +38,7 @@ export function WorkWithMeCta({ className }: WorkWithMeCtaProps) {
             rel="noopener noreferrer"
             variant="primary"
             className="mt-4 w-max"
+            onClick={() => posthog.capture("work_with_me_cta_clicked")}
           >
             Jump on a call
           </Button>

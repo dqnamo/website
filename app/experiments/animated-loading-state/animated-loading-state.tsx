@@ -355,8 +355,8 @@ export function AnimatedLoadingState() {
     <div className="flex flex-col gap-1.5">
       <AnimatedLoadingStatePreview key={run} />
 
-      <div className="flex items-center justify-between rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-3 small-shadow dark:border-grayscale-4 dark:bg-grayscale-3">
-        <div>
+      <div className="flex items-center justify-between gap-3 rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-3 small-shadow dark:border-grayscale-4 dark:bg-grayscale-3">
+        <div className="min-w-0">
           <p className="font-medium text-grayscale-12 text-sm leading-none">
             Animated loading state
           </p>
@@ -366,6 +366,7 @@ export function AnimatedLoadingState() {
         </div>
         <Button
           aria-label="Replay loading animation"
+          className="shrink-0"
           onClick={() => setRun((value) => value + 1)}
           type="button"
           variant="secondary"

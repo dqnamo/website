@@ -13,8 +13,13 @@ type ButtonProps =
         href: string;
       });
 
-export default function Button(props: ButtonProps) {
-  const { variant = "primary", className } = props;
+export function getButtonClassName({
+  className,
+  variant = "primary",
+}: {
+  variant?: "primary" | "secondary";
+  className?: string;
+}) {
   const baseClasses =
     "cursor-pointer flex flex-row px-2 gap-1.5 h-7 items-center justify-center text-sm font-medium rounded-lg transition-colors border text-grayscale-11";
 
@@ -25,7 +30,12 @@ export default function Button(props: ButtonProps) {
       "bg-white hover:bg-grayscale-2 hover:border-grayscale-4 dark:hover:bg-grayscale-4 dark:hover:border-grayscale-5 dark:bg-grayscale-3 border-grayscale-3 dark:border-grayscale-4 rounded-lg",
   };
 
-  const classes = cn(baseClasses, variantClasses[variant], className);
+  return cn(baseClasses, variantClasses[variant], className);
+}
+
+export default function Button(props: ButtonProps) {
+  const { variant = "primary", className } = props;
+  const classes = getButtonClassName({ className, variant });
 
   if ("href" in props) {
     const {

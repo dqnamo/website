@@ -1,9 +1,12 @@
+"use client";
+
 import {
   HexagonIcon,
   MusicNotesSimpleIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import Link from "next/link";
+import posthog from "posthog-js";
 import { DqnamoPanel } from "@/components/DqnamoPanel";
 import { NewExperimentCta } from "@/components/NewExperimentCta";
 import Card from "@/components/public/Card";
@@ -48,7 +51,16 @@ export default function Home() {
           layer={0}
           className="mt-4 grid w-full grid-cols-1 gap-1.5 sm:grid-cols-2 lg:grid-cols-3"
         >
-          <Link href="https://chord.so" target="_blank">
+          <Link
+            href="https://chord.so"
+            target="_blank"
+            onClick={() =>
+              posthog.capture("project_link_clicked", {
+                project: "Chord",
+                href: "https://chord.so",
+              })
+            }
+          >
             <Card layer={1} hoverable className="h-full">
               <div className="flex flex-col items-center justify-center size-8 rounded-lg bg-white dark:bg-grayscale-5 border border-grayscale-3 dark:border-grayscale-6 small-shadow">
                 <MusicNotesSimpleIcon weight="bold" className="text-teal-9" />
@@ -64,7 +76,16 @@ export default function Home() {
               </p>
             </Card>
           </Link>
-          <Link href="https://base.dqnamo.com" target="_blank">
+          <Link
+            href="https://base.dqnamo.com"
+            target="_blank"
+            onClick={() =>
+              posthog.capture("project_link_clicked", {
+                project: "Base",
+                href: "https://base.dqnamo.com",
+              })
+            }
+          >
             <Card layer={1} hoverable>
               <div className="flex flex-col items-center justify-center size-8 rounded-lg bg-white dark:bg-grayscale-5 border border-grayscale-3 dark:border-grayscale-6 small-shadow">
                 <HexagonIcon weight="fill" className="text-blue-9" />
@@ -76,15 +97,21 @@ export default function Home() {
               </p>
             </Card>
           </Link>
-          <Link href="https://chaterface.com" target="_blank">
+          <Link
+            href="https://chaterface.com"
+            target="_blank"
+            onClick={() =>
+              posthog.capture("project_link_clicked", {
+                project: "Chaterface",
+                href: "https://chaterface.com",
+              })
+            }
+          >
             <Card layer={1} hoverable className="h-full">
               <div className="flex flex-col items-center justify-center size-8 overflow-hidden rounded-lg bg-white dark:bg-grayscale-5 border border-grayscale-3 dark:border-grayscale-6 small-shadow">
-                <Image
-                  src="/logos/chaterface.svg"
-                  alt=""
-                  width={24}
-                  height={24}
-                  className="size-6"
+                <div
+                  aria-hidden
+                  className="size-6 shrink-0 bg-orange-9 mask-[url('/logos/chaterface.svg')] mask-contain mask-center mask-no-repeat"
                 />
               </div>
               <p className="text-grayscale-11 text-sm font-medium mt-3">
@@ -95,7 +122,16 @@ export default function Home() {
               </p>
             </Card>
           </Link>
-          <Link href="https://hyperaide.com" target="_blank">
+          <Link
+            href="https://hyperaide.com"
+            target="_blank"
+            onClick={() =>
+              posthog.capture("project_link_clicked", {
+                project: "Hyperaide",
+                href: "https://hyperaide.com",
+              })
+            }
+          >
             <Card layer={1} hoverable className="h-full">
               <div className="flex flex-col items-center justify-center size-8 rounded-lg bg-white dark:bg-grayscale-5 border border-grayscale-3 dark:border-grayscale-6 small-shadow">
                 <Image
@@ -114,7 +150,16 @@ export default function Home() {
               </p>
             </Card>
           </Link>
-          <Link href="https://growdoro.com" target="_blank">
+          <Link
+            href="https://growdoro.com"
+            target="_blank"
+            onClick={() =>
+              posthog.capture("project_link_clicked", {
+                project: "Growdoro",
+                href: "https://growdoro.com",
+              })
+            }
+          >
             <Card layer={1} hoverable className="h-full">
               <div className="flex flex-col items-center overflow-hidden justify-center size-8 rounded-lg bg-white dark:bg-grayscale-5 border border-grayscale-3 dark:border-grayscale-6 small-shadow">
                 <p className="text-grass-9 text-sm font-semibold">G</p>
