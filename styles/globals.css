@@ -5,6 +5,12 @@ body {
   position: relative;
 }
 
+@keyframes logo-trace-loader-loop {
+  to {
+    stroke-dashoffset: -1;
+  }
+}
+
 .root {
   isolation: isolate;
 }
