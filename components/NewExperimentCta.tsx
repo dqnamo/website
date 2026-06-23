@@ -6,7 +6,9 @@ import posthog from "posthog-js";
 import { ScrambleTextShowcase } from "@/app/experiments/scramble-text/scramble-text-showcase";
 import { ExperimentBannerPreview } from "@/components/ExperimentBannerPreview";
 import { IridescentFoil } from "@/components/IridescentFoil";
+import { LogoTraceLoader } from "@/components/LogoTraceLoader";
 import { GameOfLife } from "@/components/random/GameOfLife";
+import { Signature } from "@/components/Signature";
 import { cn } from "@/helpers/classname-helper";
 
 type NewExperimentCtaProps = {
@@ -26,6 +28,19 @@ const experiments = [
     href: "/experiments/animated-loading-state",
     description: "Game of Life loading cells transition into an area chart.",
     preview: "loading",
+  },
+  {
+    title: "Animated Signature",
+    href: "/experiments/signature",
+    description:
+      "A reusable SVG signature component that draws itself on mount.",
+    preview: "signature",
+  },
+  {
+    title: "Logo Trace Loader",
+    href: "/experiments/logo-trace-loader",
+    description: "A traced logo loader that resolves into a filled mark.",
+    preview: "logo-loader",
   },
   {
     title: "Iridescent Foil",
@@ -78,6 +93,46 @@ function ExperimentPreview({
     );
   }
 
+  if (type === "signature") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "flex items-center justify-center bg-grayscale-2 px-5 text-grayscale-12 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-3 dark:group-hover:bg-grayscale-4",
+        )}
+      >
+        <div className="-rotate-6 w-44">
+          <Signature
+            ariaLabel="Animated signature preview"
+            duration={2.4}
+            strokeWidth={12}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  if (type === "logo-loader") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "flex items-center justify-center bg-grayscale-2 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-3 dark:group-hover:bg-grayscale-4",
+        )}
+      >
+        <LogoTraceLoader
+          ariaLabel="Logo trace loader preview"
+          loopDurationSeconds={0.72}
+          showInnerTrace={false}
+          size={54}
+          strokeWidth={11}
+        />
+      </div>
+    );
+  }
+
   return (
     <IridescentFoil
       aria-label="Interactive iridescent foil sticker preview"
@@ -98,9 +153,9 @@ export function NewExperimentCta({ className }: NewExperimentCtaProps) {
         </p>
       </div>
 
-      <div className="grid gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5 sm:grid-cols-3">
+      <div className="grid gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5 sm:grid-cols-2 lg:grid-cols-3">
         <Link
-          className="group flex min-h-64 flex-col overflow-hidden rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4 sm:col-span-3"
+          className="group flex min-h-64 flex-col overflow-hidden rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4 sm:col-span-2 lg:col-span-3"
           data-experiment-card=""
           href="/experiments/scramble-text"
           onClick={() =>

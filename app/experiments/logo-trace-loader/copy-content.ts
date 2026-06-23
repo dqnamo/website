@@ -1,8 +1,9 @@
-export const LOGO_TRACE_LOADER_PROMPT = `Add a reusable SVG logo trace loading spinner to my app.
+export const LOGO_TRACE_LOADER_PROMPT = `Build a reusable SVG logo trace loader component.
 
-This is for use anywhere the app needs a branded loading indicator. Do not build a demo page unless one already exists and needs updating.
+Goal:
+Create one self-contained client component that traces a logo while work is in progress, then resolves into the filled logo mark when loading completes.
 
-Implement a client component:
+Component contract:
 
 \`\`\`tsx
 // components/LogoTraceLoader.tsx
@@ -19,7 +20,8 @@ type LogoTraceLoaderProps = {
 };
 \`\`\`
 
-Use my logo SVG paths. If they are not already available in the repo, ask me for the SVG or extract these values from an existing SVG file:
+Logo data:
+Use my actual logo SVG paths. If they are not already available in the repo, ask me for the SVG file or extract these values from an existing logo asset:
 
 \`\`\`ts
 const LOGO_VIEW_BOX = "PASTE_VIEW_BOX";
@@ -34,28 +36,29 @@ const FILL_PATHS = [
 \`\`\`
 
 SVG preparation:
-- Prefer one continuous path for TRACE_PATH. It should be the route the animated stroke follows, not necessarily every filled shape in the logo.
-- If the SVG only contains filled shapes, choose or derive a clean outer contour for TRACE_PATH and keep the original filled shapes in FILL_PATHS.
+- Prefer one continuous path for TRACE_PATH. It is the route followed by the animated stroke, not necessarily every filled shape in the logo.
+- If the source SVG only contains filled shapes, derive a clean outer contour for TRACE_PATH and keep the original filled shapes in FILL_PATHS.
 - Flatten transforms before copying path data when the SVG uses transformed groups or paths.
 - Preserve holes and compound shapes in FILL_PATHS so the final filled logo matches the original.
 - If a clean trace path cannot be confidently extracted, ask me for a simplified outline/trace path instead of guessing.
 
 Behavior:
 - While loading is true, animate a short stroke segment around TRACE_PATH.
-- When isComplete is true, or loading becomes false, close the trace into the full outline.
+- When isComplete is true, or loading becomes false, transition from the looping trace to the full outline.
 - After the trace closes, fade in FILL_PATHS so the spinner resolves into the filled logo.
-- Call onDone once after the filled logo is visible.
-- Use currentColor so the loader can be styled by className.
+- Call onDone exactly once after the filled logo is visible.
+- Use currentColor for both stroke and fill so the loader can be styled through className.
 - Respect prefers-reduced-motion by showing the filled logo immediately and calling onDone.
 - Include timeout fallbacks so the component does not rely only on SVG animation callbacks.
+- Keep width and height stable from the first render to avoid layout shift.
 
-Suggested internal phases:
+Internal state:
 
 \`\`\`ts
 type LoaderPhase = "loop" | "closingOutline" | "fadingFill" | "done";
 \`\`\`
 
-Suggested SVG shape:
+Rendering outline:
 
 \`\`\`tsx
 <svg
@@ -98,7 +101,7 @@ Suggested SVG shape:
 </svg>
 \`\`\`
 
-Add the CSS keyframe globally or next to the component:
+Animation CSS:
 
 \`\`\`css
 @keyframes logo-trace-loader-loop {
@@ -108,43 +111,8 @@ Add the CSS keyframe globally or next to the component:
 }
 \`\`\`
 
-Example usage in a loading screen:
-
-\`\`\`tsx
-import { LogoTraceLoader } from "@/components/LogoTraceLoader";
-
-export function LoadingState() {
-  return (
-    <div className="flex min-h-64 items-center justify-center">
-      <LogoTraceLoader
-        ariaLabel="Loading"
-        className="text-blue-9"
-        loading
-        size={40}
-        strokeWidth={12}
-      />
-    </div>
-  );
-}
-\`\`\`
-
-Example usage when resolving async work:
-
-\`\`\`tsx
-<LogoTraceLoader
-  ariaLabel="Loading workspace"
-  className="text-blue-9"
-  isComplete={isReady}
-  loading={!isReady}
-  onDone={() => setCanShowContent(true)}
-  size={40}
-  strokeWidth={12}
-/>
-\`\`\`
-
-Implementation notes:
-- Keep the component self-contained and typed.
-- Do not hardcode page-specific text, buttons, or demo controls into the loader.
-- Do not include app-specific business logic.
-- Avoid layout shift by keeping the SVG width and height stable.
+Scope:
+- Implement the component and any required CSS only.
+- Do not add unrelated UI, product copy, routes, screens, buttons, or business logic.
+- Keep the component typed and reusable.
 - Run the project formatter, typecheck, and build after implementation.`;
