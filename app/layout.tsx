@@ -22,6 +22,7 @@ const pirataOne = Pirata_One({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://dqnamo.com"),
   title: "dqnamo",
   description: "The personal website of dqnamo.",
   openGraph: {
