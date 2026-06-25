@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Pirata_One } from "next/font/google";
+import { Barlow, Inter, JetBrains_Mono, Pirata_One } from "next/font/google";
 import "../styles/globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
@@ -19,6 +19,12 @@ const pirataOne = Pirata_One({
   variable: "--font-pirata-one",
   subsets: ["latin"],
   weight: ["400"],
+});
+
+const barlow = Barlow({
+  variable: "--font-barlow",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -46,7 +52,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} ${pirataOne.variable} h-full antialiased`}
+      className={`${inter.variable} ${jetbrainsMono.variable} ${pirataOne.variable} ${barlow.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full bg-grayscale-1 text-grayscale-12">

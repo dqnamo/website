@@ -25,6 +25,12 @@
 @import "@radix-ui/colors/brown.css";
 @import "@radix-ui/colors/brown-dark.css";
 
+@import "@radix-ui/colors/yellow.css";
+@import "@radix-ui/colors/yellow-dark.css";
+
+@import "@radix-ui/colors/amber.css";
+@import "@radix-ui/colors/amber-dark.css";
+
 @import "@radix-ui/colors/orange.css";
 @import "@radix-ui/colors/orange-dark.css";
 
@@ -61,6 +67,9 @@
 @import "@radix-ui/colors/blue.css";
 @import "@radix-ui/colors/blue-dark.css";
 
+@import "@radix-ui/colors/sky.css";
+@import "@radix-ui/colors/sky-dark.css";
+
 @import "@radix-ui/colors/cyan.css";
 @import "@radix-ui/colors/cyan-dark.css";
 
@@ -75,3 +84,9 @@
 
 @import "@radix-ui/colors/grass.css";
 @import "@radix-ui/colors/grass-dark.css";
+
+@import "@radix-ui/colors/lime.css";
+@import "@radix-ui/colors/lime-dark.css";
+
+@import "@radix-ui/colors/mint.css";
+@import "@radix-ui/colors/mint-dark.css";

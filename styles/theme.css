@@ -6,7 +6,7 @@
   --font-sans: var(--font-inter);
   --font-mono: var(--font-jetbrains-mono);
   --font-pirata: var(--font-pirata-one);
-  --font-number: var(--font-inter);
+  --font-number: var(--font-barlow);
 
   --radius-control: 6px;
   --radius-surface: 8px;

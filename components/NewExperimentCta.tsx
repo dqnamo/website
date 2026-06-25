@@ -4,6 +4,7 @@ import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import posthog from "posthog-js";
 import { ScrambleTextShowcase } from "@/app/experiments/scramble-text/scramble-text-showcase";
+import { AnimatedSparkChart } from "@/components/AnimatedSparkChart";
 import { ExperimentBannerPreview } from "@/components/ExperimentBannerPreview";
 import { IridescentFoil } from "@/components/IridescentFoil";
 import { LogoTraceLoader } from "@/components/LogoTraceLoader";
@@ -30,6 +31,12 @@ const experiments = [
     preview: "loading",
   },
   {
+    title: "Animated Spark Chart",
+    href: "/experiments/animated-spark-chart",
+    description: "An SVG sparkline that draws itself and colors by trend.",
+    preview: "spark-chart",
+  },
+  {
     title: "Animated Signature",
     href: "/experiments/signature",
     description:
@@ -52,6 +59,19 @@ const experiments = [
 ] as const;
 
 const previewSurfaceClassName = "h-32 shrink-0 overflow-hidden rounded-lg";
+const sparkChartPreviewData = Array.from({ length: 64 }, (_, index) => {
+  const progress = index / 63;
+  const envelope = Math.sin(progress * Math.PI);
+  const trend = 8_790 + (12_478 - 8_790) * progress;
+  const wave =
+    Math.sin(progress * Math.PI * 5.4 + 0.45) * 420 +
+    Math.sin(progress * Math.PI * 11.6 + 0.3) * 180;
+
+  return {
+    label: `${index + 1}`,
+    value: index === 63 ? 12_478 : Number((trend + envelope * wave).toFixed(2)),
+  };
+});
 
 function ExperimentPreview({
   type,
@@ -109,6 +129,29 @@ function ExperimentPreview({
             strokeWidth={12}
           />
         </div>
+      </div>
+    );
+  }
+
+  if (type === "spark-chart") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "flex items-center justify-center bg-grayscale-2 p-3 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+        )}
+      >
+        <AnimatedSparkChart
+          className="w-52 border-grayscale-3 p-2 shadow-none dark:border-grayscale-5"
+          data={sparkChartPreviewData}
+          height={54}
+          label="Revenue"
+          trendPercent={42}
+          valueFormat={{ maximumFractionDigits: 0 }}
+          valuePrefix="$"
+          width={320}
+        />
       </div>
     );
   }
