@@ -37,5 +37,18 @@
     "shiki": "^4.0.2",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "description": "A Next.js personal website cloned from the Base starter, with external service integrations removed.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dqnamo/website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dqnamo/website/issues"
+  },
+  "homepage": "https://github.com/dqnamo/website#readme"
 }

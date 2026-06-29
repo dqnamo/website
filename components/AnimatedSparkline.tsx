@@ -6,15 +6,15 @@ import type { CSSProperties } from "react";
 import { Sparkline, type SparklineCurve } from "@/components/Sparkline";
 import { cn } from "@/helpers/classname-helper";
 
-type AnimatedSparkChartPoint = {
+type AnimatedSparklinePoint = {
   label: string;
   value: number;
 };
 
-type AnimatedSparkChartProps = {
+type AnimatedSparklineProps = {
   className?: string;
   curve?: SparkCurve;
-  data: readonly AnimatedSparkChartPoint[];
+  data: readonly AnimatedSparklinePoint[];
   height?: number;
   label?: string;
   replayKey?: number;
@@ -32,12 +32,12 @@ const defaultValueFormat = {
   maximumFractionDigits: 1,
 } satisfies Format;
 
-const chartAnimationTiming = {
+const sparklineAnimationTiming = {
   duration: 980,
   easing: "cubic-bezier(0.25, 1, 0.5, 1)",
 } as const;
 
-function formatChartValue({
+function formatSparklineValue({
   format,
   prefix = "",
   suffix = "",
@@ -51,7 +51,7 @@ function formatChartValue({
   return `${prefix}${new Intl.NumberFormat("en-US", format).format(value)}${suffix}`;
 }
 
-export function AnimatedSparkChart({
+export function AnimatedSparkline({
   className,
   curve = "smooth",
   data,
@@ -64,7 +64,7 @@ export function AnimatedSparkChart({
   valuePrefix,
   valueSuffix,
   width = 220,
-}: AnimatedSparkChartProps) {
+}: AnimatedSparklineProps) {
   const firstValue = data[0]?.value ?? 0;
   const lastValue = data.at(-1)?.value ?? firstValue;
   const delta =
@@ -96,7 +96,7 @@ export function AnimatedSparkChart({
           </p>
           {showValue ? (
             <p className="mt-1 font-bold font-number font-semibold text-grayscale-12 text-2xl leading-none">
-              {formatChartValue({
+              {formatSparklineValue({
                 format: valueFormat,
                 prefix: valuePrefix,
                 suffix: valueSuffix,
@@ -123,9 +123,9 @@ export function AnimatedSparkChart({
           )}
           <NumberFlow
             format={defaultValueFormat}
-            spinTiming={chartAnimationTiming}
+            spinTiming={sparklineAnimationTiming}
             suffix="%"
-            transformTiming={chartAnimationTiming}
+            transformTiming={sparklineAnimationTiming}
             value={absoluteDelta}
           />
         </div>
@@ -137,7 +137,7 @@ export function AnimatedSparkChart({
         color="var(--spark-9)"
         curve={curve}
         data={data}
-        duration={chartAnimationTiming.duration}
+        duration={sparklineAnimationTiming.duration}
         glow
         height={height}
         key={replayKey}

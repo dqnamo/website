@@ -74,9 +74,9 @@ export function ScrambleTextShowcase({
               weight={regenerated ? "fill" : "bold"}
             />
           }
-          iconKey={regenerated ? "regenerated" : "regenerate"}
           className="shrink-0 text-xs"
           onClick={handleRegenerate}
+          stateKey={regenerated ? "regenerated" : "regenerate"}
           type="button"
           variant="primary"
         >

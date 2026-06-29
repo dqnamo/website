@@ -3,18 +3,17 @@ import { ExperimentPage } from "@/app/experiments/_components/ExperimentPage";
 import { SourcePanel } from "@/app/experiments/_components/SourcePanel";
 import { buildSourceTabs } from "@/app/experiments/_lib/source";
 import { componentSource, usageSource } from "./copy-content";
-import { DynamicButtonShowcase } from "./dynamic-button-showcase";
+import { ScrollFadeListShowcase } from "./scroll-fade-list";
 
 export const metadata: Metadata = {
-  title: "Dynamic button | dqnamo",
-  description:
-    "A button component that animates its width and text when the label changes.",
+  title: "Scroll fade list | dqnamo",
+  description: "A compact scrollable list with scroll-linked edge fades.",
 };
 
-export default async function DynamicButtonPage() {
+export default async function ScrollFadeListPage() {
   const tabs = await buildSourceTabs([
     {
-      label: "DynamicButton.tsx",
+      label: "ScrollFadeList.tsx",
       source: componentSource,
       value: "component",
     },
@@ -23,11 +22,14 @@ export default async function DynamicButtonPage() {
 
   return (
     <ExperimentPage
-      description="A button that resizes to fit its label and crossfades the text and icon when the action or state changes."
-      slug="dynamic-button"
-      title="Dynamic Button"
+      description="A scrollable list with gradient fade edges to show that there is more content above or below."
+      sectionClassName="dark:border-grayscale-3 dark:bg-grayscale-2"
+      slug="scroll-fade-list"
+      title="Scroll Fade List"
     >
-      <DynamicButtonShowcase />
+      <div className="flex min-h-[34rem] w-full items-center justify-center rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-4 small-shadow dark:border-grayscale-4 dark:bg-grayscale-2 dark:shadow-none md:p-8">
+        <ScrollFadeListShowcase />
+      </div>
       <div className="w-full overflow-hidden rounded-[13px] border border-grayscale-3 bg-grayscale-1 small-shadow dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none">
         <SourcePanel tabs={tabs} />
       </div>

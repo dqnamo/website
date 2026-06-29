@@ -1,9 +1,8 @@
 "use client";
 
 import {
-  ArrowClockwiseIcon,
+  CheckCircleIcon,
   CheckIcon,
-  ClipboardTextIcon,
   CommandIcon,
   CopyIcon,
   FloppyDiskIcon,
@@ -13,59 +12,66 @@ import {
 } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
 import { DynamicButton } from "@/components/DynamicButton";
-import Button from "@/components/public/Button";
+import { Tabs } from "@/components/public/Tabs";
 
 type ButtonState = {
   icon: Icon;
   iconClassName?: string;
-  iconKey: string;
+  iconWeight?: "bold" | "duotone" | "fill" | "light" | "regular" | "thin";
   label: string;
+  stateKey: string;
 };
 
 type ButtonAction = ButtonState & {
   success?: ButtonState;
+  successDelayMs?: number;
 };
 
 const buttonActions: readonly ButtonAction[] = [
   {
     icon: FloppyDiskIcon,
-    iconKey: "save",
     label: "Save",
+    stateKey: "save",
     success: {
-      icon: CheckIcon,
-      iconKey: "saved",
-      label: "Saved",
+      icon: CheckCircleIcon,
+      iconClassName: "text-green-9",
+      iconWeight: "fill",
+      label: "Save",
+      stateKey: "saved",
     },
   },
   {
     icon: CopyIcon,
-    iconKey: "copy",
     label: "Copy",
+    stateKey: "copy",
     success: {
-      icon: ClipboardTextIcon,
-      iconKey: "copied",
-      label: "Copied",
+      icon: CheckCircleIcon,
+      iconClassName: "text-green-9",
+      iconWeight: "fill",
+      label: "Copy",
+      stateKey: "copied",
     },
   },
   {
     icon: UsersIcon,
-    iconKey: "invite",
     label: "Invite teammates",
+    stateKey: "invite",
   },
   {
     icon: CommandIcon,
-    iconKey: "command",
     label: "Open command palette",
+    stateKey: "command",
   },
   {
     icon: SpinnerGapIcon,
     iconClassName: "animate-spin",
-    iconKey: "processing",
     label: "Processing",
+    stateKey: "processing",
+    successDelayMs: 3000,
     success: {
       icon: CheckIcon,
-      iconKey: "done",
       label: "Done",
+      stateKey: "done",
     },
   },
 ] as const;
@@ -74,23 +80,24 @@ const feedbackDurationMs = 1200;
 
 export function DynamicButtonShowcase() {
   const [actionIndex, setActionIndex] = useState(0);
-  const [customText, setCustomText] = useState("");
   const [feedback, setFeedback] = useState<ButtonState | null>(null);
   const [variant, setVariant] = useState<"primary" | "secondary">("primary");
   const feedbackTimerRef = useRef<number | null>(null);
+  const successTimerRef = useRef<number | null>(null);
 
   const currentAction = buttonActions[actionIndex];
   const currentSuccess = currentAction.success;
-  const visibleState = feedback ?? {
-    ...currentAction,
-    label: customText.trim() || currentAction.label,
-  };
+  const visibleState = feedback ?? currentAction;
   const VisibleIcon = visibleState.icon;
 
   useEffect(() => {
     return () => {
       if (feedbackTimerRef.current !== null) {
         window.clearTimeout(feedbackTimerRef.current);
+      }
+
+      if (successTimerRef.current !== null) {
+        window.clearTimeout(successTimerRef.current);
       }
     };
   }, []);
@@ -99,6 +106,11 @@ export function DynamicButtonShowcase() {
     if (feedbackTimerRef.current !== null) {
       window.clearTimeout(feedbackTimerRef.current);
       feedbackTimerRef.current = null;
+    }
+
+    if (successTimerRef.current !== null) {
+      window.clearTimeout(successTimerRef.current);
+      successTimerRef.current = null;
     }
 
     setFeedback(null);
@@ -113,25 +125,41 @@ export function DynamicButtonShowcase() {
     }, feedbackDurationMs);
   }
 
-  function handleCycle() {
-    clearFeedback();
-    setCustomText("");
-    setActionIndex((currentIndex) => (currentIndex + 1) % buttonActions.length);
-  }
-
   function handleActionClick() {
-    if (currentSuccess) {
-      showFeedback(currentSuccess);
+    if (!currentSuccess) {
       return;
     }
 
-    handleCycle();
+    if (currentAction.successDelayMs) {
+      return;
+    }
+
+    showFeedback(currentSuccess);
   }
 
-  function selectAction(nextIndex: number) {
+  function selectAction(nextStateKey: string) {
+    const nextIndex = buttonActions.findIndex(
+      (action) => action.stateKey === nextStateKey,
+    );
+
+    if (nextIndex === -1) {
+      return;
+    }
+
+    const nextAction = buttonActions[nextIndex];
+
     clearFeedback();
-    setCustomText("");
     setActionIndex(nextIndex);
+
+    const delayedSuccess = nextAction.success;
+    const delayMs = nextAction.successDelayMs;
+
+    if (delayedSuccess && delayMs) {
+      successTimerRef.current = window.setTimeout(() => {
+        showFeedback(delayedSuccess);
+        successTimerRef.current = null;
+      }, delayMs);
+    }
   }
 
   return (
@@ -144,89 +172,64 @@ export function DynamicButtonShowcase() {
               aria-hidden="true"
               className={visibleState.iconClassName}
               size={15}
-              weight="bold"
+              weight={visibleState.iconWeight ?? "bold"}
             />
           }
-          iconKey={visibleState.iconKey}
           onClick={handleActionClick}
+          stateKey={`${visibleState.stateKey}:${visibleState.label}`}
           variant={variant}
         >
           {visibleState.label}
         </DynamicButton>
       </div>
 
-      <div className="grid gap-4 border-grayscale-3 border-t p-4 dark:border-grayscale-4 sm:grid-cols-[1fr_auto]">
-        <label className="flex min-w-0 flex-col gap-2">
+      <div className="grid gap-4 border-grayscale-3 border-t p-4 dark:border-grayscale-4">
+        <div className="flex min-w-0 flex-col gap-2">
           <span className="font-mono font-semibold text-[10px] text-grayscale-10 uppercase leading-none">
-            Button text
+            Demo
           </span>
-          <input
-            className="h-9 min-w-0 rounded-lg border border-grayscale-3 bg-white px-3 text-grayscale-12 text-sm outline-none transition-colors placeholder:text-grayscale-9 focus:border-grayscale-7 dark:border-grayscale-5 dark:bg-grayscale-2"
-            onChange={(event) => {
-              clearFeedback();
-              setCustomText(event.target.value);
-            }}
-            value={customText || currentAction.label}
-          />
-        </label>
+          <Tabs.Root
+            onValueChange={selectAction}
+            value={currentAction.stateKey}
+          >
+            <Tabs.List
+              aria-label="Dynamic button demo"
+              className="flex-wrap gap-1.5"
+            >
+              {buttonActions.map((action) => {
+                const ActionIcon = action.icon;
 
+                return (
+                  <Tabs.Tab
+                    className="flex h-7 items-center gap-1.5 rounded-md px-2 font-medium text-grayscale-11 text-xs transition-colors data-active:bg-grayscale-3 data-active:text-grayscale-12 data-active:small-shadow dark:data-active:bg-grayscale-4"
+                    key={action.stateKey}
+                    value={action.stateKey}
+                  >
+                    <ActionIcon aria-hidden="true" size={15} weight="bold" />
+                    {action.label}
+                  </Tabs.Tab>
+                );
+              })}
+            </Tabs.List>
+          </Tabs.Root>
+        </div>
         <div className="flex flex-col gap-2">
           <span className="font-mono font-semibold text-[10px] text-grayscale-10 uppercase leading-none">
             Variant
           </span>
-          <div className="flex rounded-lg border border-grayscale-3 bg-grayscale-2 p-1 dark:border-grayscale-5 dark:bg-grayscale-2">
+          <div className="flex flex-wrap gap-1.5">
             {(["primary", "secondary"] as const).map((nextVariant) => (
               <button
-                className="h-7 rounded-md px-2 font-medium text-grayscale-11 text-xs transition-colors data-[active=true]:bg-white data-[active=true]:text-grayscale-12 data-[active=true]:small-shadow dark:data-[active=true]:bg-grayscale-4"
+                className="h-7 rounded-md px-2 font-medium text-grayscale-11 text-xs transition-colors data-[active=true]:bg-grayscale-3 data-[active=true]:text-grayscale-12 data-[active=true]:small-shadow dark:data-[active=true]:bg-grayscale-4"
                 data-active={variant === nextVariant}
                 key={nextVariant}
                 onClick={() => setVariant(nextVariant)}
                 type="button"
               >
-                {nextVariant}
+                {nextVariant === "primary" ? "Primary" : "Secondary"}
               </button>
             ))}
           </div>
-        </div>
-
-        <div className="flex flex-wrap gap-1.5 sm:col-span-2">
-          {buttonActions.map((action, index) => {
-            const ActionIcon = action.icon;
-
-            return (
-              <Button
-                className="text-xs"
-                key={action.iconKey}
-                onClick={() => selectAction(index)}
-                type="button"
-                variant="secondary"
-              >
-                <ActionIcon aria-hidden="true" size={15} weight="bold" />
-                {action.label}
-              </Button>
-            );
-          })}
-          {currentSuccess ? (
-            <Button
-              className="text-xs"
-              onClick={() => showFeedback(currentSuccess)}
-              type="button"
-              variant="secondary"
-            >
-              <CheckIcon aria-hidden="true" size={15} weight="bold" />
-              Show {currentSuccess.label}
-            </Button>
-          ) : null}
-          <Button
-            aria-label="Cycle button text"
-            className="text-xs"
-            onClick={handleCycle}
-            type="button"
-            variant="secondary"
-          >
-            <ArrowClockwiseIcon aria-hidden="true" size={15} weight="bold" />
-            Cycle
-          </Button>
         </div>
       </div>
     </div>

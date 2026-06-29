@@ -4,9 +4,9 @@ import { Slider } from "@base-ui/react/slider";
 import { ArrowClockwiseIcon } from "@phosphor-icons/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  AnimatedSparkChart,
+  AnimatedSparkline,
   type SparkCurve,
-} from "@/components/AnimatedSparkChart";
+} from "@/components/AnimatedSparkline";
 import { Tabs } from "@/components/public/Tabs";
 import { cn } from "@/helpers/classname-helper";
 
@@ -170,7 +170,7 @@ function interpolateSparkPoints({
   });
 }
 
-function SparkChartPreview({
+function SparklinePreview({
   curve,
   replayKey,
   trendPercent,
@@ -236,7 +236,7 @@ function SparkChartPreview({
 
   return (
     <div className="flex flex-col items-center justify-center w-full gap-3">
-      <AnimatedSparkChart
+      <AnimatedSparkline
         className="mx-auto w-60"
         curve={curve}
         data={displayData}
@@ -251,23 +251,24 @@ function SparkChartPreview({
   );
 }
 
-export function AnimatedSparkChartShowcase() {
+export function AnimatedSparklineShowcase() {
   const [curve, setCurve] = useState<SparkCurve>("smooth");
   const [trendPercent, setTrendPercent] = useState(42);
-  const [chartTrendPercent, setChartTrendPercent] = useState(trendPercent);
+  const [sparklineTrendPercent, setSparklineTrendPercent] =
+    useState(trendPercent);
   const [replayKey, setReplayKey] = useState(0);
 
   useEffect(() => {
-    if (chartTrendPercent === trendPercent) {
+    if (sparklineTrendPercent === trendPercent) {
       return;
     }
 
     const timeout = window.setTimeout(() => {
-      setChartTrendPercent(trendPercent);
+      setSparklineTrendPercent(trendPercent);
     }, trendDebounceMs);
 
     return () => window.clearTimeout(timeout);
-  }, [chartTrendPercent, trendPercent]);
+  }, [sparklineTrendPercent, trendPercent]);
 
   return (
     <div className="flex w-full flex-col gap-1.5">
@@ -280,10 +281,10 @@ export function AnimatedSparkChartShowcase() {
           <ArrowClockwiseIcon aria-hidden size={15} weight="bold" />
           Replay
         </button>
-        <SparkChartPreview
+        <SparklinePreview
           curve={curve}
           replayKey={replayKey}
-          trendPercent={chartTrendPercent}
+          trendPercent={sparklineTrendPercent}
         />
       </div>
 
@@ -303,7 +304,7 @@ export function AnimatedSparkChartShowcase() {
             }}
             value={curve}
           >
-            <Tabs.List aria-label="Spark chart curve" className="">
+            <Tabs.List aria-label="Sparkline curve" className="">
               {(["smooth", "sharp"] as const).map((nextCurve) => (
                 <Tabs.Tab
                   className={cn(

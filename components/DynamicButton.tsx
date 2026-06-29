@@ -6,39 +6,87 @@ import {
   motion,
   useReducedMotion,
 } from "motion/react";
-import { useLayoutEffect, useRef, useState } from "react";
+import {
+  forwardRef,
+  type Key,
+  type ReactNode,
+  useCallback,
+  useImperativeHandle,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { getButtonClassName } from "./public/Button";
 
-type DynamicButtonProps = Omit<HTMLMotionProps<"button">, "children"> & {
+const uiEaseOut = [0.23, 1, 0.32, 1] as const;
+
+export type DynamicButtonProps = Omit<
+  HTMLMotionProps<"button">,
+  "animate" | "children" | "initial" | "ref" | "transition"
+> & {
   children: string;
-  icon?: React.ReactNode;
-  iconKey?: React.Key;
+  icon?: ReactNode;
+  stateKey?: Key;
   variant?: "primary" | "secondary";
+  width?: "content" | "full";
 };
 
-export function DynamicButton({
-  children,
-  className,
-  icon,
-  iconKey,
-  type = "button",
-  variant = "primary",
-  ...props
-}: DynamicButtonProps) {
-  const shouldReduceMotion = useReducedMotion();
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const measureRef = useRef<HTMLSpanElement>(null);
-  const [width, setWidth] = useState<number | null>(null);
+export const DynamicButton = forwardRef<HTMLButtonElement, DynamicButtonProps>(
+  function DynamicButton(
+    {
+      children,
+      className,
+      icon,
+      stateKey,
+      type = "button",
+      variant = "primary",
+      width = "content",
+      ...props
+    },
+    forwardedRef,
+  ) {
+    const shouldReduceMotion = useReducedMotion();
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const measureRef = useRef<HTMLSpanElement>(null);
+    const measurementSignatureRef = useRef("");
+    const [measuredWidth, setMeasuredWidth] = useState<number | null>(null);
+    const iconKey = stateKey ?? children;
+    const measurementSignature = [
+      children,
+      className,
+      icon ? "icon" : "no-icon",
+      stateKey,
+      variant,
+    ].join("\0");
+    const shouldMeasureWidth = width === "content";
+    const widthTransition = shouldReduceMotion
+      ? { duration: 0 }
+      : { bounce: 0, duration: 0.26, type: "spring" as const };
+    const contentTransition = {
+      duration: shouldReduceMotion ? 0.16 : 0.18,
+      ease: uiEaseOut,
+    };
+    const contentVisible = { opacity: 1, transform: "translateY(0px)" };
+    const contentInitial = shouldReduceMotion
+      ? { opacity: 0, transform: "translateY(0px)" }
+      : { opacity: 0, transform: "translateY(8px)" };
+    const contentExit = shouldReduceMotion
+      ? { opacity: 0, transform: "translateY(0px)" }
+      : { opacity: 0, transform: "translateY(-8px)" };
 
-  useLayoutEffect(() => {
-    const button = buttonRef.current;
-    const measure = measureRef.current;
+    useImperativeHandle(
+      forwardedRef,
+      () => buttonRef.current as HTMLButtonElement,
+    );
 
-    if (!button || !measure) {
-      return;
-    }
+    const syncWidth = useCallback(() => {
+      const button = buttonRef.current;
+      const measure = measureRef.current;
 
-    const syncWidth = () => {
+      if (!button || !measure || !shouldMeasureWidth) {
+        return;
+      }
+
       const styles = window.getComputedStyle(button);
       const horizontalPadding =
         Number.parseFloat(styles.paddingLeft) +
@@ -47,91 +95,103 @@ export function DynamicButton({
         Number.parseFloat(styles.borderRightWidth);
       const nextWidth = Math.ceil(measure.scrollWidth + horizontalPadding);
 
-      setWidth((currentWidth) =>
+      setMeasuredWidth((currentWidth) =>
         currentWidth === nextWidth ? currentWidth : nextWidth,
       );
-    };
+    }, [shouldMeasureWidth]);
 
-    syncWidth();
+    useLayoutEffect(() => {
+      const measure = measureRef.current;
 
-    const observer = new ResizeObserver(syncWidth);
-    observer.observe(measure);
-    window.addEventListener("resize", syncWidth);
+      if (!measure || !shouldMeasureWidth) {
+        setMeasuredWidth(null);
+        return;
+      }
 
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("resize", syncWidth);
-    };
-  });
+      syncWidth();
 
-  return (
-    <motion.button
-      className={getButtonClassName({
-        className: `relative overflow-hidden whitespace-nowrap ${className ?? ""}`,
-        variant,
-      })}
-      animate={{ width: width ?? "auto" }}
-      initial={false}
-      ref={buttonRef}
-      transition={{
-        width: shouldReduceMotion
-          ? { duration: 0 }
-          : { bounce: 0, duration: 0.32, type: "spring" },
-      }}
-      type={type}
-      {...props}
-    >
-      <span className="relative inline-flex items-center gap-1.5">
-        {icon ? (
-          <span className="relative inline-grid size-[15px] shrink-0 overflow-hidden">
+      const observer = new ResizeObserver(syncWidth);
+      observer.observe(measure);
+      window.addEventListener("resize", syncWidth);
+
+      return () => {
+        observer.disconnect();
+        window.removeEventListener("resize", syncWidth);
+      };
+    }, [shouldMeasureWidth, syncWidth]);
+
+    useLayoutEffect(() => {
+      if (measurementSignatureRef.current === measurementSignature) {
+        return;
+      }
+
+      measurementSignatureRef.current = measurementSignature;
+      syncWidth();
+    }, [measurementSignature, syncWidth]);
+
+    return (
+      <motion.button
+        {...props}
+        className={getButtonClassName({
+          className: `relative overflow-hidden whitespace-nowrap transition-[color,background-color,border-color,box-shadow,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97] ${width === "full" ? "w-full" : ""} ${className ?? ""}`,
+          variant,
+        })}
+        animate={
+          width === "content" ? { width: measuredWidth ?? "auto" } : undefined
+        }
+        initial={false}
+        ref={buttonRef}
+        transition={
+          width === "content" ? { width: widthTransition } : undefined
+        }
+        type={type}
+      >
+        <span className="relative inline-flex items-center gap-1.5">
+          {icon ? (
+            <span className="relative inline-grid size-[15px] shrink-0 overflow-hidden">
+              <AnimatePresence initial={false} mode="popLayout">
+                <motion.span
+                  animate={contentVisible}
+                  className="col-start-1 row-start-1 flex size-[15px] items-center justify-center"
+                  exit={contentExit}
+                  initial={contentInitial}
+                  key={iconKey}
+                  transition={contentTransition}
+                >
+                  {icon}
+                </motion.span>
+              </AnimatePresence>
+            </span>
+          ) : null}
+
+          <span className="relative inline-grid overflow-hidden">
             <AnimatePresence initial={false} mode="popLayout">
               <motion.span
-                animate={{ opacity: 1, y: 0 }}
-                className="col-start-1 row-start-1 flex size-[15px] items-center justify-center"
-                exit={
-                  shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }
-                }
-                initial={
-                  shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 8 }
-                }
-                key={iconKey ?? children}
-                transition={{ duration: shouldReduceMotion ? 0 : 0.18 }}
+                animate={contentVisible}
+                className="col-start-1 row-start-1 block"
+                exit={contentExit}
+                initial={contentInitial}
+                key={children}
+                transition={contentTransition}
               >
-                {icon}
+                {children}
               </motion.span>
             </AnimatePresence>
           </span>
-        ) : null}
-
-        <span className="relative inline-grid overflow-hidden">
-          <AnimatePresence initial={false} mode="popLayout">
-            <motion.span
-              animate={{ opacity: 1, y: 0 }}
-              className="col-start-1 row-start-1 block"
-              exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
-              initial={
-                shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 8 }
-              }
-              key={children}
-              transition={{ duration: shouldReduceMotion ? 0 : 0.18 }}
-            >
-              {children}
-            </motion.span>
-          </AnimatePresence>
         </span>
-      </span>
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute inline-flex items-center gap-1.5 opacity-0"
-        ref={measureRef}
-      >
-        {icon ? (
-          <span className="flex size-[15px] shrink-0 items-center justify-center">
-            {icon}
-          </span>
-        ) : null}
-        <span>{children}</span>
-      </span>
-    </motion.button>
-  );
-}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inline-flex items-center gap-1.5 opacity-0"
+          ref={measureRef}
+        >
+          {icon ? (
+            <span className="flex size-[15px] shrink-0 items-center justify-center">
+              {icon}
+            </span>
+          ) : null}
+          <span>{children}</span>
+        </span>
+      </motion.button>
+    );
+  },
+);

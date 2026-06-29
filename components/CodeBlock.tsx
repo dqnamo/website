@@ -17,7 +17,7 @@ export default function CodeBlock({ lines }: { lines: CodeLine[] }) {
     <pre className="min-h-0 flex-1 overflow-auto p-4 font-mono text-xs leading-relaxed">
       <code>
         {lines.map((line) => (
-          <span className="block" key={line.id}>
+          <span className="block min-h-[1lh]" key={line.id}>
             {line.tokens.map((token) => (
               <span
                 key={token.id}
