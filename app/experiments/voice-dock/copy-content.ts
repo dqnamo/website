@@ -19,7 +19,7 @@ type VoiceDockProps = {
   onSubmit?: () => void | Promise<void>;
 };
 
-const panelHeight = 132;
+const panelHeight = 120;
 
 const dockTransition = { duration: 0.3, ease: [0.22, 1, 0.36, 1] } as const;
 
@@ -44,25 +44,6 @@ export function VoiceDock({
 
   modeRef.current = mode;
 
-  // Resolve a themed gradient from the host element's own colors.
-  const registerGradient = useCallback((analyzer: AudioMotionAnalyzer) => {
-    const host = hostRef.current;
-    if (!host) return;
-    const base = window.getComputedStyle(host).color;
-    const probe = document.createElement("span");
-    probe.style.color = "var(--color-accent-9)";
-    host.appendChild(probe);
-    const accent = window.getComputedStyle(probe).color;
-    host.removeChild(probe);
-    analyzer.registerGradient("voice", {
-      colorStops: [
-        { color: accent, pos: 0 },
-        { color: base, pos: 1 },
-      ],
-    });
-    analyzer.gradient = "voice";
-  }, []);
-
   const ensureAnalyzer = useCallback(async () => {
     if (analyzerRef.current) return analyzerRef.current;
     if (!hostRef.current) return null;
@@ -70,30 +51,32 @@ export function VoiceDock({
       "audiomotion-analyzer"
     );
     const analyzer = new AudioMotionAnalyzer(hostRef.current, {
+      barSpace: 0.32,
+      colorMode: "bar-index", // rainbow across bars
       connectSpeakers: false, // analyze only, no feedback
-      fillAlpha: 0.28,
-      frequencyScale: "log",
-      lineWidth: 2,
-      mode: 10,
+      gradient: "rainbow",
+      mode: 4, // 1/6 octave bands
       overlay: true,
+      reflexAlpha: 0.22,
+      reflexRatio: 0.34,
+      roundBars: true,
       showBgColor: false,
       showScaleX: false,
       showScaleY: false,
-      smoothing: 0.82,
+      smoothing: 0.7,
     });
     analyzerRef.current = analyzer;
-    registerGradient(analyzer);
     return analyzer;
-  }, [registerGradient]);
+  }, []);
 
   const clearInput = useCallback(() => {
     const analyzer = analyzerRef.current;
     if (syntheticRef.current) {
       window.clearInterval(syntheticRef.current.interval);
       for (const node of syntheticRef.current.nodes) {
-        if (node instanceof OscillatorNode) {
+        if ("stop" in node && typeof node.stop === "function") {
           try {
-            node.stop();
+            (node as OscillatorNode | AudioBufferSourceNode).stop();
           } catch {}
         }
         try {
@@ -110,26 +93,32 @@ export function VoiceDock({
     }
   }, []);
 
-  // Silent oscillator bank stands in when a mic isn't available, so the
-  // waveform still animates during the demo.
+  // Filtered broadband noise stands in when a mic isn't available, so the
+  // whole colorful spectrum still lights up during the demo.
   const startSyntheticAmbient = useCallback((analyzer: AudioMotionAnalyzer) => {
     const ctx = analyzer.audioCtx;
+    const buffer = ctx.createBuffer(1, 2 * ctx.sampleRate, ctx.sampleRate);
+    const channel = buffer.getChannelData(0);
+    for (let i = 0; i < channel.length; i++) channel[i] = Math.random() * 2 - 1;
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    noise.loop = true;
+    const filter = ctx.createBiquadFilter();
+    filter.type = "bandpass";
+    filter.frequency.value = 900;
+    filter.Q.value = 0.7;
     const gain = ctx.createGain();
     gain.gain.value = 0.0001;
-    const oscillators = [130, 92, 320].map((frequency, index) => {
-      const osc = ctx.createOscillator();
-      osc.type = (["sawtooth", "sine", "triangle"] as const)[index];
-      osc.frequency.value = frequency;
-      osc.connect(gain);
-      osc.start();
-      return osc;
-    });
+    noise.connect(filter);
+    filter.connect(gain);
     analyzer.connectInput(gain);
+    noise.start();
     inputRef.current = gain;
     const interval = window.setInterval(() => {
-      gain.gain.setTargetAtTime(0.05 + Math.random() * 0.18, ctx.currentTime, 0.16);
-    }, 280);
-    syntheticRef.current = { interval, nodes: [...oscillators, gain] };
+      gain.gain.setTargetAtTime(0.3 + Math.random() * 0.5, ctx.currentTime, 0.1);
+      filter.frequency.setTargetAtTime(300 + Math.random() * 3200, ctx.currentTime, 0.18);
+    }, 180);
+    syntheticRef.current = { interval, nodes: [noise, filter, gain] };
   }, []);
 
   // Stop capturing and hand off to the agent's thinking state.
@@ -151,7 +140,6 @@ export function VoiceDock({
     setMode("listening");
     const analyzer = await ensureAnalyzer();
     if (!analyzer) return;
-    registerGradient(analyzer);
     await analyzer.audioCtx.resume().catch(() => {});
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -163,7 +151,7 @@ export function VoiceDock({
       setDenied(true);
       startSyntheticAmbient(analyzer);
     }
-  }, [clearInput, ensureAnalyzer, registerGradient, startSyntheticAmbient]);
+  }, [clearInput, ensureAnalyzer, startSyntheticAmbient]);
 
   const toggle = useCallback(() => {
     const current = modeRef.current;
@@ -240,13 +228,8 @@ export function VoiceDock({
           initial={false}
           transition={shouldReduceMotion ? { duration: 0 } : dockTransition}
         >
-          <div className="mb-2 flex flex-col gap-2 rounded-xl bg-white/5 p-3">
-            <div className="h-14 w-full overflow-hidden rounded-md text-white" ref={hostRef} />
-            <p className="text-xs leading-4 text-neutral-400">
-              {denied
-                ? "Allow microphone access for a live waveform."
-                : "Press to stop."}
-            </p>
+          <div className="mb-2 rounded-xl bg-white/5 p-2">
+            <div className="h-24 w-full overflow-hidden rounded-md" ref={hostRef} />
           </div>
         </motion.div>
       </div>

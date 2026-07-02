@@ -4,7 +4,6 @@ import {
   MicrophoneIcon,
   MicrophoneSlashIcon,
   SpinnerGapIcon,
-  WaveformIcon,
 } from "@phosphor-icons/react";
 import type AudioMotionAnalyzer from "audiomotion-analyzer";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -16,7 +15,7 @@ import { cn } from "@/helpers/classname-helper";
 
 type VoiceMode = "idle" | "listening" | "thinking";
 
-const panelHeight = 132;
+const panelHeight = 120;
 
 const dockTransition = {
   duration: 0.3,
@@ -41,23 +40,6 @@ function isTextInputTarget(target: EventTarget | null) {
       ),
     )
   );
-}
-
-function resolveColor(element: HTMLElement, value: string) {
-  const probe = document.createElement("span");
-  probe.style.color = value;
-  probe.style.display = "none";
-  element.appendChild(probe);
-  const resolved = window.getComputedStyle(probe).color;
-  element.removeChild(probe);
-  return resolved;
-}
-
-function formatElapsed(ms: number) {
-  const totalSeconds = Math.floor(ms / 1000);
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 }
 
 type VoiceButtonProps = ComponentPropsWithoutRef<"button"> & {
@@ -167,7 +149,6 @@ function VoiceStatus({ mode, denied }: { mode: VoiceMode; denied: boolean }) {
 export function VoiceDockShowcase() {
   const [mode, setMode] = useState<VoiceMode>("idle");
   const [denied, setDenied] = useState(false);
-  const [elapsed, setElapsed] = useState(0);
   const shouldReduceMotion = useReducedMotion();
 
   const modeRef = useRef<VoiceMode>("idle");
@@ -179,26 +160,9 @@ export function VoiceDockShowcase() {
     null,
   );
   const rafRef = useRef<number | null>(null);
-  const timerStartRef = useRef<number | null>(null);
   const pulseRef = useRef<HTMLSpanElement>(null);
 
   modeRef.current = mode;
-
-  const registerGradient = useCallback((analyzer: AudioMotionAnalyzer) => {
-    const host = canvasHostRef.current;
-    if (!host) {
-      return;
-    }
-    const base = window.getComputedStyle(host).color;
-    const accent = resolveColor(host, "var(--color-accent-9)");
-    analyzer.registerGradient("voice", {
-      colorStops: [
-        { color: accent, pos: 0 },
-        { color: base, pos: 1 },
-      ],
-    });
-    analyzer.gradient = "voice";
-  }, []);
 
   const ensureAnalyzer = useCallback(async () => {
     if (analyzerRef.current) {
@@ -212,34 +176,38 @@ export function VoiceDockShowcase() {
       "audiomotion-analyzer"
     );
     const analyzer = new AudioMotionAnalyzer(host, {
+      barSpace: 0.32,
       channelLayout: "single",
+      colorMode: "bar-index",
       connectSpeakers: false,
-      fillAlpha: 0.28,
       frequencyScale: "log",
-      lineWidth: 2,
+      gradient: "rainbow",
       maxFreq: 16000,
-      minFreq: 50,
-      mode: 10,
+      minFreq: 40,
+      mode: 4,
       overlay: true,
+      reflexAlpha: 0.22,
+      reflexBright: 1,
+      reflexRatio: 0.34,
+      roundBars: true,
       showBgColor: false,
       showPeaks: false,
       showScaleX: false,
       showScaleY: false,
-      smoothing: 0.82,
+      smoothing: 0.7,
     });
     analyzerRef.current = analyzer;
-    registerGradient(analyzer);
     return analyzer;
-  }, [registerGradient]);
+  }, []);
 
   const clearInput = useCallback(() => {
     const analyzer = analyzerRef.current;
     if (syntheticRef.current) {
       window.clearInterval(syntheticRef.current.interval);
       for (const node of syntheticRef.current.nodes) {
-        if (node instanceof OscillatorNode) {
+        if ("stop" in node && typeof node.stop === "function") {
           try {
-            node.stop();
+            (node as OscillatorNode | AudioBufferSourceNode).stop();
           } catch {
             // already stopped
           }
@@ -264,35 +232,48 @@ export function VoiceDockShowcase() {
     }
   }, []);
 
-  // Fallback source so the waveform still moves when a mic isn't available.
+  // Fallback source so the whole spectrum still lights up when a mic isn't
+  // available: filtered broadband noise with a wandering band-pass sweep.
   const startSyntheticAmbient = useCallback((analyzer: AudioMotionAnalyzer) => {
     const ctx = analyzer.audioCtx;
+    const bufferSize = 2 * ctx.sampleRate;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const channel = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      channel[i] = Math.random() * 2 - 1;
+    }
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    noise.loop = true;
+
+    const filter = ctx.createBiquadFilter();
+    filter.type = "bandpass";
+    filter.frequency.value = 900;
+    filter.Q.value = 0.7;
+
     const gain = ctx.createGain();
     gain.gain.value = 0.0001;
-    const oscillators = [
-      { frequency: 130, type: "sawtooth" as OscillatorType },
-      { frequency: 92, type: "sine" as OscillatorType },
-      { frequency: 320, type: "triangle" as OscillatorType },
-    ].map(({ frequency, type }) => {
-      const osc = ctx.createOscillator();
-      osc.type = type;
-      osc.frequency.value = frequency;
-      osc.connect(gain);
-      osc.start();
-      return osc;
-    });
+
+    noise.connect(filter);
+    filter.connect(gain);
     analyzer.connectInput(gain);
+    noise.start();
     inputNodeRef.current = gain;
 
     const interval = window.setInterval(() => {
       gain.gain.setTargetAtTime(
-        0.05 + Math.random() * 0.18,
+        0.3 + Math.random() * 0.5,
         ctx.currentTime,
-        0.16,
+        0.1,
       );
-    }, 280);
+      filter.frequency.setTargetAtTime(
+        300 + Math.random() * 3200,
+        ctx.currentTime,
+        0.18,
+      );
+    }, 180);
 
-    syntheticRef.current = { interval, nodes: [...oscillators, gain] };
+    syntheticRef.current = { interval, nodes: [noise, filter, gain] };
   }, []);
 
   const runLevelLoop = useCallback(() => {
@@ -326,9 +307,7 @@ export function VoiceDockShowcase() {
   const goIdle = useCallback(() => {
     clearInput();
     stopLevelLoop();
-    timerStartRef.current = null;
     setMode("idle");
-    setElapsed(0);
   }, [clearInput, stopLevelLoop]);
 
   // Stop capturing and hand off to the agent's thinking state.
@@ -338,7 +317,6 @@ export function VoiceDockShowcase() {
     }
     clearInput();
     stopLevelLoop();
-    timerStartRef.current = null;
     setMode("thinking");
   }, [clearInput, stopLevelLoop]);
 
@@ -346,14 +324,11 @@ export function VoiceDockShowcase() {
     clearInput();
     setDenied(false);
     setMode("listening");
-    setElapsed(0);
-    timerStartRef.current = performance.now();
 
     const analyzer = await ensureAnalyzer();
     if (!analyzer) {
       return;
     }
-    registerGradient(analyzer);
     try {
       await analyzer.audioCtx.resume();
     } catch {
@@ -373,13 +348,7 @@ export function VoiceDockShowcase() {
     }
 
     runLevelLoop();
-  }, [
-    clearInput,
-    ensureAnalyzer,
-    registerGradient,
-    runLevelLoop,
-    startSyntheticAmbient,
-  ]);
+  }, [clearInput, ensureAnalyzer, runLevelLoop, startSyntheticAmbient]);
 
   const toggleVoice = useCallback(() => {
     const current = modeRef.current;
@@ -393,18 +362,6 @@ export function VoiceDockShowcase() {
     }
     goIdle();
   }, [beginListening, endListening, goIdle]);
-
-  useEffect(() => {
-    if (mode !== "listening") {
-      return;
-    }
-    const interval = window.setInterval(() => {
-      if (timerStartRef.current !== null) {
-        setElapsed(performance.now() - timerStartRef.current);
-      }
-    }, 250);
-    return () => window.clearInterval(interval);
-  }, [mode]);
 
   useEffect(() => {
     function handleGlobalKeyDown(event: KeyboardEvent) {
@@ -519,31 +476,11 @@ export function VoiceDockShowcase() {
           initial={false}
           transition={shouldReduceMotion ? { duration: 0 } : dockTransition}
         >
-          <div className="mb-2 flex flex-col gap-2 rounded-[12px] bg-grayscale-11/25 p-3 dark:bg-grayscale-3/60">
-            <div className="flex items-center justify-between gap-2">
-              <span className="flex items-center gap-1.5 font-medium text-grayscale-2 text-xs leading-none dark:text-grayscale-12">
-                <WaveformIcon
-                  aria-hidden="true"
-                  className="size-3.5 shrink-0"
-                  weight="bold"
-                />
-                You
-              </span>
-              <span className="font-mono text-[11px] text-grayscale-8 tabular-nums leading-none dark:text-grayscale-10">
-                {formatElapsed(elapsed)}
-              </span>
-            </div>
-
+          <div className="mb-2 rounded-[12px] bg-grayscale-11/25 p-2 dark:bg-grayscale-3/60">
             <div
-              className="h-14 w-full overflow-hidden rounded-[8px] text-grayscale-2 dark:text-grayscale-12"
+              className="h-24 w-full overflow-hidden rounded-[8px]"
               ref={canvasHostRef}
             />
-
-            <p className="text-grayscale-8 text-xs leading-4 dark:text-grayscale-10">
-              {denied
-                ? "Allow microphone access for a live waveform."
-                : "Press V or Escape to stop."}
-            </p>
           </div>
         </motion.div>
       </div>
