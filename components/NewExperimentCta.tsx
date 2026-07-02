@@ -47,6 +47,13 @@ const experiments = [
     preview: "agent-dock",
   },
   {
+    title: "Voice Dock",
+    href: "/experiments/voice-dock",
+    description:
+      "A voice dock that expands into a live audio waveform as it listens.",
+    preview: "voice-dock",
+  },
+  {
     title: "Scroll Fade List",
     href: "/experiments/scroll-fade-list",
     description: "A compact list surface with a soft overflow fade.",
@@ -348,6 +355,62 @@ function ExperimentPreview({
                   C
                 </span>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (type === "voice-dock") {
+    const waveformBars = [
+      0.35, 0.6, 0.85, 0.5, 0.95, 0.7, 0.4, 0.75, 1, 0.55, 0.8, 0.45, 0.65, 0.9,
+      0.5, 0.7, 0.38, 0.6,
+    ];
+
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "flex items-center justify-center bg-grayscale-2 p-3 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+        )}
+      >
+        <div className="w-full max-w-[13.25rem] overflow-hidden rounded-[13px] border border-grayscale-12 bg-grayscale-12 p-1.5 text-grayscale-2 shadow-[0_10px_28px_rgba(0,0,0,0.12)] dark:border-grayscale-4 dark:bg-grayscale-4 dark:text-grayscale-12 dark:shadow-none">
+          <div className="mb-1.5 flex h-8 items-center gap-[3px] rounded-[8px] bg-grayscale-11/25 px-2 dark:bg-grayscale-3/60">
+            {waveformBars.map((height, index) => (
+              <span
+                className="w-[3px] shrink-0 rounded-full bg-accent-9"
+                // biome-ignore lint/suspicious/noArrayIndexKey: static decorative bars
+                key={index}
+                style={{ height: `${Math.round(height * 100)}%` }}
+              />
+            ))}
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Image
+              alt=""
+              aria-hidden="true"
+              className="size-7 shrink-0 rounded-[9px]"
+              height={28}
+              src="https://api.dicebear.com/10.x/initial-face/svg?seed=Aria&size=80"
+              unoptimized
+              width={28}
+            />
+            <div className="min-w-0 flex-1">
+              <p className="truncate font-medium text-[10px] leading-none">
+                Aria
+              </p>
+              <p className="mt-1 truncate text-[8px] text-grayscale-8 leading-none dark:text-grayscale-10">
+                Listening...
+              </p>
+            </div>
+            <div className="flex h-6 items-center gap-1 rounded-[7px] bg-grayscale-11/60 px-1 font-medium text-[8px] leading-none dark:bg-grayscale-6">
+              <MicrophoneIcon size={11} weight="bold" />
+              <span>Stop</span>
+              <span className="flex size-4 items-center justify-center rounded-[4px] bg-grayscale-11/55 font-mono font-semibold text-[8px] text-grayscale-1 dark:bg-grayscale-7 dark:text-grayscale-12">
+                V
+              </span>
             </div>
           </div>
         </div>
