@@ -8,7 +8,7 @@ import { VoiceDockShowcase } from "./voice-dock-showcase";
 export const metadata: Metadata = {
   title: "Voice Dock | dqnamo",
   description:
-    "A compact agent dock for voice sessions with a live audio waveform, listening, thinking, and speaking states.",
+    "A compact agent dock for voice input with a live audio waveform that hands off to a thinking state.",
 };
 
 export default async function VoiceDockPage() {
@@ -23,7 +23,7 @@ export default async function VoiceDockPage() {
 
   return (
     <ExperimentPage
-      description="A voice counterpart to the agent dock: tap to talk and it expands into a live audio waveform powered by audioMotion-analyzer, cycling through listening, thinking, and speaking states."
+      description="A voice counterpart to the agent dock: tap to talk and it expands into a live audio waveform powered by audioMotion-analyzer, then closes into a thinking state while the agent works."
       slug="voice-dock"
       title="Voice Dock"
     >

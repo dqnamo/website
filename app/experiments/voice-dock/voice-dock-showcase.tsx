@@ -14,7 +14,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Shimmer } from "@/components/ai-elements/shimmer";
 import { cn } from "@/helpers/classname-helper";
 
-type VoiceMode = "idle" | "listening" | "thinking" | "speaking";
+type VoiceMode = "idle" | "listening" | "thinking";
 
 const panelHeight = 132;
 
@@ -25,9 +25,6 @@ const dockTransition = {
 
 const agentAvatarUrl =
   "https://api.dicebear.com/10.x/initial-face/svg?seed=Aria&size=80";
-
-const spokenReply =
-  "Sure — I've pulled your latest numbers and I'm drafting the summary now.";
 
 const buttonClassName =
   "relative flex h-9 items-center justify-center gap-1.5 rounded-[9px] px-2.5 py-1 font-medium text-grayscale-1 text-sm leading-none transition-[background-color,color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-grayscale-11/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 disabled:cursor-not-allowed disabled:opacity-60 dark:text-grayscale-12 dark:hover:bg-grayscale-6";
@@ -118,7 +115,39 @@ function VoiceStatus({ mode, denied }: { mode: VoiceMode; denied: boolean }) {
   return (
     <div className="min-w-0 overflow-hidden">
       <AnimatePresence initial={false} mode="popLayout">
-        {mode === "idle" ? (
+        {mode === "thinking" ? (
+          <motion.p
+            animate={{ opacity: 1, y: 0 }}
+            className="flex min-w-0 items-center gap-1.5 text-grayscale-8 text-xs leading-none dark:text-grayscale-10"
+            exit={{ opacity: 0, y: -6 }}
+            initial={{ opacity: 0, y: 6 }}
+            key="thinking"
+            transition={{ duration: 0.16, ease: "easeOut" }}
+          >
+            <SpinnerGapIcon
+              aria-hidden="true"
+              className="size-3.5 shrink-0 animate-spin text-grayscale-1 dark:text-grayscale-12"
+              weight="bold"
+            />
+            <Shimmer
+              as="span"
+              className="truncate [--color-background:var(--color-grayscale-1)] [--color-muted-foreground:var(--color-grayscale-8)] dark:[--color-background:var(--color-grayscale-12)] dark:[--color-muted-foreground:var(--color-grayscale-10)]"
+            >
+              Thinking...
+            </Shimmer>
+          </motion.p>
+        ) : mode === "listening" ? (
+          <motion.p
+            animate={{ opacity: 1, y: 0 }}
+            className="truncate text-grayscale-1 text-xs leading-none dark:text-grayscale-12"
+            exit={{ opacity: 0, y: -6 }}
+            initial={{ opacity: 0, y: 6 }}
+            key="listening"
+            transition={{ duration: 0.16, ease: "easeOut" }}
+          >
+            Listening...
+          </motion.p>
+        ) : (
           <motion.p
             animate={{ opacity: 1, y: 0 }}
             className="truncate text-grayscale-8 text-xs leading-none dark:text-grayscale-10"
@@ -127,36 +156,7 @@ function VoiceStatus({ mode, denied }: { mode: VoiceMode; denied: boolean }) {
             key="idle"
             transition={{ duration: 0.16, ease: "easeOut" }}
           >
-            {denied ? "Mic blocked — running a demo voice" : "Tap to talk"}
-          </motion.p>
-        ) : (
-          <motion.p
-            animate={{ opacity: 1, y: 0 }}
-            className="flex min-w-0 items-center gap-1.5 text-grayscale-8 text-xs leading-none dark:text-grayscale-10"
-            exit={{ opacity: 0, y: -6 }}
-            initial={{ opacity: 0, y: 6 }}
-            key={mode}
-            transition={{ duration: 0.16, ease: "easeOut" }}
-          >
-            {mode === "thinking" ? (
-              <>
-                <SpinnerGapIcon
-                  aria-hidden="true"
-                  className="size-3.5 shrink-0 animate-spin text-grayscale-1 dark:text-grayscale-12"
-                  weight="bold"
-                />
-                <Shimmer
-                  as="span"
-                  className="truncate [--color-background:var(--color-grayscale-1)] [--color-muted-foreground:var(--color-grayscale-8)] dark:[--color-background:var(--color-grayscale-12)] dark:[--color-muted-foreground:var(--color-grayscale-10)]"
-                >
-                  Thinking...
-                </Shimmer>
-              </>
-            ) : (
-              <span className="truncate text-grayscale-1 dark:text-grayscale-12">
-                {mode === "listening" ? "Listening..." : "Speaking..."}
-              </span>
-            )}
+            {denied ? "Mic blocked — running a demo waveform" : "Tap to talk"}
           </motion.p>
         )}
       </AnimatePresence>
@@ -179,7 +179,6 @@ export function VoiceDockShowcase() {
     null,
   );
   const rafRef = useRef<number | null>(null);
-  const timersRef = useRef<number[]>([]);
   const timerStartRef = useRef<number | null>(null);
   const pulseRef = useRef<HTMLSpanElement>(null);
 
@@ -265,52 +264,36 @@ export function VoiceDockShowcase() {
     }
   }, []);
 
-  const startSynthetic = useCallback(
-    (analyzer: AudioMotionAnalyzer, kind: "speaking" | "ambient") => {
-      const ctx = analyzer.audioCtx;
-      const gain = ctx.createGain();
-      gain.gain.value = 0.0001;
-      const oscillators = [
-        { frequency: 130, type: "sawtooth" as OscillatorType },
-        { frequency: 92, type: "sine" as OscillatorType },
-        { frequency: 320, type: "triangle" as OscillatorType },
-      ].map(({ frequency, type }) => {
-        const osc = ctx.createOscillator();
-        osc.type = type;
-        osc.frequency.value = frequency;
-        osc.connect(gain);
-        osc.start();
-        return osc;
-      });
-      analyzer.connectInput(gain);
-      inputNodeRef.current = gain;
+  // Fallback source so the waveform still moves when a mic isn't available.
+  const startSyntheticAmbient = useCallback((analyzer: AudioMotionAnalyzer) => {
+    const ctx = analyzer.audioCtx;
+    const gain = ctx.createGain();
+    gain.gain.value = 0.0001;
+    const oscillators = [
+      { frequency: 130, type: "sawtooth" as OscillatorType },
+      { frequency: 92, type: "sine" as OscillatorType },
+      { frequency: 320, type: "triangle" as OscillatorType },
+    ].map(({ frequency, type }) => {
+      const osc = ctx.createOscillator();
+      osc.type = type;
+      osc.frequency.value = frequency;
+      osc.connect(gain);
+      osc.start();
+      return osc;
+    });
+    analyzer.connectInput(gain);
+    inputNodeRef.current = gain;
 
-      const isSpeaking = kind === "speaking";
-      const interval = window.setInterval(
-        () => {
-          const level = isSpeaking
-            ? 0.16 + Math.random() * 0.78
-            : 0.04 + Math.random() * 0.14;
-          gain.gain.setTargetAtTime(
-            level,
-            ctx.currentTime,
-            isSpeaking ? 0.05 : 0.16,
-          );
-          if (isSpeaking) {
-            oscillators[0].frequency.setTargetAtTime(
-              105 + Math.random() * 90,
-              ctx.currentTime,
-              0.08,
-            );
-          }
-        },
-        isSpeaking ? 130 : 300,
+    const interval = window.setInterval(() => {
+      gain.gain.setTargetAtTime(
+        0.05 + Math.random() * 0.18,
+        ctx.currentTime,
+        0.16,
       );
+    }, 280);
 
-      syntheticRef.current = { interval, nodes: [...oscillators, gain] };
-    },
-    [],
-  );
+    syntheticRef.current = { interval, nodes: [...oscillators, gain] };
+  }, []);
 
   const runLevelLoop = useCallback(() => {
     if (rafRef.current !== null) {
@@ -340,48 +323,28 @@ export function VoiceDockShowcase() {
     }
   }, []);
 
-  const clearTimers = useCallback(() => {
-    for (const timer of timersRef.current) {
-      window.clearTimeout(timer);
-    }
-    timersRef.current = [];
-    timerStartRef.current = null;
-  }, []);
-
   const goIdle = useCallback(() => {
     clearInput();
     stopLevelLoop();
+    timerStartRef.current = null;
     setMode("idle");
     setElapsed(0);
   }, [clearInput, stopLevelLoop]);
 
+  // Stop capturing and hand off to the agent's thinking state.
   const endListening = useCallback(() => {
     if (modeRef.current !== "listening") {
       return;
     }
     clearInput();
+    stopLevelLoop();
     timerStartRef.current = null;
     setMode("thinking");
-
-    const analyzer = analyzerRef.current;
-    const toSpeaking = window.setTimeout(() => {
-      setMode("speaking");
-      if (analyzer) {
-        registerGradient(analyzer);
-        startSynthetic(analyzer, "speaking");
-        runLevelLoop();
-      }
-      const toIdle = window.setTimeout(() => {
-        goIdle();
-      }, 3400);
-      timersRef.current.push(toIdle);
-    }, 1100);
-    timersRef.current.push(toSpeaking);
-  }, [clearInput, goIdle, registerGradient, runLevelLoop, startSynthetic]);
+  }, [clearInput, stopLevelLoop]);
 
   const beginListening = useCallback(async () => {
-    clearTimers();
     clearInput();
+    setDenied(false);
     setMode("listening");
     setElapsed(0);
     timerStartRef.current = performance.now();
@@ -406,17 +369,16 @@ export function VoiceDockShowcase() {
       setDenied(false);
     } catch {
       setDenied(true);
-      startSynthetic(analyzer, "ambient");
+      startSyntheticAmbient(analyzer);
     }
 
     runLevelLoop();
   }, [
     clearInput,
-    clearTimers,
     ensureAnalyzer,
     registerGradient,
     runLevelLoop,
-    startSynthetic,
+    startSyntheticAmbient,
   ]);
 
   const toggleVoice = useCallback(() => {
@@ -429,9 +391,8 @@ export function VoiceDockShowcase() {
       endListening();
       return;
     }
-    clearTimers();
     goIdle();
-  }, [beginListening, clearTimers, endListening, goIdle]);
+  }, [beginListening, endListening, goIdle]);
 
   useEffect(() => {
     if (mode !== "listening") {
@@ -464,7 +425,10 @@ export function VoiceDockShowcase() {
       if (event.key !== "Escape" || modeRef.current === "idle") {
         return;
       }
-      clearTimers();
+      if (modeRef.current === "listening") {
+        endListening();
+        return;
+      }
       goIdle();
     }
 
@@ -474,11 +438,10 @@ export function VoiceDockShowcase() {
       window.removeEventListener("keydown", handleGlobalKeyDown);
       window.removeEventListener("keydown", handleEscape);
     };
-  }, [clearTimers, goIdle, toggleVoice]);
+  }, [endListening, goIdle, toggleVoice]);
 
   useEffect(() => {
     return () => {
-      clearTimers();
       clearInput();
       if (rafRef.current !== null) {
         window.cancelAnimationFrame(rafRef.current);
@@ -486,10 +449,11 @@ export function VoiceDockShowcase() {
       analyzerRef.current?.destroy();
       analyzerRef.current = null;
     };
-  }, [clearInput, clearTimers]);
+  }, [clearInput]);
 
-  const isActive = mode !== "idle";
-  const buttonLabel = mode === "idle" ? "Voice" : "Stop";
+  const isBusy = mode !== "idle";
+  const isListening = mode === "listening";
+  const buttonLabel = isListening ? "Stop" : "Voice";
   const buttonIcon = denied ? (
     <MicrophoneSlashIcon
       aria-hidden="true"
@@ -522,7 +486,7 @@ export function VoiceDockShowcase() {
               aria-hidden="true"
               className={cn(
                 "absolute -right-0.5 -bottom-0.5 size-3 rounded-full border-2 border-grayscale-12 transition-colors duration-300 dark:border-grayscale-4",
-                isActive ? "bg-green-9" : "bg-grayscale-8 dark:bg-grayscale-7",
+                isBusy ? "bg-green-9" : "bg-grayscale-8 dark:bg-grayscale-7",
               )}
             />
           </div>
@@ -534,8 +498,8 @@ export function VoiceDockShowcase() {
 
           <div className="flex shrink-0 items-center gap-1.5">
             <VoiceButton
-              active={isActive}
-              aria-label={mode === "idle" ? "Start voice session" : "Stop"}
+              active={isListening}
+              aria-label={isListening ? "Stop" : "Start voice session"}
               icon={buttonIcon}
               label={buttonLabel}
               onClick={toggleVoice}
@@ -547,10 +511,10 @@ export function VoiceDockShowcase() {
 
         <motion.div
           animate={{
-            height: isActive ? panelHeight : 0,
-            opacity: isActive ? 1 : 0,
+            height: isListening ? panelHeight : 0,
+            opacity: isListening ? 1 : 0,
           }}
-          aria-hidden={!isActive}
+          aria-hidden={!isListening}
           className="overflow-hidden"
           initial={false}
           transition={shouldReduceMotion ? { duration: 0 } : dockTransition}
@@ -563,7 +527,7 @@ export function VoiceDockShowcase() {
                   className="size-3.5 shrink-0"
                   weight="bold"
                 />
-                {mode === "speaking" ? "Aria" : "You"}
+                You
               </span>
               <span className="font-mono text-[11px] text-grayscale-8 tabular-nums leading-none dark:text-grayscale-10">
                 {formatElapsed(elapsed)}
@@ -575,35 +539,11 @@ export function VoiceDockShowcase() {
               ref={canvasHostRef}
             />
 
-            <div className="min-h-4">
-              <AnimatePresence initial={false} mode="wait">
-                {mode === "speaking" ? (
-                  <motion.p
-                    animate={{ opacity: 1, y: 0 }}
-                    className="line-clamp-1 text-grayscale-4 text-xs leading-4 dark:text-grayscale-11"
-                    exit={{ opacity: 0 }}
-                    initial={{ opacity: 0, y: 4 }}
-                    key="reply"
-                    transition={{ duration: 0.2, ease: "easeOut" }}
-                  >
-                    {spokenReply}
-                  </motion.p>
-                ) : (
-                  <motion.p
-                    animate={{ opacity: 1 }}
-                    className="text-grayscale-8 text-xs leading-4 dark:text-grayscale-10"
-                    exit={{ opacity: 0 }}
-                    initial={{ opacity: 0 }}
-                    key="hint"
-                    transition={{ duration: 0.2, ease: "easeOut" }}
-                  >
-                    {denied
-                      ? "Allow microphone access for a live waveform."
-                      : "Press V or Escape to stop."}
-                  </motion.p>
-                )}
-              </AnimatePresence>
-            </div>
+            <p className="text-grayscale-8 text-xs leading-4 dark:text-grayscale-10">
+              {denied
+                ? "Allow microphone access for a live waveform."
+                : "Press V or Escape to stop."}
+            </p>
           </div>
         </motion.div>
       </div>

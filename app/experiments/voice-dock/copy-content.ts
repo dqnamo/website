@@ -10,15 +10,13 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-type VoiceMode = "idle" | "listening" | "thinking" | "speaking";
+type VoiceMode = "idle" | "listening" | "thinking";
 
 type VoiceDockProps = {
   agentName: string;
   avatarSrc: string;
   className?: string;
-  reply?: string;
-  onStart?: () => void;
-  onStop?: () => void;
+  onSubmit?: () => void | Promise<void>;
 };
 
 const panelHeight = 132;
@@ -29,9 +27,7 @@ export function VoiceDock({
   agentName,
   avatarSrc,
   className,
-  reply = "Sure — give me one second.",
-  onStart,
-  onStop,
+  onSubmit,
 }: VoiceDockProps) {
   const [mode, setMode] = useState<VoiceMode>("idle");
   const [denied, setDenied] = useState(false);
@@ -45,7 +41,6 @@ export function VoiceDock({
   const syntheticRef = useRef<{ nodes: AudioNode[]; interval: number } | null>(
     null,
   );
-  const timersRef = useRef<number[]>([]);
 
   modeRef.current = mode;
 
@@ -115,63 +110,45 @@ export function VoiceDock({
     }
   }, []);
 
-  // A silent oscillator bank stands in for the agent's voice (or a mic
-  // fallback), so the analyzer always has something to visualize.
-  const startSynthetic = useCallback(
-    (analyzer: AudioMotionAnalyzer, kind: "speaking" | "ambient") => {
-      const ctx = analyzer.audioCtx;
-      const gain = ctx.createGain();
-      gain.gain.value = 0.0001;
-      const oscillators = [130, 92, 320].map((frequency, index) => {
-        const osc = ctx.createOscillator();
-        osc.type = (["sawtooth", "sine", "triangle"] as const)[index];
-        osc.frequency.value = frequency;
-        osc.connect(gain);
-        osc.start();
-        return osc;
-      });
-      analyzer.connectInput(gain);
-      inputRef.current = gain;
+  // Silent oscillator bank stands in when a mic isn't available, so the
+  // waveform still animates during the demo.
+  const startSyntheticAmbient = useCallback((analyzer: AudioMotionAnalyzer) => {
+    const ctx = analyzer.audioCtx;
+    const gain = ctx.createGain();
+    gain.gain.value = 0.0001;
+    const oscillators = [130, 92, 320].map((frequency, index) => {
+      const osc = ctx.createOscillator();
+      osc.type = (["sawtooth", "sine", "triangle"] as const)[index];
+      osc.frequency.value = frequency;
+      osc.connect(gain);
+      osc.start();
+      return osc;
+    });
+    analyzer.connectInput(gain);
+    inputRef.current = gain;
+    const interval = window.setInterval(() => {
+      gain.gain.setTargetAtTime(0.05 + Math.random() * 0.18, ctx.currentTime, 0.16);
+    }, 280);
+    syntheticRef.current = { interval, nodes: [...oscillators, gain] };
+  }, []);
 
-      const isSpeaking = kind === "speaking";
-      const interval = window.setInterval(
-        () => {
-          const level = isSpeaking
-            ? 0.16 + Math.random() * 0.78
-            : 0.04 + Math.random() * 0.14;
-          gain.gain.setTargetAtTime(level, ctx.currentTime, 0.06);
-        },
-        isSpeaking ? 130 : 300,
-      );
-      syntheticRef.current = { interval, nodes: [...oscillators, gain] };
-    },
-    [],
-  );
-
-  const goIdle = useCallback(() => {
-    clearInput();
-    setMode("idle");
-    onStop?.();
-  }, [clearInput, onStop]);
-
+  // Stop capturing and hand off to the agent's thinking state.
   const endListening = useCallback(() => {
     if (modeRef.current !== "listening") return;
     clearInput();
     setMode("thinking");
-    const analyzer = analyzerRef.current;
-    timersRef.current.push(
-      window.setTimeout(() => {
-        setMode("speaking");
-        if (analyzer) startSynthetic(analyzer, "speaking");
-        timersRef.current.push(window.setTimeout(goIdle, 3400));
-      }, 1100),
-    );
-  }, [clearInput, goIdle, startSynthetic]);
+    void onSubmit?.();
+  }, [clearInput, onSubmit]);
+
+  const goIdle = useCallback(() => {
+    clearInput();
+    setMode("idle");
+  }, [clearInput]);
 
   const beginListening = useCallback(async () => {
     clearInput();
+    setDenied(false);
     setMode("listening");
-    onStart?.();
     const analyzer = await ensureAnalyzer();
     if (!analyzer) return;
     registerGradient(analyzer);
@@ -182,32 +159,28 @@ export function VoiceDock({
       const source = analyzer.audioCtx.createMediaStreamSource(stream);
       analyzer.connectInput(source);
       inputRef.current = source;
-      setDenied(false);
     } catch {
       setDenied(true);
-      startSynthetic(analyzer, "ambient");
+      startSyntheticAmbient(analyzer);
     }
-  }, [clearInput, ensureAnalyzer, onStart, registerGradient, startSynthetic]);
+  }, [clearInput, ensureAnalyzer, registerGradient, startSyntheticAmbient]);
 
   const toggle = useCallback(() => {
     const current = modeRef.current;
     if (current === "idle") return void beginListening();
     if (current === "listening") return endListening();
-    for (const timer of timersRef.current) window.clearTimeout(timer);
-    timersRef.current = [];
     goIdle();
   }, [beginListening, endListening, goIdle]);
 
   useEffect(() => {
     return () => {
-      for (const timer of timersRef.current) window.clearTimeout(timer);
       clearInput();
       analyzerRef.current?.destroy();
       analyzerRef.current = null;
     };
   }, [clearInput]);
 
-  const active = mode !== "idle";
+  const listening = mode === "listening";
 
   return (
     <div className={className}>
@@ -242,9 +215,7 @@ export function VoiceDock({
                   ? "Tap to talk"
                   : mode === "listening"
                     ? "Listening..."
-                    : mode === "thinking"
-                      ? "Thinking..."
-                      : "Speaking..."}
+                    : "Thinking..."}
               </motion.p>
             </AnimatePresence>
           </div>
@@ -258,13 +229,13 @@ export function VoiceDock({
             ) : (
               <MicrophoneIcon className="size-4" weight="bold" />
             )}
-            {active ? "Stop" : "Voice"}
+            {listening ? "Stop" : "Voice"}
           </button>
         </div>
 
         <motion.div
-          animate={{ height: active ? panelHeight : 0, opacity: active ? 1 : 0 }}
-          aria-hidden={!active}
+          animate={{ height: listening ? panelHeight : 0, opacity: listening ? 1 : 0 }}
+          aria-hidden={!listening}
           className="overflow-hidden"
           initial={false}
           transition={shouldReduceMotion ? { duration: 0 } : dockTransition}
@@ -272,7 +243,9 @@ export function VoiceDock({
           <div className="mb-2 flex flex-col gap-2 rounded-xl bg-white/5 p-3">
             <div className="h-14 w-full overflow-hidden rounded-md text-white" ref={hostRef} />
             <p className="text-xs leading-4 text-neutral-400">
-              {mode === "speaking" ? reply : "Press to stop."}
+              {denied
+                ? "Allow microphone access for a live waveform."
+                : "Press to stop."}
             </p>
           </div>
         </motion.div>
@@ -293,9 +266,10 @@ export function VoiceDockExample() {
       agentName="Aria"
       avatarSrc={avatarSrc}
       className="w-full max-w-md"
-      onStart={() => console.log("listening")}
-      onStop={() => console.log("stopped")}
-      reply="Sure — I've pulled your latest numbers together."
+      onSubmit={async () => {
+        // hand the captured audio off to your agent here
+        await transcribeAndRespond();
+      }}
     />
   );
 }
