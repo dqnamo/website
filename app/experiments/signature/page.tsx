@@ -7,6 +7,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { WorkWithMeCta } from "@/components/WorkWithMeCta";
 import { tokenize } from "@/helpers/syntax";
 import { usageSource } from "./copy-content";
+import { SignatureCreator } from "./signature-creator";
 import { SignatureShowcase } from "./signature-showcase";
 import { SourcePanel } from "./source-panel";
 
@@ -63,6 +64,7 @@ export default async function SignaturePage() {
 
         <section className="flex flex-col items-center justify-center gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5 dark:border-grayscale-4">
           <SignatureShowcase />
+          <SignatureCreator />
           <div className="w-full overflow-hidden rounded-[13px] border border-grayscale-3 bg-grayscale-1 small-shadow dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none">
             <SourcePanel
               componentLines={componentLines}
