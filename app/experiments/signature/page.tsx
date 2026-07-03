@@ -7,8 +7,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { WorkWithMeCta } from "@/components/WorkWithMeCta";
 import { tokenize } from "@/helpers/syntax";
 import { usageSource } from "./copy-content";
-import { SignatureShowcase } from "./signature-showcase";
-import { SourcePanel } from "./source-panel";
+import { SignatureLab } from "./signature-lab";
 
 export const metadata: Metadata = {
   title: "Animated signature | dqnamo",
@@ -62,15 +61,12 @@ export default async function SignaturePage() {
         </div>
 
         <section className="flex flex-col items-center justify-center gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5 dark:border-grayscale-4">
-          <SignatureShowcase />
-          <div className="w-full overflow-hidden rounded-[13px] border border-grayscale-3 bg-grayscale-1 small-shadow dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none">
-            <SourcePanel
-              componentLines={componentLines}
-              componentSource={componentSource}
-              usageLines={usageLines}
-              usageSource={usageSource}
-            />
-          </div>
+          <SignatureLab
+            componentLines={componentLines}
+            componentSource={componentSource}
+            usageLines={usageLines}
+            usageSource={usageSource}
+          />
         </section>
 
         <WorkWithMeCta className="my-16" />
