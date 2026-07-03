@@ -1,21 +1,18 @@
+export const SIGNATURE_PATH_PLACEHOLDER = "__SIGNATURE_PATH__";
+
+export const SIGNATURE_FALLBACK_PATH =
+  "M60 200 Q180 60 300 180 T540 180 Q660 260 780 140 T940 180";
+
 export const usageSource = `import { Signature } from "@/components/Signature";
 
-export function SignatureExample() {
+export function MySignature() {
   return (
-    <div className="w-56 text-grayscale-12">
-      <Signature duration={2} strokeWidth={10} />
-    </div>
-  );
-}
-
-export function CustomPathExample() {
-  return (
-    <div className="w-64 text-blue-10">
+    <div className="w-64 text-grayscale-12">
       <Signature
-        path="M10 80 C 40 10, 65 10, 95 80"
-        viewBox="0 0 100 100"
-        duration={1.8}
-        strokeWidth={4}
+        path="${SIGNATURE_PATH_PLACEHOLDER}"
+        viewBox="0 0 1000 320"
+        duration={1.4}
+        strokeWidth={7}
       />
     </div>
   );

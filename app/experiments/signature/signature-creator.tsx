@@ -5,6 +5,7 @@ import {
   ArrowCounterClockwiseIcon,
   TrashIcon,
 } from "@phosphor-icons/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Button from "@/components/public/Button";
 import { Signature } from "@/components/Signature";
@@ -17,7 +18,7 @@ type Point = {
 type Stroke = Point[];
 
 const viewBoxWidth = 1000;
-const viewBoxHeight = 420;
+const viewBoxHeight = 320;
 const viewBox = `0 0 ${viewBoxWidth} ${viewBoxHeight}`;
 const minPointDistance = 3;
 
@@ -79,7 +80,11 @@ function getSvgPoint(svg: SVGSVGElement, event: React.PointerEvent) {
   };
 }
 
-export function SignatureCreator() {
+type SignatureCreatorProps = {
+  onPathChange?: (path: string) => void;
+};
+
+export function SignatureCreator({ onPathChange }: SignatureCreatorProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const [strokes, setStrokes] = useState<Stroke[]>([]);
   const [activeStroke, setActiveStroke] = useState<Stroke | null>(null);
@@ -92,6 +97,10 @@ export function SignatureCreator() {
   );
   const drawPath = useMemo(() => strokesToPath(drawStrokes), [drawStrokes]);
   const committedPath = useMemo(() => strokesToPath(strokes), [strokes]);
+
+  useEffect(() => {
+    onPathChange?.(committedPath);
+  }, [committedPath, onPathChange]);
 
   function continueStroke(event: React.PointerEvent<SVGSVGElement>) {
     if (!isDrawing) {
@@ -212,10 +221,10 @@ export function SignatureCreator() {
         </div>
       </div>
 
-      <div className="relative">
+      <div className="relative aspect-[1000/320] w-full">
       <svg
         aria-label="Signature drawing pad"
-        className="block aspect-[1000/420] w-full touch-none text-grayscale-12"
+        className="absolute inset-0 block h-full w-full touch-none text-grayscale-12"
         onPointerLeave={handlePointerLeave}
         onPointerMove={continueStroke}
         ref={svgRef}
@@ -229,16 +238,15 @@ export function SignatureCreator() {
             patternUnits="userSpaceOnUse"
             width="24"
           >
-            <path
-              d="M24 0H0V24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1"
+            <circle
+              className="fill-grayscale-4 dark:fill-grayscale-5"
+              cx="2"
+              cy="2"
+              r="1.5"
             />
           </pattern>
         </defs>
         <rect
-          className="text-grayscale-3"
           fill="url(#signature-creator-grid)"
           height="100%"
           width="100%"
@@ -250,24 +258,32 @@ export function SignatureCreator() {
             stroke="currentColor"
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth={10}
+            strokeWidth={7}
           />
-        ) : (
-          <text
-            className="fill-grayscale-9 font-mono text-[13px] uppercase tracking-[0.08em]"
-            dominantBaseline="middle"
-            textAnchor="middle"
-            x={viewBoxWidth / 2}
-            y={viewBoxHeight / 2}
-          >
-            Press space to start drawing
-          </text>
-        )}
+        ) : null}
       </svg>
 
-        <span className="pointer-events-none absolute bottom-2 left-2 font-mono text-[10px] text-grayscale-9 uppercase tracking-[0.08em]">
-          {isDrawing ? "Press space to stop" : "Press space to start"}
-        </span>
+        <div className="pointer-events-none absolute right-2 bottom-2 flex items-center gap-1.5 rounded-full border border-grayscale-3 bg-grayscale-1/80 px-2 py-1 backdrop-blur-sm dark:border-grayscale-4 dark:bg-grayscale-3/80">
+          <span
+            className={`size-1.5 rounded-full transition-colors ${
+              isDrawing ? "bg-red-9" : "bg-grayscale-8"
+            }`}
+          />
+          <span className="relative inline-grid overflow-hidden text-[11px] text-grayscale-10">
+            <AnimatePresence initial={false} mode="popLayout">
+              <motion.span
+                animate={{ opacity: 1, transform: "translateY(0px)" }}
+                className="col-start-1 row-start-1 block whitespace-nowrap"
+                exit={{ opacity: 0, transform: "translateY(-8px)" }}
+                initial={{ opacity: 0, transform: "translateY(8px)" }}
+                key={isDrawing ? "stop" : "start"}
+                transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+              >
+                {isDrawing ? "Press space to stop" : "Press space to start"}
+              </motion.span>
+            </AnimatePresence>
+          </span>
+        </div>
       </div>
 
       <div className="flex items-center justify-between gap-3 border-grayscale-3 border-t border-b p-2 dark:border-grayscale-4">
@@ -287,20 +303,16 @@ export function SignatureCreator() {
         </Button>
       </div>
 
-      <div className="flex aspect-[1000/420] w-full items-center justify-center p-6 text-grayscale-12">
+      <div className="flex aspect-[1000/320] w-full items-center justify-center p-6 text-grayscale-12">
         {committedPath ? (
           <Signature
             key={runKey}
-            duration={2}
+            duration={1.4}
             path={committedPath}
-            strokeWidth={10}
+            strokeWidth={7}
             viewBox={viewBox}
           />
-        ) : (
-          <span className="font-mono text-[11px] text-grayscale-9 uppercase tracking-[0.08em]">
-            Your signature plays back here
-          </span>
-        )}
+        ) : null}
       </div>
     </div>
   );
