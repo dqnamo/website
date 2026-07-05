@@ -25,6 +25,7 @@ import { AnimatedSparkline } from "@/components/AnimatedSparkline";
 import { ExperimentBannerPreview } from "@/components/ExperimentBannerPreview";
 import { IridescentFoil } from "@/components/IridescentFoil";
 import { LogoTraceLoader } from "@/components/LogoTraceLoader";
+import { PlayingCard } from "@/components/PlayingCard";
 import { GameOfLife } from "@/components/random/GameOfLife";
 import { Signature } from "@/components/Signature";
 import { cn } from "@/helpers/classname-helper";
@@ -39,6 +40,12 @@ const experiments = [
     href: "/experiments/dynamic-button",
     description: "A button that smoothly resizes as its label animates.",
     preview: "dynamic-button",
+  },
+  {
+    title: "Playing Cards",
+    href: "/experiments/playing-cards",
+    description: "Mini playing cards dealt into a springy fanned hand.",
+    preview: "playing-cards",
   },
   {
     title: "Agent Dock",
@@ -303,6 +310,32 @@ function ExperimentPreview({
 }) {
   if (type === "dynamic-button") {
     return <DynamicButtonPreview featured={featured} />;
+  }
+
+  if (type === "playing-cards") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "flex items-center justify-center bg-grayscale-2 p-3 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+        )}
+      >
+        <div className="flex items-center justify-center pt-1">
+          <PlayingCard
+            className="-rotate-12 w-14 translate-y-1.5"
+            rank="A"
+            suit="spades"
+          />
+          <PlayingCard className="-ml-6 z-10 w-14" rank="K" suit="hearts" />
+          <PlayingCard
+            className="-ml-6 w-14 rotate-12 translate-y-1.5"
+            rank="Q"
+            suit="clubs"
+          />
+        </div>
+      </div>
+    );
   }
 
   if (type === "agent-dock") {
