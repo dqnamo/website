@@ -2,11 +2,9 @@
 
 import {
   ArrowRightIcon,
-  ChatIcon,
   CheckIcon,
   CopyIcon,
   FloppyDiskIcon,
-  MicrophoneIcon,
   PaperPlaneTiltIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -21,11 +19,9 @@ import {
   useState,
 } from "react";
 import { ScrambleTextShowcase } from "@/app/experiments/scramble-text/scramble-text-showcase";
-import { AnimatedSparkline } from "@/components/AnimatedSparkline";
-import { ExperimentBannerPreview } from "@/components/ExperimentBannerPreview";
 import { IridescentFoil } from "@/components/IridescentFoil";
 import { LogoTraceLoader } from "@/components/LogoTraceLoader";
-import { GameOfLife } from "@/components/random/GameOfLife";
+import { PlayingCard } from "@/components/PlayingCard";
 import { Signature } from "@/components/Signature";
 import { cn } from "@/helpers/classname-helper";
 
@@ -41,10 +37,11 @@ const experiments = [
     preview: "dynamic-button",
   },
   {
-    title: "Agent Dock",
-    href: "/experiments/agent-dock",
-    description: "A compact voice and chat dock for lightweight agent states.",
-    preview: "agent-dock",
+    title: "Playing Cards",
+    href: "/experiments/playing-cards",
+    description:
+      "A composable playing card, plus a fanned hand you can thumb through and play.",
+    preview: "playing-cards",
   },
   {
     title: "Scroll Fade List",
@@ -57,25 +54,6 @@ const experiments = [
     href: "/experiments/model-selector",
     description: "A benchmark-informed picker with model configuration.",
     preview: "model-selector",
-  },
-  {
-    title: "Animated Banner",
-    href: "/experiments/animated-banner",
-    description:
-      "A compact animated promo card with video, countdown, and CTA.",
-    preview: "banner",
-  },
-  {
-    title: "Animated Loading State",
-    href: "/experiments/animated-loading-state",
-    description: "Game of Life loading cells transition into an area chart.",
-    preview: "loading",
-  },
-  {
-    title: "Animated Sparkline",
-    href: "/experiments/animated-sparkline",
-    description: "An SVG sparkline that draws itself and colors by trend.",
-    preview: "sparkline",
   },
   {
     title: "Animated Signature",
@@ -114,9 +92,6 @@ const scrollPreviewItems = [
   ["🇵🇾", "Paraguay"],
 ] as const;
 
-const agentAvatarUrl =
-  "https://api.dicebear.com/10.x/initial-face/svg?seed=Zaraaaa&size=80";
-
 const dynamicButtonPreviewStates = [
   {
     icon: FloppyDiskIcon,
@@ -137,20 +112,6 @@ const dynamicButtonPreviewStates = [
     stateKey: "copy",
   },
 ] as const;
-
-const sparklinePreviewData = Array.from({ length: 64 }, (_, index) => {
-  const progress = index / 63;
-  const envelope = Math.sin(progress * Math.PI);
-  const trend = 8_790 + (12_478 - 8_790) * progress;
-  const wave =
-    Math.sin(progress * Math.PI * 5.4 + 0.45) * 420 +
-    Math.sin(progress * Math.PI * 11.6 + 0.3) * 180;
-
-  return {
-    label: `${index + 1}`,
-    value: index === 63 ? 12_478 : Number((trend + envelope * wave).toFixed(2)),
-  };
-});
 
 function DynamicButtonPreview({ featured = false }: { featured?: boolean }) {
   const shouldReduceMotion = useReducedMotion();
@@ -305,50 +266,24 @@ function ExperimentPreview({
     return <DynamicButtonPreview featured={featured} />;
   }
 
-  if (type === "agent-dock") {
+  if (type === "playing-cards") {
     return (
       <div
         aria-hidden="true"
         className={cn(
           previewSurfaceClassName,
-          "flex items-center justify-center bg-grayscale-2 p-3 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+          "relative bg-grayscale-2 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
         )}
       >
-        <div className="w-full max-w-[13.25rem] overflow-hidden rounded-[13px] border border-grayscale-12 bg-grayscale-12 p-1.5 text-grayscale-2 shadow-[0_10px_28px_rgba(0,0,0,0.12)] dark:border-grayscale-4 dark:bg-grayscale-4 dark:text-grayscale-12 dark:shadow-none">
-          <div className="flex items-center gap-1.5">
-            <Image
-              alt=""
-              aria-hidden="true"
-              className="size-7 shrink-0 rounded-[9px]"
-              height={28}
-              src={agentAvatarUrl}
-              unoptimized
-              width={28}
-            />
-            <div className="min-w-0 flex-1">
-              <p className="truncate font-medium text-[10px] leading-none">
-                Zara
-              </p>
-              <p className="mt-1 truncate text-[8px] text-grayscale-8 leading-none dark:text-grayscale-10">
-                Your hyperaide
-              </p>
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="flex h-6 items-center gap-1 rounded-[7px] bg-grayscale-11/60 px-1 text-[8px] font-medium leading-none dark:bg-grayscale-6">
-                <MicrophoneIcon size={11} weight="bold" />
-                <span>Voice</span>
-                <span className="flex size-4 items-center justify-center rounded-[4px] bg-grayscale-11/55 font-mono font-semibold text-[8px] text-grayscale-1 dark:bg-grayscale-7 dark:text-grayscale-12">
-                  V
-                </span>
-              </div>
-              <div className="flex h-6 items-center gap-1 rounded-[7px] bg-grayscale-11/60 px-1 text-[8px] font-medium leading-none dark:bg-grayscale-6">
-                <ChatIcon size={11} weight="bold" />
-                <span>Chat</span>
-                <span className="flex size-4 items-center justify-center rounded-[4px] bg-grayscale-11/55 font-mono font-semibold text-[8px] text-grayscale-1 dark:bg-grayscale-7 dark:text-grayscale-12">
-                  C
-                </span>
-              </div>
-            </div>
+        <div className="-translate-x-1/2 absolute bottom-[-26px] left-1/2">
+          <div className="-rotate-[14deg] absolute bottom-0 left-[-58px] origin-bottom transition-transform duration-300 group-hover:-rotate-[18deg] group-hover:-translate-y-1">
+            <PlayingCard rank="7" suit="clubs" width={64} />
+          </div>
+          <div className="absolute bottom-1 left-[-32px] origin-bottom transition-transform duration-300 group-hover:-translate-y-2">
+            <PlayingCard rank="Q" suit="hearts" width={64} />
+          </div>
+          <div className="absolute bottom-0 left-[-6px] origin-bottom rotate-[14deg] transition-transform duration-300 group-hover:-translate-y-1 group-hover:rotate-[18deg]">
+            <PlayingCard rank="A" suit="spades" width={64} />
           </div>
         </div>
       </div>
@@ -421,41 +356,6 @@ function ExperimentPreview({
     );
   }
 
-  if (type === "banner") {
-    return (
-      <ExperimentBannerPreview
-        className={cn(
-          previewSurfaceClassName,
-          "relative bg-grayscale-3 [--worldcup-overlay:var(--color-grayscale-2)] dark:bg-grayscale-3 dark:[--worldcup-overlay:var(--color-grayscale-3)]",
-        )}
-      />
-    );
-  }
-
-  if (type === "loading") {
-    return (
-      <div
-        className={cn(
-          previewSurfaceClassName,
-          "bg-white [--game-of-life-color:var(--color-grayscale-3)] dark:bg-grayscale-3 dark:[--game-of-life-color:var(--color-grayscale-5)]",
-        )}
-      >
-        <GameOfLife
-          aria-hidden={false}
-          aria-label="Animated Game of Life loading preview"
-          cellRadius={3}
-          cellSize={14}
-          className="h-full w-full"
-          density={0.28}
-          fadeDuration={920}
-          maxOpacity={1}
-          role="img"
-          stepInterval={620}
-        />
-      </div>
-    );
-  }
-
   if (type === "signature") {
     return (
       <div
@@ -472,29 +372,6 @@ function ExperimentPreview({
             strokeWidth={12}
           />
         </div>
-      </div>
-    );
-  }
-
-  if (type === "sparkline") {
-    return (
-      <div
-        aria-hidden="true"
-        className={cn(
-          previewSurfaceClassName,
-          "flex items-center justify-center bg-grayscale-2 p-3 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
-        )}
-      >
-        <AnimatedSparkline
-          className="w-52 border-grayscale-3 p-2 shadow-none dark:border-grayscale-5"
-          data={sparklinePreviewData}
-          height={54}
-          label="Revenue"
-          trendPercent={42}
-          valueFormat={{ maximumFractionDigits: 0 }}
-          valuePrefix="$"
-          width={320}
-        />
       </div>
     );
   }
@@ -626,15 +503,7 @@ export function NewExperimentCta({ className }: NewExperimentCtaProps) {
         </Link>
 
         {secondaryExperiments.map((experiment) => (
-          <ExperimentCard
-            className={
-              experiment.preview === "agent-dock"
-                ? "sm:col-span-2 lg:col-span-2"
-                : undefined
-            }
-            experiment={experiment}
-            key={experiment.href}
-          />
+          <ExperimentCard experiment={experiment} key={experiment.href} />
         ))}
       </div>
     </section>
