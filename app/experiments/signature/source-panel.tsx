@@ -6,7 +6,10 @@ import CodeBlock from "@/components/CodeBlock";
 import Button from "@/components/public/Button";
 import { Tabs } from "@/components/public/Tabs";
 import type { CodeLine } from "@/helpers/syntax";
-import { SIGNATURE_FALLBACK_PATH, SIGNATURE_PATH_PLACEHOLDER } from "./copy-content";
+import {
+  SIGNATURE_FALLBACK_PATH,
+  SIGNATURE_PATH_PLACEHOLDER,
+} from "./copy-content";
 
 type SourcePanelProps = {
   componentLines: CodeLine[];
@@ -23,10 +26,7 @@ function applyPathToLines(lines: CodeLine[], path: string): CodeLine[] {
       token.content.includes(SIGNATURE_PATH_PLACEHOLDER)
         ? {
             ...token,
-            content: token.content.replaceAll(
-              SIGNATURE_PATH_PLACEHOLDER,
-              path,
-            ),
+            content: token.content.replaceAll(SIGNATURE_PATH_PLACEHOLDER, path),
           }
         : token,
     ),
