@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build",
     "build:game-of-life-animation": "npm --prefix packages/game-of-life-animation run build",
     "start": "next start",
