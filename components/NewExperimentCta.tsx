@@ -2,10 +2,14 @@
 
 import {
   ArrowRightIcon,
+  CheckCircleIcon,
   CheckIcon,
   CopyIcon,
+  FileArrowUpIcon,
+  FileZipIcon,
   FloppyDiskIcon,
   PaperPlaneTiltIcon,
+  TrashIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
@@ -30,6 +34,20 @@ type NewExperimentCtaProps = {
 };
 
 const experiments = [
+  {
+    title: "Hold to Confirm",
+    href: "/experiments/hold-to-confirm",
+    description:
+      "A deliberate action that fills while held, then offers a timed undo.",
+    preview: "hold-to-confirm",
+  },
+  {
+    title: "Magnetic Drop Zone",
+    href: "/experiments/magnetic-drop-zone",
+    description:
+      "A file target that pulls toward an incoming drag before the file lands.",
+    preview: "magnetic-drop-zone",
+  },
   {
     title: "Dynamic Button",
     href: "/experiments/dynamic-button",
@@ -82,7 +100,7 @@ const featuredPreviewSurfaceClassName =
   "h-40 shrink-0 overflow-hidden rounded-lg";
 const experimentCardClassName =
   "group flex min-h-64 flex-col overflow-hidden rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4";
-const [dynamicButtonExperiment, ...secondaryExperiments] = experiments;
+const [featuredExperiment, ...secondaryExperiments] = experiments;
 const scrollPreviewItems = [
   ["🇿🇦", "South Africa"],
   ["🇨🇦", "Canada"],
@@ -112,6 +130,17 @@ const dynamicButtonPreviewStates = [
     stateKey: "copy",
   },
 ] as const;
+
+type HoldPreviewPhase = "holding" | "idle" | "undo";
+
+const holdPreviewSequence: Record<
+  HoldPreviewPhase,
+  { delay: number; next: HoldPreviewPhase }
+> = {
+  holding: { delay: 1600, next: "undo" },
+  idle: { delay: 650, next: "holding" },
+  undo: { delay: 2750, next: "idle" },
+};
 
 function DynamicButtonPreview({ featured = false }: { featured?: boolean }) {
   const shouldReduceMotion = useReducedMotion();
@@ -255,6 +284,132 @@ function DynamicButtonPreview({ featured = false }: { featured?: boolean }) {
   );
 }
 
+function MagneticDropZonePreview({ featured = false }: { featured?: boolean }) {
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        featured ? featuredPreviewSurfaceClassName : previewSurfaceClassName,
+        "relative flex items-center justify-center bg-grayscale-2 p-4 transition-colors group-hover:bg-blue-2 dark:bg-grayscale-2 dark:group-hover:bg-blue-2",
+      )}
+    >
+      <div className="absolute top-3 right-[12%] z-10 flex rotate-6 items-center gap-1.5 rounded-lg border border-grayscale-4 bg-grayscale-1 p-1.5 pr-2 shadow-sm transition-transform duration-300 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] group-hover:-translate-x-8 group-hover:translate-y-8 group-hover:rotate-2 dark:border-grayscale-6 dark:bg-grayscale-3">
+        <div className="flex size-6 items-center justify-center rounded-md bg-amber-3 text-amber-11 dark:bg-amber-4">
+          <FileZipIcon size={13} weight="fill" />
+        </div>
+        <span className="font-medium text-[10px] text-grayscale-11">
+          assets.zip
+        </span>
+      </div>
+      <div className="flex h-24 w-full max-w-60 translate-y-2 flex-col items-center justify-center rounded-xl border border-grayscale-4 bg-grayscale-1 shadow-sm transition-[transform,border-color,background-color] duration-300 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] group-hover:translate-x-1 group-hover:translate-y-1 group-hover:scale-[1.02] group-hover:border-blue-7 group-hover:bg-blue-3/50 dark:border-grayscale-5 dark:bg-grayscale-3">
+        <FileArrowUpIcon
+          className="text-grayscale-10 transition-colors duration-200 group-hover:text-blue-11"
+          size={19}
+          weight="fill"
+        />
+        <span className="mt-1.5 font-medium text-[10px] text-grayscale-10">
+          Drop a file here
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function HoldToConfirmPreview({ featured = false }: { featured?: boolean }) {
+  const shouldReduceMotion = useReducedMotion();
+  const [phase, setPhase] = useState<HoldPreviewPhase>("idle");
+
+  useEffect(() => {
+    if (shouldReduceMotion) {
+      return;
+    }
+
+    const { delay, next } = holdPreviewSequence[phase];
+    const timer = window.setTimeout(() => setPhase(next), delay);
+
+    return () => window.clearTimeout(timer);
+  }, [phase, shouldReduceMotion]);
+
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        featured ? featuredPreviewSurfaceClassName : previewSurfaceClassName,
+        "flex items-center justify-center bg-grayscale-2 p-4 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+      )}
+    >
+      <AnimatePresence initial={false} mode="wait">
+        {phase === "undo" ? (
+          <motion.div
+            animate={{ opacity: 1, transform: "translateY(0px)" }}
+            className="flex h-9 min-w-60 items-center justify-between gap-3 rounded-xl bg-grayscale-1 p-1 pl-3 text-xs shadow-sm dark:bg-grayscale-4"
+            exit={{
+              opacity: 0,
+              transform: "translateY(-4px)",
+              transition: { duration: 0.12, ease: [0.23, 1, 0.32, 1] },
+            }}
+            initial={{ opacity: 0, transform: "translateY(4px)" }}
+            key="undo-preview"
+            transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
+          >
+            <span className="flex items-center gap-1.5 font-medium text-grayscale-12">
+              <CheckCircleIcon
+                className="text-green-9"
+                size={15}
+                weight="fill"
+              />
+              Project deleted
+            </span>
+            <div className="relative isolate flex h-7 min-w-18 items-center justify-center overflow-hidden rounded-lg border border-grayscale-4 bg-grayscale-1 px-2 font-medium text-grayscale-11 dark:border-grayscale-6 dark:bg-grayscale-3">
+              <span>Undo</span>
+              <motion.span
+                animate={{ clipPath: "inset(0 100% 0 0)" }}
+                className="absolute inset-0 flex items-center justify-center bg-grayscale-12 px-2 text-grayscale-1"
+                initial={{ clipPath: "inset(0 0 0 0)" }}
+                transition={{ duration: 2.75, ease: "linear" }}
+              >
+                Undo
+              </motion.span>
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div
+            animate={{ opacity: 1, transform: "translateY(0px)" }}
+            className="relative isolate flex h-9 min-w-44 items-center justify-center overflow-hidden rounded-lg border border-red-9 bg-red-3 px-3 font-medium text-red-11 text-xs transition-[border-color,background-color,color] duration-150 dark:bg-red-4"
+            exit={{
+              opacity: 0,
+              transform: "translateY(-4px)",
+              transition: { duration: 0.12, ease: [0.23, 1, 0.32, 1] },
+            }}
+            initial={{ opacity: 0, transform: "translateY(4px)" }}
+            key="hold-preview"
+            transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
+          >
+            <span className="relative flex items-center gap-1.5">
+              <TrashIcon size={14} weight="bold" />
+              Hold to delete
+            </span>
+            <motion.span
+              animate={{
+                clipPath:
+                  phase === "holding" ? "inset(0 0 0 0)" : "inset(0 100% 0 0)",
+              }}
+              className="absolute inset-0 flex items-center justify-center gap-1.5 bg-red-9 px-3 text-white"
+              transition={{
+                duration: phase === "holding" ? 1.6 : 0.18,
+                ease: phase === "holding" ? "linear" : [0.23, 1, 0.32, 1],
+              }}
+            >
+              <TrashIcon size={14} weight="bold" />
+              Hold to delete
+            </motion.span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 function ExperimentPreview({
   featured = false,
   type,
@@ -262,6 +417,14 @@ function ExperimentPreview({
   featured?: boolean;
   type: (typeof experiments)[number]["preview"];
 }) {
+  if (type === "hold-to-confirm") {
+    return <HoldToConfirmPreview featured={featured} />;
+  }
+
+  if (type === "magnetic-drop-zone") {
+    return <MagneticDropZonePreview featured={featured} />;
+  }
+
   if (type === "dynamic-button") {
     return <DynamicButtonPreview featured={featured} />;
   }
@@ -462,7 +625,7 @@ export function NewExperimentCta({ className }: NewExperimentCtaProps) {
       <div className="grid gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5 sm:grid-cols-2 lg:grid-cols-3">
         <ExperimentCard
           className="sm:col-span-2 lg:col-span-3"
-          experiment={dynamicButtonExperiment}
+          experiment={featuredExperiment}
           featured
         />
 
