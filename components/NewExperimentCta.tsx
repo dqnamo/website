@@ -27,6 +27,8 @@ import { IridescentFoil } from "@/components/IridescentFoil";
 import { LogoTraceLoader } from "@/components/LogoTraceLoader";
 import { PlayingCard } from "@/components/PlayingCard";
 import { Signature } from "@/components/Signature";
+import { Stamp } from "@/components/Stamp";
+import { Ticket } from "@/components/Ticket";
 import { cn } from "@/helpers/classname-helper";
 
 type NewExperimentCtaProps = {
@@ -60,6 +62,20 @@ const experiments = [
     description:
       "A composable playing card, plus a fanned hand you can thumb through and play.",
     preview: "playing-cards",
+  },
+  {
+    title: "Ticket",
+    href: "/experiments/ticket",
+    description:
+      "A perforated ticket silhouette with composable sections and subtle parallax depth.",
+    preview: "ticket",
+  },
+  {
+    title: "Stamp",
+    href: "/experiments/stamp",
+    description:
+      "A reusable postage stamp frame for images, text, and custom React content.",
+    preview: "stamp",
   },
   {
     title: "Scroll Fade List",
@@ -265,7 +281,7 @@ function DynamicButtonPreview({ featured = false }: { featured?: boolean }) {
           </AnimatePresence>
         </span>
         <span
-          aria-hidden="true"
+          aria-hidden={true}
           className="pointer-events-none absolute inline-flex items-center gap-1.5 opacity-0"
           ref={measureRef}
         >
@@ -449,6 +465,71 @@ function ExperimentPreview({
             <PlayingCard rank="A" suit="spades" width={64} />
           </div>
         </div>
+      </div>
+    );
+  }
+
+  if (type === "ticket") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "flex items-center justify-center bg-grayscale-2 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+        )}
+      >
+        <Ticket
+          aria-hidden={true}
+          body={
+            <div className="flex h-full flex-col justify-between p-2">
+              <div className="h-10 w-full bg-[radial-gradient(circle,currentColor_0_1px,transparent_1.5px)] bg-size-[7px_7px] opacity-70" />
+              <span className="font-bold text-[6px] uppercase leading-[0.85] tracking-[-0.06em]">
+                Optical
+                <br />
+                Signals
+              </span>
+            </div>
+          }
+          className="h-[116px] w-[54px] aspect-auto"
+          cornerSize={4}
+          notchSize={6}
+          stub={
+            <div className="flex h-full items-end p-2">
+              <div className="h-2.5 w-full bg-[repeating-linear-gradient(90deg,currentColor_0_1px,transparent_1px_3px)]" />
+            </div>
+          }
+          stubHeight={29}
+          tilt={false}
+        />
+      </div>
+    );
+  }
+
+  if (type === "stamp") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "flex items-center justify-center bg-grayscale-2 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+        )}
+      >
+        <Stamp
+          aria-hidden={true}
+          className="w-[78px]"
+          horizontalPerforations={10}
+          padding={5}
+          perforationDepth={3.3}
+          verticalPerforations={13}
+        >
+          <Image
+            alt=""
+            className="object-cover [image-rendering:pixelated]"
+            fill
+            sizes="68px"
+            src="/experiments/stamp/retro-landscape.png"
+          />
+        </Stamp>
       </div>
     );
   }
