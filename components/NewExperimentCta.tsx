@@ -37,6 +37,13 @@ type NewExperimentCtaProps = {
 
 const experiments = [
   {
+    title: "Cassette Player",
+    href: "/experiments/cassette-player",
+    description:
+      "A tactile audio player with turning reels and a compact-cassette control surface.",
+    preview: "cassette-player",
+  },
+  {
     title: "Hold to Confirm",
     href: "/experiments/hold-to-confirm",
     description:
@@ -463,6 +470,41 @@ function ExperimentPreview({
           </div>
           <div className="absolute bottom-0 left-[-6px] origin-bottom rotate-[14deg] transition-transform duration-300 group-hover:-translate-y-1 group-hover:rotate-[18deg]">
             <PlayingCard rank="A" suit="spades" width={64} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (type === "cassette-player") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          featured ? featuredPreviewSurfaceClassName : previewSurfaceClassName,
+          "relative flex items-center justify-center bg-grayscale-1 transition-colors group-hover:bg-grayscale-2 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+        )}
+      >
+        <div className="relative aspect-[1.58] w-48 overflow-hidden rounded-[9px] border border-black bg-[linear-gradient(165deg,#373735_0%,#20201f_52%,#0e0e0d_100%)] shadow-[0_12px_24px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(255,255,255,0.2)] transition-transform duration-200 group-hover:-translate-y-0.5 sm:w-56">
+          <div className="absolute inset-x-[9%] top-[10%] bottom-[25%] overflow-hidden rounded-[5px] border border-grayscale-12 bg-[linear-gradient(to_bottom,var(--preview-stripe)_0_4%,transparent_4%_7%,var(--preview-stripe)_7%_11%,transparent_11%),var(--preview-label-bg)] px-[6%] pt-[8%] [--preview-label-bg:var(--color-grayscale-1)] [--preview-stripe:#14b8a6] dark:border-[#b91c1c] dark:[--preview-label-bg:#dc2626] dark:[--preview-stripe:#fff]">
+            <div className="flex items-center justify-between font-mono font-bold text-[5px] text-grayscale-12 tracking-[0.12em]">
+              <span>FIELD NOTES</span>
+              <span>SIDE A</span>
+            </div>
+            <div className="mt-[2%] flex items-center justify-between font-semibold text-grayscale-12 text-xs tracking-[-0.04em]">
+              <span>Extra Time</span>
+              <span className="font-mono text-[5px] tracking-normal">
+                DN—05
+              </span>
+            </div>
+            <div className="absolute right-[14%] bottom-[15%] left-[14%] h-[34%] rounded-full border border-[#25211d] bg-[#393631]">
+              <div className="absolute inset-y-[12%] right-[31%] left-[31%] border border-[#11100f] rounded-[2px] bg-[repeating-linear-gradient(to_right,transparent_0_23%,rgba(224,215,195,0.28)_23%_24%,transparent_24%_49%),#1b1a18] shadow-[inset_0_2px_4px_rgba(0,0,0,0.72)]" />
+              <div className="absolute top-1/2 left-[14%] aspect-square w-[20%] -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-[#25211d] bg-[repeating-conic-gradient(#eee4d0_0deg_16deg,#393631_16deg_28deg)] shadow-[0_0_0_4px_#171614] transition-transform duration-300 group-hover:rotate-90" />
+              <div className="absolute top-1/2 left-[86%] aspect-square w-[20%] -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-[#25211d] bg-[repeating-conic-gradient(#eee4d0_0deg_16deg,#393631_16deg_28deg)] shadow-[0_0_0_4px_#171614] transition-transform duration-300 group-hover:rotate-90" />
+            </div>
+          </div>
+          <div className="absolute right-[29%] bottom-[5%] left-[29%] flex h-[14%] items-center justify-center bg-grayscale-11/20 [clip-path:polygon(13%_0,87%_0,100%_100%,0_100%)]">
+            <div className="aspect-square h-[70%] rounded-full bg-grayscale-12 shadow-sm transition-transform duration-150 group-hover:scale-95" />
           </div>
         </div>
       </div>
