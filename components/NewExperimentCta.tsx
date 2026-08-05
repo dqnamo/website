@@ -37,7 +37,7 @@ type NewExperimentCtaProps = {
 
 const experiments = [
   {
-    title: "Cassette Player",
+    title: "Cassette Audio Player",
     href: "/experiments/cassette-player",
     description:
       "A tactile audio player with turning reels and a compact-cassette control surface.",
