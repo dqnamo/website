@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ArrowCounterClockwiseIcon,
   ArrowRightIcon,
   CheckCircleIcon,
   CheckIcon,
@@ -9,6 +10,8 @@ import {
   FileZipIcon,
   FloppyDiskIcon,
   PaperPlaneTiltIcon,
+  PlayIcon,
+  SpeakerHighIcon,
   TrashIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -36,6 +39,13 @@ type NewExperimentCtaProps = {
 };
 
 const experiments = [
+  {
+    title: "Cassette Audio Player",
+    href: "/experiments/cassette-player",
+    description:
+      "A tactile audio player with turning reels and a compact-cassette control surface.",
+    preview: "cassette-player",
+  },
   {
     title: "Hold to Confirm",
     href: "/experiments/hold-to-confirm",
@@ -125,6 +135,7 @@ const scrollPreviewItems = [
   ["🇩🇪", "Germany"],
   ["🇵🇾", "Paraguay"],
 ] as const;
+const CASSETTE_PREVIEW_REEL_SPOKES = [0, 60, 120, 180, 240, 300] as const;
 
 const dynamicButtonPreviewStates = [
   {
@@ -426,6 +437,113 @@ function HoldToConfirmPreview({ featured = false }: { featured?: boolean }) {
   );
 }
 
+function CassettePreviewReel({ className }: { className: string }) {
+  return (
+    <div
+      className={cn(
+        "absolute top-1/2 z-3 aspect-square w-[78cqh] -translate-x-1/2 -translate-y-1/2",
+        className,
+      )}
+    >
+      <svg
+        aria-hidden="true"
+        className="absolute inset-0 origin-center rounded-full transition-transform duration-500 group-hover:rotate-180"
+        viewBox="0 0 100 100"
+      >
+        <circle className="fill-grayscale-1" cx="50" cy="50" r="48" />
+        {CASSETTE_PREVIEW_REEL_SPOKES.map((rotation) => (
+          <path
+            className="fill-[#1b1a18] stroke-[#11100f] [filter:drop-shadow(0_1px_1px_rgba(0,0,0,0.32))] [stroke-linejoin:round] [stroke-width:1.25]"
+            d="M46 3h8v9a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2z"
+            key={rotation}
+            transform={`rotate(${rotation} 50 50)`}
+          />
+        ))}
+        <circle
+          className="fill-none stroke-[#1b1a18] [stroke-width:3]"
+          cx="50"
+          cy="50"
+          r="48"
+        />
+      </svg>
+    </div>
+  );
+}
+
+function CassettePlayerPreview({ featured = false }: { featured?: boolean }) {
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        featured ? featuredPreviewSurfaceClassName : previewSurfaceClassName,
+        "relative flex items-center justify-center bg-grayscale-1 transition-colors group-hover:bg-grayscale-2 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+      )}
+    >
+      <div className="relative aspect-[1.58] w-48 overflow-hidden rounded-[9px] border border-black bg-[linear-gradient(165deg,#373735_0%,#20201f_52%,#0e0e0d_100%)] transition-transform duration-200 group-hover:-translate-y-0.5 sm:w-56">
+        <div className="pointer-events-none absolute inset-1 rounded-[7px] border border-white/10 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.55)]" />
+
+        <div className="absolute top-[6%] left-[5%] size-1.5 rounded-full border border-black bg-grayscale-8 shadow-[inset_0_0_0_0.5px_rgba(255,255,255,0.25)]" />
+        <div className="absolute top-[6%] right-[5%] size-1.5 rounded-full border border-black bg-grayscale-8 shadow-[inset_0_0_0_0.5px_rgba(255,255,255,0.25)]" />
+        <div className="absolute bottom-[6%] left-[5%] size-1.5 rounded-full border border-black bg-grayscale-8 shadow-[inset_0_0_0_0.5px_rgba(255,255,255,0.25)]" />
+        <div className="absolute right-[5%] bottom-[6%] size-1.5 rounded-full border border-black bg-grayscale-8 shadow-[inset_0_0_0_0.5px_rgba(255,255,255,0.25)]" />
+
+        <div className="absolute top-[9.5%] right-[8.5%] bottom-[24%] left-[8.5%] overflow-hidden rounded-[5px] border-2 border-grayscale-2 bg-grayscale-1 text-grayscale-12 dark:border-[#dc2626] dark:bg-[#dc2626] dark:text-white">
+          <div className="relative z-10 mx-[5%] mt-[5%] flex items-start justify-between gap-2">
+            <div className="min-w-0">
+              <p className="font-bold font-mono text-[5px] uppercase leading-none tracking-[0.12em] opacity-80">
+                Archive 11
+              </p>
+              <p className="mt-1 truncate font-semibold text-[9px] leading-none tracking-[-0.04em] sm:text-[10px]">
+                One Small Step
+              </p>
+            </div>
+            <div className="grid shrink-0 justify-items-end gap-1 font-bold font-mono text-[4px] uppercase leading-none tracking-[0.08em]">
+              <span className="rounded-full bg-grayscale-12 px-1.5 py-1 text-grayscale-1 dark:bg-white dark:text-[#dc2626]">
+                Side A
+              </span>
+              <span className="opacity-65">200769</span>
+            </div>
+          </div>
+
+          <div className="absolute inset-x-0 top-[43%] grid h-[27%] grid-rows-3 gap-px">
+            <span className="bg-green-500 dark:bg-white" />
+            <span className="bg-teal-500 dark:bg-white" />
+            <span className="bg-blue-500 dark:bg-white" />
+          </div>
+
+          <div className="absolute inset-x-[17.5%] top-[39%] h-[34%] overflow-hidden rounded-full border border-[#11100f] bg-[#1b1a18] shadow-[0_0_0_2px_rgba(37,33,29,0.18),inset_0_2px_4px_rgba(0,0,0,0.72)] [container-type:size]">
+            <div className="absolute inset-y-[14%] right-[29%] left-[29%] rounded-[2px] border border-[#11100f] bg-[#393631] shadow-[inset_0_2px_3px_rgba(0,0,0,0.65)]" />
+            <CassettePreviewReel className="left-[50cqh]" />
+            <CassettePreviewReel className="left-[calc(100%-50cqh)]" />
+          </div>
+
+          <div className="absolute right-[5%] bottom-[7%] left-[5%]">
+            <div className="h-px overflow-hidden rounded-full bg-grayscale-12/30 dark:bg-white/35">
+              <div className="h-full w-[28%] rounded-full bg-grayscale-12 dark:bg-white" />
+            </div>
+            <div className="mt-1 flex justify-between font-mono text-[4px] tabular-nums opacity-75">
+              <span>0:03</span>
+              <span>0:13</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="absolute right-[27%] bottom-[3.5%] left-[27%] grid h-[16%] grid-cols-[1fr_auto_1fr] place-items-center gap-1 bg-grayscale-10/20 px-[12%] shadow-[inset_0_2px_4px_rgba(0,0,0,0.45)] [clip-path:polygon(13%_0,87%_0,100%_100%,0_100%)]">
+          <span className="grid size-3 place-items-center rounded-full border border-grayscale-8 bg-grayscale-9 text-white sm:size-3.5">
+            <ArrowCounterClockwiseIcon aria-hidden size={6} weight="bold" />
+          </span>
+          <span className="grid size-4 place-items-center rounded-full border border-grayscale-8 bg-grayscale-9 text-white sm:size-[18px]">
+            <PlayIcon aria-hidden size={7} weight="fill" />
+          </span>
+          <span className="grid size-3 place-items-center rounded-full border border-grayscale-8 bg-grayscale-9 text-white sm:size-3.5">
+            <SpeakerHighIcon aria-hidden size={6} weight="bold" />
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ExperimentPreview({
   featured = false,
   type,
@@ -467,6 +585,10 @@ function ExperimentPreview({
         </div>
       </div>
     );
+  }
+
+  if (type === "cassette-player") {
+    return <CassettePlayerPreview featured={featured} />;
   }
 
   if (type === "ticket") {
