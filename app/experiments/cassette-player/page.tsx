@@ -11,23 +11,14 @@ export const metadata: Metadata = {
 };
 
 export default async function CassettePlayerPage() {
-  const [componentSource, stylesSource] = await Promise.all([
-    readSourceFile("app/experiments/cassette-player/cassette-player.tsx"),
-    readSourceFile(
-      "app/experiments/cassette-player/cassette-player.module.css",
-    ),
-  ]);
+  const componentSource = await readSourceFile(
+    "app/experiments/cassette-player/cassette-player.tsx",
+  );
   const tabs = await buildSourceTabs([
     {
       label: "CassettePlayer.tsx",
       source: componentSource,
       value: "component",
-    },
-    {
-      label: "cassette-player.module.css",
-      language: "css",
-      source: stylesSource,
-      value: "styles",
     },
   ]);
 
