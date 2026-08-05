@@ -5,10 +5,25 @@ import { buildSourceTabs, readSourceFile } from "@/app/experiments/_lib/source";
 import { CassettePlayer } from "./cassette-player";
 import { usageSource } from "./copy-content";
 
+const title = "Cassette Audio Player | dqnamo";
+const description =
+  "A tactile audio player inspired by the labels, reels, and mechanical controls of a compact cassette.";
+
 export const metadata: Metadata = {
-  title: "Cassette Audio Player | dqnamo",
-  description:
-    "A tactile audio player inspired by the labels, reels, and mechanical controls of a compact cassette.",
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    siteName: "dqnamo",
+    type: "website",
+    url: "/experiments/cassette-player",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+  },
 };
 
 export default async function CassettePlayerPage() {
