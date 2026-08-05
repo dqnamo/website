@@ -19,7 +19,7 @@ const TRACK_TITLE = "One Small Step";
 const MIN_REWIND_DURATION = 220;
 const MAX_REWIND_DURATION = 1000;
 const CASSETTE_TEXTURE =
-  "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E\")";
+  "url(\"data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
 const BUTTON_CLASSES =
   "grid aspect-square cursor-pointer place-items-center rounded-full border text-[#fdfdfc] transition-[background-color,transform] duration-150 ease-out active:scale-[0.96] focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-[#21201c] motion-reduce:duration-[0.01ms]";
 
@@ -352,7 +352,7 @@ export function CassettePlayer() {
           />
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 opacity-[0.13] mix-blend-multiply"
+            className="pointer-events-none absolute inset-0 opacity-100 mix-blend-multiply"
             style={{ backgroundImage: CASSETTE_TEXTURE }}
           />
           <Screw className="top-[4%] left-[2.53%]" />
@@ -392,6 +392,11 @@ export function CassettePlayer() {
               </div>
 
               <div className="absolute inset-y-0 inset-x-[17.5%] z-3 overflow-hidden rounded-full bg-[#1b1a18] bg-[linear-gradient(rgba(255,255,255,0.13),transparent_45%)] shadow-[0_0_0_4px_var(--label-border),inset_0_3px_8px_rgba(0,0,0,0.58)] [--reel-window-color:#1b1a18] [container-type:size]">
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 opacity-25 mix-blend-multiply"
+                  style={{ backgroundImage: CASSETTE_TEXTURE }}
+                />
                 <div
                   aria-hidden="true"
                   className="absolute top-[12%] right-[28%] bottom-[12%] left-[28%] z-2 flex items-center justify-evenly overflow-hidden rounded-[3px] border-2 border-[#11100f] bg-[#393631] bg-[linear-gradient(to_bottom,rgba(255,255,255,0.1),transparent_42%)] shadow-[inset_0_3px_6px_rgba(0,0,0,0.72),0_0_0_2px_rgba(255,255,255,0.08)]"
@@ -466,7 +471,7 @@ export function CassettePlayer() {
               aria-label="Restart track"
               className={cn(
                 BUTTON_CLASSES,
-                "w-[clamp(24px,6.5vw,32px)] border-[#82827c] bg-[#63635e] shadow-[0_2px_5px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.2)] hover:bg-grayscale-12/75",
+                "w-[clamp(24px,6.5vw,32px)] border-[#82827c] bg-[#63635e] shadow-[0_2px_5px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.2)] hover:bg-[#7c7b74]",
               )}
               onClick={restart}
               type="button"
@@ -496,7 +501,7 @@ export function CassettePlayer() {
               aria-label={volume === 0 ? "Unmute" : "Mute"}
               className={cn(
                 BUTTON_CLASSES,
-                "w-[clamp(24px,6.5vw,32px)] border-[#82827c] bg-[#63635e] shadow-[0_2px_5px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.2)] hover:bg-grayscale-12/75",
+                "w-[clamp(24px,6.5vw,32px)] border-[#82827c] bg-[#63635e] shadow-[0_2px_5px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.2)] hover:bg-[#7c7b74]",
               )}
               onClick={toggleMute}
               type="button"
