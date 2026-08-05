@@ -479,13 +479,13 @@ function CassettePlayerPreview({ featured = false }: { featured?: boolean }) {
         "relative flex items-center justify-center bg-grayscale-1 transition-colors group-hover:bg-grayscale-2 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
       )}
     >
-      <div className="relative aspect-[1.58] w-48 overflow-hidden rounded-[9px] border border-black bg-[linear-gradient(165deg,#373735_0%,#20201f_52%,#0e0e0d_100%)] shadow-[0_12px_24px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(255,255,255,0.2)] transition-transform duration-200 group-hover:-translate-y-0.5 sm:w-56">
+      <div className="relative aspect-[1.58] w-48 overflow-hidden rounded-[9px] border border-black bg-[linear-gradient(165deg,#373735_0%,#20201f_52%,#0e0e0d_100%)] transition-transform duration-200 group-hover:-translate-y-0.5 sm:w-56">
         <div className="pointer-events-none absolute inset-1 rounded-[7px] border border-white/10 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.55)]" />
 
-        <div className="absolute top-[4.5%] left-[3%] size-1.5 rounded-full border border-black bg-grayscale-8 shadow-[inset_0_0_0_0.5px_rgba(255,255,255,0.25)]" />
-        <div className="absolute top-[4.5%] right-[3%] size-1.5 rounded-full border border-black bg-grayscale-8 shadow-[inset_0_0_0_0.5px_rgba(255,255,255,0.25)]" />
-        <div className="absolute bottom-[4.5%] left-[3%] size-1.5 rounded-full border border-black bg-grayscale-8 shadow-[inset_0_0_0_0.5px_rgba(255,255,255,0.25)]" />
-        <div className="absolute right-[3%] bottom-[4.5%] size-1.5 rounded-full border border-black bg-grayscale-8 shadow-[inset_0_0_0_0.5px_rgba(255,255,255,0.25)]" />
+        <div className="absolute top-[6%] left-[5%] size-1.5 rounded-full border border-black bg-grayscale-8 shadow-[inset_0_0_0_0.5px_rgba(255,255,255,0.25)]" />
+        <div className="absolute top-[6%] right-[5%] size-1.5 rounded-full border border-black bg-grayscale-8 shadow-[inset_0_0_0_0.5px_rgba(255,255,255,0.25)]" />
+        <div className="absolute bottom-[6%] left-[5%] size-1.5 rounded-full border border-black bg-grayscale-8 shadow-[inset_0_0_0_0.5px_rgba(255,255,255,0.25)]" />
+        <div className="absolute right-[5%] bottom-[6%] size-1.5 rounded-full border border-black bg-grayscale-8 shadow-[inset_0_0_0_0.5px_rgba(255,255,255,0.25)]" />
 
         <div className="absolute top-[9.5%] right-[8.5%] bottom-[24%] left-[8.5%] overflow-hidden rounded-[5px] border-2 border-grayscale-2 bg-grayscale-1 text-grayscale-12 dark:border-[#dc2626] dark:bg-[#dc2626] dark:text-white">
           <div className="relative z-10 mx-[5%] mt-[5%] flex items-start justify-between gap-2">
