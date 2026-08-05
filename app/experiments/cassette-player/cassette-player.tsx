@@ -9,7 +9,6 @@ import {
 } from "@phosphor-icons/react";
 import {
   type PointerEvent as ReactPointerEvent,
-  useId,
   useRef,
   useState,
 } from "react";
@@ -17,6 +16,7 @@ import styles from "./cassette-player.module.css";
 
 const AUDIO_SOURCE = "/videos/home/world-cup-2026.mp4";
 const REEL_SPOKES = [0, 60, 120, 180, 240, 300] as const;
+const TAPE_WINDOW_DIVIDERS = [0, 1, 2, 3, 4] as const;
 
 function formatTime(seconds: number) {
   if (!Number.isFinite(seconds)) {
@@ -31,52 +31,27 @@ function formatTime(seconds: number) {
 type ReelProps = {
   className: string;
   rotation: number;
-  scale: number;
 };
 
-function Reel({ className, rotation, scale }: ReelProps) {
-  const maskId = useId().replaceAll(":", "");
-
+function Reel({ className, rotation }: ReelProps) {
   return (
     <div className={`${styles.reelAssembly} ${className}`}>
-      <div
-        aria-hidden="true"
-        className={styles.tapeRoll}
-        style={{ transform: `translate(-50%, -50%) scale(${scale})` }}
-      />
       <svg
         aria-hidden="true"
         className={styles.reel}
         style={{ transform: `rotate(${rotation}deg)` }}
         viewBox="0 0 100 100"
       >
-        <defs>
-          <mask id={maskId} maskUnits="userSpaceOnUse">
-            <circle cx="50" cy="50" fill="white" r="49" />
-            {REEL_SPOKES.map((spokeRotation) => (
-              <rect
-                fill="black"
-                height="25"
-                key={spokeRotation}
-                rx="4"
-                transform={`rotate(${spokeRotation} 50 50)`}
-                width="8"
-                x="46"
-                y="7"
-              />
-            ))}
-            <circle cx="50" cy="50" fill="black" r="13" />
-          </mask>
-        </defs>
-        <circle
-          className={styles.reelFace}
-          cx="50"
-          cy="50"
-          mask={`url(#${maskId})`}
-          r="49"
-        />
+        <circle className={styles.reelHole} cx="50" cy="50" r="48" />
+        {REEL_SPOKES.map((spokeRotation) => (
+          <path
+            className={styles.reelSpoke}
+            d="M46 3h8v9a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2z"
+            key={spokeRotation}
+            transform={`rotate(${spokeRotation} 50 50)`}
+          />
+        ))}
         <circle className={styles.reelOutline} cx="50" cy="50" r="48" />
-        <circle className={styles.reelCenter} cx="50" cy="50" r="13" />
       </svg>
     </div>
   );
@@ -94,8 +69,8 @@ export function CassettePlayer() {
 
   const progress = duration > 0 ? currentTime / duration : 0;
   const reelRotation = currentTime * 240;
-  const leftReelScale = 1 - progress * 0.34;
-  const rightReelScale = 0.66 + progress * 0.34;
+  const leftTapeScale = 1 - progress * 0.4;
+  const rightTapeScale = 0.6 + progress * 0.4;
 
   async function togglePlayback() {
     const audio = audioRef.current;
@@ -217,7 +192,7 @@ export function CassettePlayer() {
 
       <div className={styles.player}>
         <div
-          className={styles.cassette}
+          className={`${styles.cassette} dark`}
           data-playing={isPlaying}
           data-scrubbing={isScrubbing}
         >
@@ -250,18 +225,25 @@ export function CassettePlayer() {
             </div>
 
             <div className={styles.window}>
-              <div aria-hidden="true" className={styles.tapePath} />
-              <div aria-hidden="true" className={styles.inspectionWindow} />
-              <Reel
-                className={styles.leftReel}
-                rotation={reelRotation}
-                scale={leftReelScale}
-              />
-              <Reel
-                className={styles.rightReel}
-                rotation={reelRotation}
-                scale={rightReelScale}
-              />
+              <div aria-hidden="true" className={styles.tapeWindow}>
+                <span
+                  className={`${styles.tapePack} ${styles.leftTapePack}`}
+                  style={{
+                    transform: `translate(-50%, -50%) scale(${leftTapeScale})`,
+                  }}
+                />
+                <span
+                  className={`${styles.tapePack} ${styles.rightTapePack}`}
+                  style={{
+                    transform: `translate(-50%, -50%) scale(${rightTapeScale})`,
+                  }}
+                />
+                {TAPE_WINDOW_DIVIDERS.map((divider) => (
+                  <span className={styles.tapeWindowDivider} key={divider} />
+                ))}
+              </div>
+              <Reel className={styles.leftReel} rotation={reelRotation} />
+              <Reel className={styles.rightReel} rotation={reelRotation} />
             </div>
 
             <input

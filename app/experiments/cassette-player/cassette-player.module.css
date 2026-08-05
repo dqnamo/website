@@ -1,10 +1,18 @@
 .showcase {
   --ink: #25211d;
-  --paper: #f3e9d3;
   --label-bg: var(--color-grayscale-1);
-  --label-border: color-mix(in srgb, var(--label-ink) 78%, transparent);
+  --label-border: color-mix(in srgb, var(--color-grayscale-1) 50%, transparent);
   --label-ink: var(--color-grayscale-12);
-  --label-stripe: #14b8a6;
+  --label-pattern: linear-gradient(
+    to bottom,
+    transparent 0 53%,
+    var(--color-green-500) 53% 59%,
+    transparent 59% 60%,
+    var(--color-teal-500) 60% 66%,
+    transparent 66% 67%,
+    var(--color-blue-500) 67% 73%,
+    transparent 73%
+  );
   --progress-accent: #14b8a6;
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   display: grid;
@@ -21,8 +29,12 @@
 /* biome-ignore lint/correctness/noUnknownPseudoClass: :global targets the app theme class from this CSS module. */
 :global(.dark) .showcase {
   --label-bg: #dc2626;
-  --label-border: #b91c1c;
-  --label-stripe: #fff;
+  --label-pattern: linear-gradient(
+    to bottom,
+    transparent 0 7%,
+    #fff 7% 11%,
+    transparent 11%
+  );
 }
 
 .player {
@@ -74,20 +86,12 @@
   left: 8.5%;
   z-index: 1;
   overflow: hidden;
-  border: 1px solid var(--label-border);
+  border: 4px solid var(--label-border);
   border-radius: 9px;
-  background:
-    linear-gradient(
-      to bottom,
-      var(--label-stripe) 0 4%,
-      transparent 4% 7%,
-      var(--label-stripe) 7% 11%,
-      transparent 11%
-    ),
-    var(--label-bg);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.6),
-    inset 0 0 12px rgba(92, 74, 49, 0.12);
+  background: var(--label-pattern), var(--label-bg);
+  background-origin: border-box;
+  background-repeat: no-repeat;
+  box-shadow: inset 0 0 12px rgba(92, 74, 49, 0.12);
   color: var(--label-ink);
   padding: 7% 6% 3.5%;
 }
@@ -133,55 +137,74 @@
 }
 
 .window {
+  --reel-window-color: #1b1a18;
+
   position: absolute;
   top: 46%;
-  right: 14%;
+  right: 17.5%;
   bottom: 20%;
-  left: 14%;
+  left: 17.5%;
   z-index: 3;
+  container-type: size;
   overflow: hidden;
-  border: 2px solid var(--label-ink);
   border-radius: 999px;
   background:
-    linear-gradient(rgba(255, 255, 255, 0.13), transparent 45%), #393631;
+    linear-gradient(rgba(255, 255, 255, 0.13), transparent 45%),
+    var(--reel-window-color);
   box-shadow:
-    inset 0 3px 8px rgba(0, 0, 0, 0.58),
-    0 0 0 3px rgba(244, 234, 212, 0.68);
+    0 0 0 4px var(--label-border),
+    inset 0 3px 8px rgba(0, 0, 0, 0.58);
 }
 
-.tapePath {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 1;
-  height: 68%;
-  width: 72%;
-  transform: translate(-50%, -50%);
-  border-block: 3px solid #11100f;
-  background: transparent;
-}
-
-.inspectionWindow {
+.tapeWindow {
   position: absolute;
   top: 12%;
-  right: 31%;
+  right: 28%;
   bottom: 12%;
-  left: 31%;
+  left: 28%;
   z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  overflow: hidden;
   border: 2px solid #11100f;
   border-radius: 3px;
   background:
     linear-gradient(to bottom, rgba(255, 255, 255, 0.1), transparent 42%),
-    repeating-linear-gradient(
-      to right,
-      transparent 0 23%,
-      rgba(224, 215, 195, 0.28) 23% 24%,
-      transparent 24% 49%
-    ),
-    #1b1a18;
+    #393631;
   box-shadow:
     inset 0 3px 6px rgba(0, 0, 0, 0.72),
     0 0 0 2px rgba(255, 255, 255, 0.08);
+}
+
+.tapePack {
+  position: absolute;
+  top: 50%;
+  aspect-ratio: 1;
+  height: 360%;
+  border: 1px solid #0d0a08;
+  border-radius: 50%;
+  background: repeating-radial-gradient(circle, #050505 0 2px, #171717 2px 4px);
+  box-shadow:
+    inset 0 0 5px rgba(0, 0, 0, 0.7),
+    0 1px 2px rgba(0, 0, 0, 0.5);
+  transition: transform 180ms var(--ease-out);
+}
+
+.leftTapePack {
+  left: calc(50cqh - 28cqw);
+}
+
+.rightTapePack {
+  left: calc(72cqw - 50cqh);
+}
+
+.tapeWindowDivider {
+  position: relative;
+  z-index: 1;
+  width: 2px;
+  height: 42%;
+  background: rgba(224, 215, 195, 0.28);
 }
 
 .reelAssembly {
@@ -189,53 +212,41 @@
   top: 50%;
   z-index: 3;
   aspect-ratio: 1;
-  width: 20%;
+  width: 78cqh;
   transform: translate(-50%, -50%);
 }
 
 .leftReel {
-  left: 14%;
+  left: 50cqh;
 }
 
 .rightReel {
-  left: 86%;
-}
-
-.tapeRoll {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  aspect-ratio: 1;
-  width: 130%;
-  border: 3px solid #0e0d0c;
-  border-radius: 50%;
-  background: repeating-radial-gradient(circle, #211e1b 0 3px, #39342f 3px 5px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.44);
-  transition: transform 180ms var(--ease-out);
+  left: calc(100% - 50cqh);
 }
 
 .reel {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.42));
   transform-origin: center;
 }
 
-.reelFace {
-  fill: var(--paper);
+.reelHole {
+  fill: var(--color-grayscale-1);
+}
+
+.reelSpoke {
+  fill: var(--reel-window-color);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.32));
+  stroke: #11100f;
+  stroke-linejoin: round;
+  stroke-width: 1.25;
 }
 
 .reelOutline {
   fill: none;
-  stroke: #24211e;
-  stroke-width: 2;
-}
-
-.reelCenter {
-  fill: none;
-  stroke: var(--paper);
-  stroke-width: 4;
+  stroke: var(--reel-window-color);
+  stroke-width: 3;
 }
 
 .cassette[data-playing="true"] .reel {
@@ -386,6 +397,7 @@
 
 .playButton {
   width: clamp(30px, 8.2vw, 43px);
+  border-color: color-mix(in srgb, var(--color-grayscale-11) 50%, transparent);
   background: var(--color-grayscale-12);
   color: var(--color-grayscale-1);
   box-shadow:
@@ -399,7 +411,7 @@
 
 .secondaryButton {
   width: clamp(24px, 6.5vw, 32px);
-  background: var(--color-grayscale-9);
+  background: var(--color-grayscale-10);
   color: var(--color-grayscale-1);
   box-shadow:
     0 2px 5px rgba(0, 0, 0, 0.28),
@@ -419,7 +431,7 @@
   }
 
   .secondaryButton:hover {
-    background: var(--color-grayscale-10);
+    background: var(--color-grayscale-11);
   }
 }
 
@@ -447,7 +459,7 @@
     animation: none;
   }
 
-  .tapeRoll,
+  .tapePack,
   .playButton,
   .secondaryButton {
     transition-duration: 0.01ms;
