@@ -3,17 +3,21 @@
   --label-bg: var(--color-grayscale-1);
   --label-border: color-mix(in srgb, var(--color-grayscale-1) 50%, transparent);
   --label-ink: var(--color-grayscale-12);
-  --label-pattern: linear-gradient(
-    to bottom,
-    transparent 0 53%,
-    var(--color-green-500) 53% 59%,
-    transparent 59% 60%,
-    var(--color-teal-500) 60% 66%,
-    transparent 66% 67%,
-    var(--color-blue-500) 67% 73%,
-    transparent 73%
+  --label-catalogue: color-mix(
+    in srgb,
+    var(--color-grayscale-12) 70%,
+    transparent
   );
-  --progress-accent: #14b8a6;
+  --label-kicker: color-mix(
+    in srgb,
+    var(--color-grayscale-12) 85%,
+    transparent
+  );
+  --label-stripe-one: var(--color-green-500);
+  --label-stripe-two: var(--color-teal-500);
+  --label-stripe-three: var(--color-blue-500);
+  --progress-thumb-bg: #fff;
+  --progress-thumb-border: var(--color-grayscale-1);
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   display: grid;
   min-height: 500px;
@@ -29,12 +33,10 @@
 /* biome-ignore lint/correctness/noUnknownPseudoClass: :global targets the app theme class from this CSS module. */
 :global(.dark) .showcase {
   --label-bg: #dc2626;
-  --label-pattern: linear-gradient(
-    to bottom,
-    transparent 0 7%,
-    #fff 7% 11%,
-    transparent 11%
-  );
+  --label-stripe-one: #fff;
+  --label-stripe-two: #fff;
+  --label-stripe-three: #fff;
+  --progress-thumb-border: var(--color-grayscale-12);
 }
 
 .player {
@@ -79,6 +81,8 @@
 }
 
 .label {
+  --label-inset: 16px;
+
   position: absolute;
   top: 9.5%;
   right: 8.5%;
@@ -88,12 +92,32 @@
   overflow: hidden;
   border: 4px solid var(--label-border);
   border-radius: 9px;
-  background: var(--label-pattern), var(--label-bg);
-  background-origin: border-box;
-  background-repeat: no-repeat;
+  background: var(--label-bg);
   box-shadow: inset 0 0 12px rgba(92, 74, 49, 0.12);
   color: var(--label-ink);
-  padding: 7% 6% 3.5%;
+}
+
+.labelContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  margin: var(--label-inset) var(--label-inset) 0;
+}
+
+.labelColumn {
+  display: grid;
+  align-content: space-between;
+  row-gap: 8px;
+}
+
+.labelMetadata {
+  justify-items: end;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 .labelHeader,
@@ -106,23 +130,27 @@
   justify-content: space-between;
   font-family: var(--font-jetbrains-mono), monospace;
   font-weight: 700;
+  line-height: 1;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
 .labelHeader {
+  color: var(--label-kicker);
   font-size: clamp(8px, 1.7vw, 11px);
 }
 
 .sideMark {
-  border: 1px solid currentColor;
+  border: 1px solid var(--label-ink);
   border-radius: 999px;
-  padding: 2px 7px;
+  background: var(--label-ink);
+  color: var(--label-bg);
+  font-size: clamp(8px, 1.7vw, 11px);
+  padding: 4px 7px;
   letter-spacing: 0.08em;
 }
 
 .trackTitle {
-  margin-top: 1.8%;
   font-family: var(--font-inter), sans-serif;
   font-size: clamp(15px, 3.4vw, 26px);
   font-weight: 700;
@@ -131,19 +159,41 @@
 }
 
 .catalogue {
+  color: var(--label-catalogue);
   font-family: var(--font-jetbrains-mono), monospace;
   font-size: clamp(7px, 1.6vw, 10px);
   letter-spacing: 0.08em;
+}
+
+.windowRow {
+  position: relative;
+  height: 34%;
+  margin-top: var(--label-inset);
+}
+
+.windowRow::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 58%;
+  transform: translateY(-50%);
+  background: linear-gradient(
+    to bottom,
+    var(--label-stripe-one) 0 30%,
+    transparent 30% 35%,
+    var(--label-stripe-two) 35% 65%,
+    transparent 65% 70%,
+    var(--label-stripe-three) 70% 100%
+  );
+  content: "";
 }
 
 .window {
   --reel-window-color: #1b1a18;
 
   position: absolute;
-  top: 46%;
-  right: 17.5%;
-  bottom: 20%;
-  left: 17.5%;
+  inset: 0 17.5%;
   z-index: 3;
   container-type: size;
   overflow: hidden;
@@ -188,7 +238,7 @@
   box-shadow:
     inset 0 0 5px rgba(0, 0, 0, 0.7),
     0 1px 2px rgba(0, 0, 0, 0.5);
-  transition: transform 180ms var(--ease-out);
+  will-change: transform;
 }
 
 .leftTapePack {
@@ -225,10 +275,14 @@
 }
 
 .reel {
+  --reel-rotation: 0deg;
+
   position: absolute;
   inset: 0;
   border-radius: 50%;
+  transform: rotate(var(--reel-rotation));
   transform-origin: center;
+  will-change: transform;
 }
 
 .reelHole {
@@ -249,33 +303,41 @@
   stroke-width: 3;
 }
 
-.cassette[data-playing="true"] .reel {
-  animation: reel-spin 1.2s linear infinite;
-}
-
-.cassette[data-scrubbing="true"] .reel {
-  transition: transform 80ms linear;
+.labelPlayback {
+  position: absolute;
+  right: var(--label-inset);
+  bottom: var(--label-inset);
+  left: var(--label-inset);
+  z-index: 5;
+  display: grid;
+  row-gap: clamp(7px, 1.5vw, 9px);
 }
 
 .labelFooter {
-  position: absolute;
-  right: 6%;
-  bottom: 3.8%;
-  left: 6%;
-  font-size: clamp(5px, 1.35vw, 8px);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 400;
   font-variant-numeric: tabular-nums;
+  letter-spacing: normal;
+  line-height: 1rem;
 }
 
 .progress {
-  position: absolute;
-  right: 6%;
-  bottom: 17%;
-  left: 6%;
-  z-index: 5;
-  width: 88%;
-  height: 3px;
+  --progress-position: 0%;
+
+  width: 100%;
+  height: 16px;
+  margin: 0;
   appearance: none;
-  border-radius: 99px;
+  background-image: linear-gradient(
+    to right,
+    var(--label-ink) 0 var(--progress-position),
+    color-mix(in srgb, var(--label-ink) 28%, transparent)
+      var(--progress-position) 100%
+  );
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 3px;
   cursor: pointer;
 }
 
@@ -283,18 +345,18 @@
   aspect-ratio: 1;
   width: 13px;
   appearance: none;
-  border: 2px solid var(--progress-accent);
+  border: 2px solid var(--progress-thumb-border);
   border-radius: 50%;
-  background: var(--color-grayscale-1);
+  background: var(--progress-thumb-bg);
   box-shadow: 0 1px 4px rgba(37, 33, 29, 0.38);
 }
 
 .progress::-moz-range-thumb {
   aspect-ratio: 1;
   width: 9px;
-  border: 2px solid var(--progress-accent);
+  border: 2px solid var(--progress-thumb-border);
   border-radius: 50%;
-  background: var(--color-grayscale-1);
+  background: var(--progress-thumb-bg);
   box-shadow: 0 1px 4px rgba(37, 33, 29, 0.38);
 }
 
@@ -449,25 +511,18 @@
     border-radius: 6px;
   }
 
-  .window {
-    border-width: 1px;
+  .windowRow {
+    height: 31%;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cassette[data-playing="true"] .reel {
-    animation: none;
+  .reel {
+    transform: none;
   }
 
-  .tapePack,
   .playButton,
   .secondaryButton {
     transition-duration: 0.01ms;
-  }
-}
-
-@keyframes reel-spin {
-  to {
-    transform: rotate(360deg);
   }
 }

@@ -7,16 +7,14 @@ import {
   SpeakerHighIcon,
   SpeakerSlashIcon,
 } from "@phosphor-icons/react";
-import {
-  type PointerEvent as ReactPointerEvent,
-  useRef,
-  useState,
-} from "react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 import styles from "./cassette-player.module.css";
 
-const AUDIO_SOURCE = "/videos/home/world-cup-2026.mp4";
+// Audio courtesy of NASA: https://www.nasa.gov/historical-sounds/
+const AUDIO_SOURCE = "/experiments/cassette-player/one-small-step.mp3";
 const REEL_SPOKES = [0, 60, 120, 180, 240, 300] as const;
 const TAPE_WINDOW_DIVIDERS = [0, 1, 2, 3, 4] as const;
+const TRACK_TITLE = "One Small Step";
 
 function formatTime(seconds: number) {
   if (!Number.isFinite(seconds)) {
@@ -39,7 +37,7 @@ function Reel({ className, rotation }: ReelProps) {
       <svg
         aria-hidden="true"
         className={styles.reel}
-        style={{ transform: `rotate(${rotation}deg)` }}
+        style={{ "--reel-rotation": `${rotation}deg` } as CSSProperties}
         viewBox="0 0 100 100"
       >
         <circle className={styles.reelHole} cx="50" cy="50" r="48" />
@@ -63,14 +61,44 @@ export function CassettePlayer() {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isScrubbing, setIsScrubbing] = useState(false);
   const [volume, setVolume] = useState(0.78);
   const [previousVolume, setPreviousVolume] = useState(0.78);
 
   const progress = duration > 0 ? currentTime / duration : 0;
-  const reelRotation = currentTime * 240;
+  const reelRotation = currentTime * 300;
   const leftTapeScale = 1 - progress * 0.4;
   const rightTapeScale = 0.6 + progress * 0.4;
+
+  useEffect(() => {
+    const audio = audioRef.current;
+
+    if (audio && Number.isFinite(audio.duration)) {
+      setDuration(audio.duration);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isPlaying) {
+      return;
+    }
+
+    let animationFrameId = 0;
+
+    function syncPlaybackFrame() {
+      const audio = audioRef.current;
+
+      if (!audio || audio.paused) {
+        return;
+      }
+
+      setCurrentTime(audio.currentTime);
+      animationFrameId = window.requestAnimationFrame(syncPlaybackFrame);
+    }
+
+    animationFrameId = window.requestAnimationFrame(syncPlaybackFrame);
+
+    return () => window.cancelAnimationFrame(animationFrameId);
+  }, [isPlaying]);
 
   async function togglePlayback() {
     const audio = audioRef.current;
@@ -112,7 +140,7 @@ export function CassettePlayer() {
     setCurrentTime(nextTime);
   }
 
-  function startScrubbing(event: ReactPointerEvent<HTMLInputElement>) {
+  function startScrubbing() {
     const audio = audioRef.current;
 
     if (!audio) {
@@ -124,15 +152,10 @@ export function CassettePlayer() {
     if (!audio.paused) {
       audio.pause();
     }
-
-    event.currentTarget.setPointerCapture(event.pointerId);
-    setIsScrubbing(true);
   }
 
   async function finishScrubbing() {
     const audio = audioRef.current;
-
-    setIsScrubbing(false);
 
     if (!audio || !resumeAfterScrubRef.current) {
       return;
@@ -184,18 +207,14 @@ export function CassettePlayer() {
         <track
           default
           kind="captions"
-          label="Audio description"
-          src="/experiments/cassette-player/extra-time.vtt"
+          label="English"
+          src="/experiments/cassette-player/one-small-step.vtt"
           srcLang="en"
         />
       </audio>
 
       <div className={styles.player}>
-        <div
-          className={`${styles.cassette} dark`}
-          data-playing={isPlaying}
-          data-scrubbing={isScrubbing}
-        >
+        <div className={`${styles.cassette} dark`}>
           <div
             aria-hidden="true"
             className={`${styles.screw} ${styles.screwTopLeft}`}
@@ -214,60 +233,66 @@ export function CassettePlayer() {
           />
 
           <div className={styles.label}>
-            <div className={styles.labelHeader}>
-              <span>FIELD NOTES</span>
-              <span className={styles.sideMark}>SIDE A</span>
-            </div>
-
-            <div className={styles.trackTitle}>
-              <span>Extra Time</span>
-              <span className={styles.catalogue}>DN—05</span>
-            </div>
-
-            <div className={styles.window}>
-              <div aria-hidden="true" className={styles.tapeWindow}>
-                <span
-                  className={`${styles.tapePack} ${styles.leftTapePack}`}
-                  style={{
-                    transform: `translate(-50%, -50%) scale(${leftTapeScale})`,
-                  }}
-                />
-                <span
-                  className={`${styles.tapePack} ${styles.rightTapePack}`}
-                  style={{
-                    transform: `translate(-50%, -50%) scale(${rightTapeScale})`,
-                  }}
-                />
-                {TAPE_WINDOW_DIVIDERS.map((divider) => (
-                  <span className={styles.tapeWindowDivider} key={divider} />
-                ))}
+            <div className={styles.labelContent}>
+              <div className={styles.labelColumn}>
+                <span className={styles.labelHeader}>ARCHIVE 11</span>
+                <span className={styles.trackTitle}>{TRACK_TITLE}</span>
               </div>
-              <Reel className={styles.leftReel} rotation={reelRotation} />
-              <Reel className={styles.rightReel} rotation={reelRotation} />
+
+              <div className={`${styles.labelColumn} ${styles.labelMetadata}`}>
+                <span className={styles.sideMark}>SIDE A</span>
+                <span className={styles.catalogue}>200769</span>
+              </div>
             </div>
 
-            <input
-              aria-label="Seek through Extra Time"
-              className={styles.progress}
-              max={duration || 0}
-              min="0"
-              onChange={(event) => seek(Number(event.currentTarget.value))}
-              onPointerCancel={finishScrubbing}
-              onPointerDown={startScrubbing}
-              onPointerUp={finishScrubbing}
-              step="0.01"
-              style={{
-                background: `linear-gradient(to right, var(--label-ink) 0 ${progress * 100}%, color-mix(in srgb, var(--label-ink) 28%, transparent) ${progress * 100}% 100%)`,
-              }}
-              type="range"
-              value={currentTime}
-            />
+            <div className={styles.windowRow}>
+              <div className={styles.window}>
+                <div aria-hidden="true" className={styles.tapeWindow}>
+                  <span
+                    className={`${styles.tapePack} ${styles.leftTapePack}`}
+                    style={{
+                      transform: `translate(-50%, -50%) scale(${leftTapeScale})`,
+                    }}
+                  />
+                  <span
+                    className={`${styles.tapePack} ${styles.rightTapePack}`}
+                    style={{
+                      transform: `translate(-50%, -50%) scale(${rightTapeScale})`,
+                    }}
+                  />
+                  {TAPE_WINDOW_DIVIDERS.map((divider) => (
+                    <span className={styles.tapeWindowDivider} key={divider} />
+                  ))}
+                </div>
+                <Reel className={styles.leftReel} rotation={reelRotation} />
+                <Reel className={styles.rightReel} rotation={reelRotation} />
+              </div>
+            </div>
 
-            <div className={styles.labelFooter}>
-              <span>STEREO</span>
-              <span>
-                {formatTime(currentTime)} / {formatTime(duration)}
-              </span>
+            <div className={styles.labelPlayback}>
+              <input
+                aria-label={`Seek through ${TRACK_TITLE}`}
+                className={styles.progress}
+                max={duration || 0}
+                min="0"
+                onChange={(event) => seek(Number(event.currentTarget.value))}
+                onPointerCancel={finishScrubbing}
+                onPointerDown={startScrubbing}
+                onPointerUp={finishScrubbing}
+                step="0.01"
+                style={
+                  {
+                    "--progress-position": `${progress * 100}%`,
+                  } as CSSProperties
+                }
+                type="range"
+                value={currentTime}
+              />
+
+              <div className={styles.labelFooter}>
+                <span>{formatTime(currentTime)}</span>
+                <span>{formatTime(duration)}</span>
+              </div>
             </div>
           </div>
 
@@ -282,7 +307,9 @@ export function CassettePlayer() {
             </button>
 
             <button
-              aria-label={isPlaying ? "Pause Extra Time" : "Play Extra Time"}
+              aria-label={
+                isPlaying ? `Pause ${TRACK_TITLE}` : `Play ${TRACK_TITLE}`
+              }
               className={styles.playButton}
               onClick={togglePlayback}
               type="button"
