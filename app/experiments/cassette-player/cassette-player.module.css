@@ -44,6 +44,12 @@
 }
 
 .cassette {
+  --control-grayscale-1: #fdfdfc;
+  --control-grayscale-8: #bcbbb5;
+  --control-grayscale-9: #8d8d86;
+  --control-grayscale-10: #82827c;
+  --control-grayscale-11: #63635e;
+  --control-grayscale-12: #21201c;
   --screw-inset-block: 4%;
   --screw-inset-inline: 2.53%;
 
@@ -152,8 +158,6 @@
 
 .trackTitle {
   font-family: var(--font-inter), sans-serif;
-  font-size: clamp(15px, 3.4vw, 26px);
-  font-weight: 700;
   letter-spacing: -0.04em;
   text-transform: none;
 }
@@ -373,7 +377,7 @@
   align-items: center;
   justify-items: center;
   clip-path: polygon(13% 0, 87% 0, 100% 100%, 0 100%);
-  background: color-mix(in srgb, var(--color-grayscale-11) 20%, transparent);
+  background: color-mix(in srgb, var(--control-grayscale-11) 20%, transparent);
   box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.5);
   padding: 0 12%;
 }
@@ -459,9 +463,9 @@
 
 .playButton {
   width: clamp(30px, 8.2vw, 43px);
-  border-color: color-mix(in srgb, var(--color-grayscale-11) 50%, transparent);
-  background: var(--color-grayscale-12);
-  color: var(--color-grayscale-1);
+  border-color: color-mix(in srgb, var(--control-grayscale-8) 50%, transparent);
+  background: var(--control-grayscale-9);
+  color: var(--control-grayscale-1);
   box-shadow:
     0 3px 8px rgba(0, 0, 0, 0.32),
     inset 0 1px 0 rgba(255, 255, 255, 0.25);
@@ -472,16 +476,23 @@
 }
 
 .secondaryButton {
+  --color-grayscale-12: var(--control-grayscale-12);
+
   width: clamp(24px, 6.5vw, 32px);
-  background: var(--color-grayscale-10);
-  color: var(--color-grayscale-1);
+  border-color: var(--control-grayscale-10);
+  background: var(--control-grayscale-11);
+  color: var(--control-grayscale-1);
   box-shadow:
     0 2px 5px rgba(0, 0, 0, 0.28),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .playButton:focus-visible,
-.secondaryButton:focus-visible,
+.secondaryButton:focus-visible {
+  outline: 2px solid var(--control-grayscale-12);
+  outline-offset: 3px;
+}
+
 .progress:focus-visible {
   outline: 2px solid var(--color-grayscale-12);
   outline-offset: 3px;
@@ -489,11 +500,7 @@
 
 @media (hover: hover) and (pointer: fine) {
   .playButton:hover {
-    background: var(--color-grayscale-11);
-  }
-
-  .secondaryButton:hover {
-    background: var(--color-grayscale-11);
+    background: var(--control-grayscale-10);
   }
 }
 

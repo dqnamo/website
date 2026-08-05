@@ -15,6 +15,12 @@ const AUDIO_SOURCE = "/experiments/cassette-player/one-small-step.mp3";
 const REEL_SPOKES = [0, 60, 120, 180, 240, 300] as const;
 const TAPE_WINDOW_DIVIDERS = [0, 1, 2, 3, 4] as const;
 const TRACK_TITLE = "One Small Step";
+const MIN_REWIND_DURATION = 220;
+const MAX_REWIND_DURATION = 1000;
+
+function easeInOutCubic(progress: number) {
+  return progress < 0.5 ? 4 * progress ** 3 : 1 - (-2 * progress + 2) ** 3 / 2;
+}
 
 function formatTime(seconds: number) {
   if (!Number.isFinite(seconds)) {
@@ -57,6 +63,8 @@ function Reel({ className, rotation }: ReelProps) {
 
 export function CassettePlayer() {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const rewindAnimationRef = useRef<number | null>(null);
+  const resumeAfterRewindRef = useRef(false);
   const resumeAfterScrubRef = useRef(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -100,12 +108,39 @@ export function CassettePlayer() {
     return () => window.cancelAnimationFrame(animationFrameId);
   }, [isPlaying]);
 
+  useEffect(
+    () => () => {
+      if (rewindAnimationRef.current !== null) {
+        window.cancelAnimationFrame(rewindAnimationRef.current);
+      }
+    },
+    [],
+  );
+
+  function cancelRewind() {
+    if (rewindAnimationRef.current === null) {
+      return;
+    }
+
+    window.cancelAnimationFrame(rewindAnimationRef.current);
+    rewindAnimationRef.current = null;
+    resumeAfterRewindRef.current = false;
+
+    const audio = audioRef.current;
+
+    if (audio) {
+      audio.currentTime = currentTime;
+    }
+  }
+
   async function togglePlayback() {
     const audio = audioRef.current;
 
     if (!audio) {
       return;
     }
+
+    cancelRewind();
 
     if (audio.paused) {
       try {
@@ -125,8 +160,65 @@ export function CassettePlayer() {
       return;
     }
 
-    audio.currentTime = 0;
-    setCurrentTime(0);
+    const audioElement = audio;
+
+    if (rewindAnimationRef.current !== null) {
+      window.cancelAnimationFrame(rewindAnimationRef.current);
+    }
+
+    resumeAfterRewindRef.current =
+      resumeAfterRewindRef.current || !audioElement.paused;
+
+    if (!audioElement.paused) {
+      audioElement.pause();
+    }
+
+    const rewindFrom = currentTime;
+    const shouldReduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    function finishRewind() {
+      rewindAnimationRef.current = null;
+      audioElement.currentTime = 0;
+      setCurrentTime(0);
+
+      const shouldResume = resumeAfterRewindRef.current;
+      resumeAfterRewindRef.current = false;
+
+      if (shouldResume) {
+        audioElement.play().catch(() => setIsPlaying(false));
+      }
+    }
+
+    if (rewindFrom <= 0 || shouldReduceMotion) {
+      finishRewind();
+      return;
+    }
+
+    const rewindDistance =
+      duration > 0 ? Math.min(Math.max(rewindFrom / duration, 0), 1) : 1;
+    const rewindDuration =
+      MIN_REWIND_DURATION +
+      (MAX_REWIND_DURATION - MIN_REWIND_DURATION) * rewindDistance;
+    const startedAt = performance.now();
+
+    function animateRewind(now: number) {
+      const linearProgress = Math.min((now - startedAt) / rewindDuration, 1);
+      const easedProgress = easeInOutCubic(linearProgress);
+
+      setCurrentTime(rewindFrom * (1 - easedProgress));
+
+      if (linearProgress < 1) {
+        rewindAnimationRef.current =
+          window.requestAnimationFrame(animateRewind);
+        return;
+      }
+
+      finishRewind();
+    }
+
+    rewindAnimationRef.current = window.requestAnimationFrame(animateRewind);
   }
 
   function seek(nextTime: number) {
@@ -136,6 +228,7 @@ export function CassettePlayer() {
       return;
     }
 
+    cancelRewind();
     audio.currentTime = nextTime;
     setCurrentTime(nextTime);
   }
@@ -147,6 +240,7 @@ export function CassettePlayer() {
       return;
     }
 
+    cancelRewind();
     resumeAfterScrubRef.current = !audio.paused;
 
     if (!audio.paused) {
@@ -236,7 +330,9 @@ export function CassettePlayer() {
             <div className={styles.labelContent}>
               <div className={styles.labelColumn}>
                 <span className={styles.labelHeader}>ARCHIVE 11</span>
-                <span className={styles.trackTitle}>{TRACK_TITLE}</span>
+                <span className={`${styles.trackTitle} font-medium text-xl`}>
+                  {TRACK_TITLE}
+                </span>
               </div>
 
               <div className={`${styles.labelColumn} ${styles.labelMetadata}`}>
@@ -299,7 +395,7 @@ export function CassettePlayer() {
           <div className={styles.controlDeck}>
             <button
               aria-label="Restart track"
-              className={styles.secondaryButton}
+              className={`${styles.secondaryButton} hover:bg-grayscale-12/75`}
               onClick={restart}
               type="button"
             >
@@ -323,7 +419,7 @@ export function CassettePlayer() {
 
             <button
               aria-label={volume === 0 ? "Unmute" : "Mute"}
-              className={styles.secondaryButton}
+              className={`${styles.secondaryButton} hover:bg-grayscale-12/75`}
               onClick={toggleMute}
               type="button"
             >
