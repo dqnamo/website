@@ -29,8 +29,10 @@ import { ScrambleTextShowcase } from "@/app/experiments/scramble-text/scramble-t
 import { IridescentFoil } from "@/components/IridescentFoil";
 import { LogoTraceLoader } from "@/components/LogoTraceLoader";
 import { PlayingCard } from "@/components/PlayingCard";
+import { ReceiptPrinter } from "@/components/ReceiptPrinter";
 import { Signature } from "@/components/Signature";
 import { Stamp } from "@/components/Stamp";
+import { tactileButtonColorTokens } from "@/components/TactileButton";
 import { Ticket } from "@/components/Ticket";
 import { cn } from "@/helpers/classname-helper";
 
@@ -39,6 +41,20 @@ type NewExperimentCtaProps = {
 };
 
 const experiments = [
+  {
+    title: "Tactile Button",
+    href: "/experiments/tactile-button",
+    description:
+      "A physical button study built from a shaped face, firm edge, and compressible depth.",
+    preview: "tactile-button",
+  },
+  {
+    title: "Receipt Printer",
+    href: "/experiments/receipt-printer",
+    description:
+      "A SaaS checkout state that prints a physical receipt when payment clears.",
+    preview: "receipt-printer",
+  },
   {
     title: "Cassette Audio Player",
     href: "/experiments/cassette-player",
@@ -159,6 +175,29 @@ const dynamicButtonPreviewStates = [
 ] as const;
 
 type HoldPreviewPhase = "holding" | "idle" | "undo";
+
+function TactileButtonPreview({ featured = false }: { featured?: boolean }) {
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        featured ? featuredPreviewSurfaceClassName : previewSurfaceClassName,
+        "relative grid place-items-center overflow-hidden bg-grayscale-2 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+      )}
+    >
+      <span
+        className="group/tactile relative block h-[38px] w-max cursor-pointer"
+        style={tactileButtonColorTokens}
+      >
+        <span className="absolute inset-x-0 top-[6px] h-8 rounded-xl bg-[var(--tactile-base)] shadow-[inset_0_-1px_0_var(--tactile-base-shadow)]" />
+        <span className="relative flex h-8 items-center justify-center gap-1.5 rounded-xl bg-[var(--tactile-face)] px-3 font-medium text-[var(--tactile-content)] text-xs shadow-[inset_0_1px_0_var(--tactile-face-highlight)] transition-transform duration-150 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] [@media(hover:hover)_and_(pointer:fine)]:group-hover/tactile:translate-y-0.5 group-active/tactile:translate-y-[6px] motion-reduce:transform-none motion-reduce:transition-none">
+          <span>Continue</span>
+          <ArrowRightIcon aria-hidden="true" size={14} weight="bold" />
+        </span>
+      </span>
+    </div>
+  );
+}
 
 const holdPreviewSequence: Record<
   HoldPreviewPhase,
@@ -307,6 +346,51 @@ function DynamicButtonPreview({ featured = false }: { featured?: boolean }) {
           <span>{state.label}</span>
         </span>
       </motion.div>
+    </div>
+  );
+}
+
+function ReceiptPrinterPreview({ featured = false }: { featured?: boolean }) {
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        featured ? featuredPreviewSurfaceClassName : previewSurfaceClassName,
+        "relative overflow-hidden bg-grayscale-2 px-4 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+      )}
+    >
+      <div
+        className={cn(
+          "absolute inset-x-0 bottom-2 mx-auto w-40 transition-transform duration-200 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] [@media(hover:hover)_and_(pointer:fine)]:group-hover:-translate-y-0.5 motion-reduce:transform-none motion-reduce:transition-none",
+          featured && "w-48",
+        )}
+      >
+        <ReceiptPrinter.Paper
+          className={cn(
+            "flex h-44 min-h-0 flex-col px-4 pt-4 pb-5 drop-shadow-lg",
+            featured && "h-52 px-5 pt-5",
+          )}
+        >
+          <span className="mx-auto block aspect-square w-7 bg-current opacity-85 [-webkit-mask-image:url('/images/receipt-printer-logo.png')] [-webkit-mask-position:center] [-webkit-mask-repeat:no-repeat] [-webkit-mask-size:contain] [mask-image:url('/images/receipt-printer-logo.png')] [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain]" />
+
+          <div className="my-2 border-current/20 border-t border-dashed" />
+
+          <div className="flex items-start justify-between gap-3 text-[6px] leading-3">
+            <div>
+              <p className="font-bold uppercase tracking-[0.08em]">Pro plan</p>
+              <p className="opacity-50">Annual subscription</p>
+            </div>
+            <span className="font-bold text-[8px]">£192.00</span>
+          </div>
+
+          <div className="mt-auto flex items-end justify-between border-current/20 border-t border-dashed pt-2 font-bold uppercase">
+            <span className="text-[6px] tracking-[0.08em]">Total paid</span>
+            <span className="text-[10px] tracking-[-0.04em]">£230.40</span>
+          </div>
+
+          <div className="mx-auto mt-2 h-3 w-20 bg-[repeating-linear-gradient(90deg,currentColor_0_1px,transparent_1px_3px,currentColor_3px_5px,transparent_5px_7px)] opacity-80" />
+        </ReceiptPrinter.Paper>
+      </div>
     </div>
   );
 }
@@ -470,22 +554,45 @@ function CassettePreviewReel({ className }: { className: string }) {
   );
 }
 
+function CassettePreviewScrew({ className }: { className: string }) {
+  const slotClassName =
+    "absolute top-1/2 right-[18%] left-[18%] h-[14%] -translate-y-1/2 rounded-full bg-[#1d1d1b] shadow-[inset_0_1px_1px_rgba(0,0,0,0.82),0_1px_rgba(255,255,255,0.1)]";
+
+  return (
+    <div
+      className={cn(
+        "absolute z-10 aspect-square w-[3.3%] rounded-full border border-[#060606] bg-[radial-gradient(circle_at_36%_30%,#5f5f5c,#30302e_48%,#171716_78%)] shadow-[inset_0_1px_1px_rgba(255,255,255,0.26),0_1px_1px_rgba(0,0,0,0.38)]",
+        className,
+      )}
+    >
+      <span className={cn(slotClassName, "rotate-45")} />
+      <span className={cn(slotClassName, "-rotate-45")} />
+    </div>
+  );
+}
+
 function CassettePlayerPreview({ featured = false }: { featured?: boolean }) {
   return (
     <div
       aria-hidden="true"
       className={cn(
         featured ? featuredPreviewSurfaceClassName : previewSurfaceClassName,
-        "relative flex items-center justify-center bg-grayscale-1 transition-colors group-hover:bg-grayscale-2 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+        "relative bg-grayscale-1 transition-colors group-hover:bg-grayscale-2 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
       )}
     >
-      <div className="relative aspect-[1.58] w-48 overflow-hidden rounded-[9px] border border-black bg-[linear-gradient(165deg,#373735_0%,#20201f_52%,#0e0e0d_100%)] transition-transform duration-200 group-hover:-translate-y-0.5 sm:w-56">
-        <div className="pointer-events-none absolute inset-1 rounded-[7px] border border-white/10 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.55)]" />
+      <div
+        className={cn(
+          "absolute top-4 left-[7%] aspect-[1.58] w-[26rem] overflow-hidden rounded-[18px] border border-[#050505] bg-[linear-gradient(165deg,#373735_0%,#20201f_52%,#0e0e0d_100%)] shadow-[0_18px_32px_rgba(0,0,0,0.22),inset_0_2px_1px_rgba(255,255,255,0.2),inset_0_-3px_3px_rgba(0,0,0,0.74)] transition-transform duration-200 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] [@media(hover:hover)_and_(pointer:fine)]:group-hover:-translate-x-0.5 [@media(hover:hover)_and_(pointer:fine)]:group-hover:-translate-y-0.5 motion-reduce:transform-none motion-reduce:transition-none",
+          featured && "top-5 left-[8%] w-[31rem]",
+        )}
+      >
+        <div className="pointer-events-none absolute inset-1.5 rounded-[13px] border border-white/[0.12] shadow-[inset_0_0_0_1px_rgba(0,0,0,0.62)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[url('/textures/plastic-noise.svg')] bg-[length:180px_180px] bg-repeat opacity-35 mix-blend-multiply" />
 
-        <div className="absolute top-[6%] left-[5%] size-1.5 rounded-full border border-black bg-grayscale-8 shadow-[inset_0_0_0_0.5px_rgba(255,255,255,0.25)]" />
-        <div className="absolute top-[6%] right-[5%] size-1.5 rounded-full border border-black bg-grayscale-8 shadow-[inset_0_0_0_0.5px_rgba(255,255,255,0.25)]" />
-        <div className="absolute bottom-[6%] left-[5%] size-1.5 rounded-full border border-black bg-grayscale-8 shadow-[inset_0_0_0_0.5px_rgba(255,255,255,0.25)]" />
-        <div className="absolute right-[5%] bottom-[6%] size-1.5 rounded-full border border-black bg-grayscale-8 shadow-[inset_0_0_0_0.5px_rgba(255,255,255,0.25)]" />
+        <CassettePreviewScrew className="top-[4%] left-[2.53%]" />
+        <CassettePreviewScrew className="top-[4%] right-[2.53%]" />
+        <CassettePreviewScrew className="bottom-[4%] left-[2.53%]" />
+        <CassettePreviewScrew className="right-[2.53%] bottom-[4%]" />
 
         <div className="absolute top-[9.5%] right-[8.5%] bottom-[24%] left-[8.5%] overflow-hidden rounded-[5px] border-2 border-grayscale-2 bg-grayscale-1 text-grayscale-12 dark:border-[#dc2626] dark:bg-[#dc2626] dark:text-white">
           <div className="relative z-10 mx-[5%] mt-[5%] flex items-start justify-between gap-2">
@@ -551,6 +658,14 @@ function ExperimentPreview({
   featured?: boolean;
   type: (typeof experiments)[number]["preview"];
 }) {
+  if (type === "tactile-button") {
+    return <TactileButtonPreview featured={featured} />;
+  }
+
+  if (type === "receipt-printer") {
+    return <ReceiptPrinterPreview featured={featured} />;
+  }
+
   if (type === "hold-to-confirm") {
     return <HoldToConfirmPreview featured={featured} />;
   }
