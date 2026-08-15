@@ -932,7 +932,7 @@ function ExperimentCard({
 
 export function NewExperimentCta({ className }: NewExperimentCtaProps) {
   return (
-    <section className={cn("flex flex-col gap-3", className)}>
+    <section className={cn("flex flex-col gap-3", className)} id="experiments">
       <div className="flex flex-col gap-px p-2">
         <h2 className="font-medium text-grayscale-11 text-sm">Experiments</h2>
         <p className="max-w-xl text-balance text-grayscale-10 text-sm">
