@@ -258,7 +258,7 @@ export default function V2Page() {
               target="_blank"
             >
               <TwitterLogoIcon aria-hidden="true" size={20} weight="fill" />
-              <h3 className="font-medium text-grayscale-12 text-sm">Twitter</h3>
+              <h3 className="font-normal text-grayscale-12 text-sm">Twitter</h3>
               <ArrowRightIcon
                 aria-hidden="true"
                 className="ml-auto text-grayscale-9 transition-transform group-hover:translate-x-0.5"
@@ -273,7 +273,7 @@ export default function V2Page() {
               target="_blank"
             >
               <GithubLogoIcon aria-hidden="true" size={20} weight="fill" />
-              <h3 className="font-medium text-grayscale-12 text-sm">GitHub</h3>
+              <h3 className="font-normal text-grayscale-12 text-sm">GitHub</h3>
               <ArrowRightIcon
                 aria-hidden="true"
                 className="ml-auto text-grayscale-9 transition-transform group-hover:translate-x-0.5"
@@ -288,7 +288,7 @@ export default function V2Page() {
               target="_blank"
             >
               <PhoneCallIcon aria-hidden="true" size={20} weight="fill" />
-              <h3 className="font-medium text-grayscale-12 text-sm">
+              <h3 className="font-normal text-grayscale-12 text-sm">
                 Book a call
               </h3>
               <ArrowRightIcon
