@@ -140,6 +140,8 @@ const experiments = [
 const previewSurfaceClassName = "h-32 shrink-0 overflow-hidden rounded-lg";
 const featuredPreviewSurfaceClassName =
   "h-40 shrink-0 overflow-hidden rounded-lg";
+const playingCardPreviewClassName =
+  "shadow-[0_2px_8px_rgba(0,0,0,0.035),0_14px_30px_rgba(0,0,0,0.055)]";
 const experimentCardClassName =
   "group flex min-h-64 flex-col overflow-hidden rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4";
 const [featuredExperiment, ...secondaryExperiments] = experiments;
@@ -689,13 +691,28 @@ export function ExperimentPreview({
       >
         <div className="-translate-x-1/2 absolute bottom-[-26px] left-1/2">
           <div className="-rotate-[14deg] absolute bottom-0 left-[-58px] origin-bottom transition-transform duration-300 group-hover:-rotate-[18deg] group-hover:-translate-y-1">
-            <PlayingCard rank="7" suit="clubs" width={64} />
+            <PlayingCard
+              className={playingCardPreviewClassName}
+              rank="7"
+              suit="clubs"
+              width={64}
+            />
           </div>
           <div className="absolute bottom-1 left-[-32px] origin-bottom transition-transform duration-300 group-hover:-translate-y-2">
-            <PlayingCard rank="Q" suit="hearts" width={64} />
+            <PlayingCard
+              className={playingCardPreviewClassName}
+              rank="Q"
+              suit="hearts"
+              width={64}
+            />
           </div>
           <div className="absolute bottom-0 left-[-6px] origin-bottom rotate-[14deg] transition-transform duration-300 group-hover:-translate-y-1 group-hover:rotate-[18deg]">
-            <PlayingCard rank="A" suit="spades" width={64} />
+            <PlayingCard
+              className={playingCardPreviewClassName}
+              rank="A"
+              suit="spades"
+              width={64}
+            />
           </div>
         </div>
       </div>
