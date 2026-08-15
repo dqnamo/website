@@ -247,7 +247,7 @@ export default function V2Page() {
           </div>
           <div className="mt-3 flex flex-row flex-wrap gap-x-4 gap-y-2 p-3">
             <a
-              className="bg-orange-2 p-0 font-normal text-orange-9 text-sm leading-none transition-colors hover:bg-orange-4 hover:text-orange-11"
+              className="bg-grayscale-2 p-0 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
               href="https://x.com/dqnamo"
               rel="noopener noreferrer"
               target="_blank"
@@ -255,7 +255,7 @@ export default function V2Page() {
               Follow me on Twitter
             </a>
             <a
-              className="bg-orange-2 p-0 font-normal text-orange-9 text-sm leading-none transition-colors hover:bg-orange-4 hover:text-orange-11"
+              className="bg-grayscale-2 p-0 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
               href="https://github.com/dqnamo"
               rel="noopener noreferrer"
               target="_blank"
@@ -263,7 +263,7 @@ export default function V2Page() {
               View my GitHub
             </a>
             <a
-              className="bg-orange-2 p-0 font-normal text-orange-9 text-sm leading-none transition-colors hover:bg-orange-4 hover:text-orange-11"
+              className="bg-grayscale-2 p-0 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
               href="https://cal.com/interface.london/20min"
               rel="noopener noreferrer"
               target="_blank"
@@ -271,7 +271,7 @@ export default function V2Page() {
               Talk to me
             </a>
             <a
-              className="bg-orange-2 p-0 font-normal text-orange-9 text-sm leading-none transition-colors hover:bg-orange-4 hover:text-orange-11"
+              className="bg-grayscale-2 p-0 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
               href="mailto:jp@interface.london"
             >
               Email me
