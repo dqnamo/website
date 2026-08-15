@@ -247,7 +247,7 @@ export default function V2Page() {
           </div>
           <div className="mt-3 flex flex-row flex-wrap gap-x-6 gap-y-3 p-3">
             <a
-              className="inline-flex items-center gap-1 bg-grayscale-2 p-0 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
+              className="inline-flex items-center gap-1 bg-grayscale-2 p-1.5 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
               href="https://x.com/dqnamo"
               rel="noopener noreferrer"
               target="_blank"
@@ -256,7 +256,7 @@ export default function V2Page() {
               <ArrowRightIcon aria-hidden="true" size={12} weight="bold" />
             </a>
             <a
-              className="inline-flex items-center gap-1 bg-grayscale-2 p-0 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
+              className="inline-flex items-center gap-1 bg-grayscale-2 p-1.5 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
               href="https://github.com/dqnamo"
               rel="noopener noreferrer"
               target="_blank"
@@ -265,7 +265,7 @@ export default function V2Page() {
               <ArrowRightIcon aria-hidden="true" size={12} weight="bold" />
             </a>
             <a
-              className="inline-flex items-center gap-1 bg-grayscale-2 p-0 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
+              className="inline-flex items-center gap-1 bg-grayscale-2 p-1.5 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
               href="https://cal.com/interface.london/20min"
               rel="noopener noreferrer"
               target="_blank"
@@ -274,7 +274,7 @@ export default function V2Page() {
               <ArrowRightIcon aria-hidden="true" size={12} weight="bold" />
             </a>
             <a
-              className="inline-flex items-center gap-1 bg-grayscale-2 p-0 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
+              className="inline-flex items-center gap-1 bg-grayscale-2 p-1.5 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
               href="mailto:jp@interface.london"
             >
               Email me
