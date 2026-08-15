@@ -46,7 +46,7 @@ export default function V2Page() {
           tools.
         </p>
 
-        <div className="mt-8 grid grid-cols-3 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5">
+        <div className="mt-8 grid grid-cols-2 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5">
           <div className="flex min-h-64 flex-col rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 small-shadow dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none">
             <div className="flex items-center justify-center rounded-lg bg-grayscale-2 p-16">
               <Image
@@ -117,7 +117,7 @@ export default function V2Page() {
               </Button>
             </div>
           </div>
-          <div className="flex min-h-64 flex-col rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 small-shadow dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none">
+          {/* <div className="flex min-h-64 flex-col rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 small-shadow dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none">
             <div className="flex items-center justify-center rounded-lg bg-grayscale-2 p-16">
               <Image
                 alt=""
@@ -152,7 +152,7 @@ export default function V2Page() {
                 />
               </Button>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* <section className="mt-16">
