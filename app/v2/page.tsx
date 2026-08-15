@@ -1,5 +1,6 @@
 import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
+import Link from "next/link";
 import Button from "@/components/public/Button";
 
 export default function V2Page() {
@@ -7,7 +8,7 @@ export default function V2Page() {
     <main className="mx-auto max-w-4xl">
       <div className="p-8">
         <h1 className="font-pirata font-bold text-4xl text-grayscale-12">
-          dqnamo
+          <Link href="/">dqnamo</Link>
         </h1>
         <p className="font-medium text-grayscale-10 text-xs">JP</p>
         <p className="mt-8 max-w-md font-sans text-sm text-grayscale-11">
