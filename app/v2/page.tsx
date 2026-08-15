@@ -1,7 +1,4 @@
-import {
-  ArrowRightIcon,
-  MusicNotesSimpleIcon,
-} from "@phosphor-icons/react/dist/ssr";
+import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import Link from "next/link";
 import { ExperimentPreview } from "@/components/NewExperimentCta";
@@ -158,7 +155,7 @@ export default function V2Page() {
           </div>
         </div>
 
-        <section className="mt-16">
+        {/* <section className="mt-16">
           <div className="p-3">
             <h2 className="font-medium text-grayscale-12 text-sm">
               Pro bono publico
@@ -207,7 +204,7 @@ export default function V2Page() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
 
         <section className="mt-16">
           <div className="p-3">
@@ -239,7 +236,7 @@ export default function V2Page() {
           </div>
         </section>
 
-        <section className="mt-16">
+        {/* <section className="mt-16">
           <div className="p-3">
             <h2 className="font-medium text-grayscale-12 text-sm">
               Other projects
@@ -285,7 +282,7 @@ export default function V2Page() {
               </p>
             </a>
           </div>
-        </section>
+        </section> */}
       </div>
     </main>
   );
