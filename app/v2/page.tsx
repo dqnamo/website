@@ -258,7 +258,7 @@ export default function V2Page() {
               rel="noopener noreferrer"
               target="_blank"
             >
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-grayscale-2 bg-white text-black">
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-grayscale-2">
                 <TwitterLogoIcon aria-hidden="true" size={20} weight="fill" />
               </div>
               <h3 className="font-normal text-grayscale-12 text-sm">Twitter</h3>
@@ -275,7 +275,7 @@ export default function V2Page() {
               rel="noopener noreferrer"
               target="_blank"
             >
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-grayscale-2 bg-white text-black">
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-grayscale-2">
                 <GithubLogoIcon aria-hidden="true" size={20} weight="fill" />
               </div>
               <h3 className="font-normal text-grayscale-12 text-sm">GitHub</h3>
@@ -292,7 +292,7 @@ export default function V2Page() {
               rel="noopener noreferrer"
               target="_blank"
             >
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-grayscale-2 bg-white text-black">
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-grayscale-2">
                 <PhoneCallIcon aria-hidden="true" size={20} weight="fill" />
               </div>
               <h3 className="font-normal text-grayscale-12 text-sm">
@@ -309,7 +309,7 @@ export default function V2Page() {
               className="group flex min-h-12 items-center gap-2 rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 pr-3 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4"
               href="mailto:jp@interface.london"
             >
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-grayscale-2 bg-white text-black">
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-grayscale-2">
                 <EnvelopeSimpleIcon
                   aria-hidden="true"
                   size={20}
