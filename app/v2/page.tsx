@@ -224,17 +224,9 @@ export default function V2Page() {
               >
                 <ExperimentPreview type={experiment.preview} />
                 <div className="mt-auto flex flex-col px-2 pt-4 pb-2">
-                  <div className="flex items-start justify-between gap-3">
-                    <h3 className="font-medium text-grayscale-12 text-sm">
-                      {experiment.title}
-                    </h3>
-                    <ArrowRightIcon
-                      aria-hidden="true"
-                      className="mt-0.5 shrink-0 text-grayscale-9 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-grayscale-11"
-                      size={15}
-                      weight="bold"
-                    />
-                  </div>
+                  <h3 className="font-medium text-grayscale-12 text-sm">
+                    {experiment.title}
+                  </h3>
                   <p className="mt-2 text-pretty text-grayscale-10 text-xs leading-5">
                     {experiment.description}
                   </p>
