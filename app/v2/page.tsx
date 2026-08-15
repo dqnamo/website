@@ -7,8 +7,13 @@ export default function V2Page() {
   return (
     <main className="mx-auto max-w-4xl">
       <div className="p-8">
-        <h1 className="font-pirata font-bold text-4xl text-grayscale-12">
-          <Link href="/">dqnamo</Link>
+        <h1 className="font-pirata font-bold text-4xl">
+          <Link
+            className="text-grayscale-11 transition-colors hover:text-grayscale-12"
+            href="/"
+          >
+            dqnamo
+          </Link>
         </h1>
         <p className="font-medium text-grayscale-10 text-xs">JP</p>
         <p className="mt-8 max-w-md font-sans text-sm text-grayscale-11">
