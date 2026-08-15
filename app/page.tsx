@@ -35,7 +35,7 @@ export default function HomePage() {
         <header className="px-3">
           <h1 className="font-pirata font-bold text-4xl">
             <Link
-              className="text-grayscale-11 transition-colors hover:text-grayscale-12"
+              className="text-grayscale-12"
               href="/"
             >
               dqnamo
