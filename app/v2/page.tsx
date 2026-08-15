@@ -252,25 +252,37 @@ export default function V2Page() {
           </div>
           <div className="mt-3 grid grid-cols-3 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5">
             <a
-              className="flex min-h-32 flex-col justify-between rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-3 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4"
+              className="group flex min-h-12 items-center gap-2 rounded-[13px] border border-grayscale-3 bg-grayscale-1 px-3 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4"
               href="https://x.com/dqnamo"
               rel="noopener noreferrer"
               target="_blank"
             >
               <TwitterLogoIcon aria-hidden="true" size={20} weight="fill" />
               <h3 className="font-medium text-grayscale-12 text-sm">Twitter</h3>
+              <ArrowRightIcon
+                aria-hidden="true"
+                className="ml-auto text-grayscale-9 transition-transform group-hover:translate-x-0.5"
+                size={14}
+                weight="bold"
+              />
             </a>
             <a
-              className="flex min-h-32 flex-col justify-between rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-3 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4"
+              className="group flex min-h-12 items-center gap-2 rounded-[13px] border border-grayscale-3 bg-grayscale-1 px-3 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4"
               href="https://github.com/dqnamo"
               rel="noopener noreferrer"
               target="_blank"
             >
               <GithubLogoIcon aria-hidden="true" size={20} weight="fill" />
               <h3 className="font-medium text-grayscale-12 text-sm">GitHub</h3>
+              <ArrowRightIcon
+                aria-hidden="true"
+                className="ml-auto text-grayscale-9 transition-transform group-hover:translate-x-0.5"
+                size={14}
+                weight="bold"
+              />
             </a>
             <a
-              className="flex min-h-32 flex-col justify-between rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-3 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4"
+              className="group flex min-h-12 items-center gap-2 rounded-[13px] border border-grayscale-3 bg-grayscale-1 px-3 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4"
               href="https://cal.com/interface.london/20min"
               rel="noopener noreferrer"
               target="_blank"
@@ -279,6 +291,12 @@ export default function V2Page() {
               <h3 className="font-medium text-grayscale-12 text-sm">
                 Book a call
               </h3>
+              <ArrowRightIcon
+                aria-hidden="true"
+                className="ml-auto text-grayscale-9 transition-transform group-hover:translate-x-0.5"
+                size={14}
+                weight="bold"
+              />
             </a>
           </div>
         </section>
