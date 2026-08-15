@@ -26,6 +26,7 @@ import {
   useState,
 } from "react";
 import { ScrambleTextShowcase } from "@/app/experiments/scramble-text/scramble-text-showcase";
+import { experiments } from "@/components/experiment-catalog";
 import { IridescentFoil } from "@/components/IridescentFoil";
 import { LogoTraceLoader } from "@/components/LogoTraceLoader";
 import { PlayingCard } from "@/components/PlayingCard";
@@ -40,106 +41,11 @@ type NewExperimentCtaProps = {
   className?: string;
 };
 
-const experiments = [
-  {
-    title: "Tactile Button",
-    href: "/experiments/tactile-button",
-    description:
-      "A physical button study built from a shaped face, firm edge, and compressible depth.",
-    preview: "tactile-button",
-  },
-  {
-    title: "Receipt Printer",
-    href: "/experiments/receipt-printer",
-    description:
-      "A SaaS checkout state that prints a physical receipt when payment clears.",
-    preview: "receipt-printer",
-  },
-  {
-    title: "Cassette Audio Player",
-    href: "/experiments/cassette-player",
-    description:
-      "A tactile audio player with turning reels and a compact-cassette control surface.",
-    preview: "cassette-player",
-  },
-  {
-    title: "Hold to Confirm",
-    href: "/experiments/hold-to-confirm",
-    description:
-      "A deliberate action that fills while held, then offers a timed undo.",
-    preview: "hold-to-confirm",
-  },
-  {
-    title: "Magnetic Drop Zone",
-    href: "/experiments/magnetic-drop-zone",
-    description:
-      "A file target that pulls toward an incoming drag before the file lands.",
-    preview: "magnetic-drop-zone",
-  },
-  {
-    title: "Dynamic Button",
-    href: "/experiments/dynamic-button",
-    description: "A button that smoothly resizes as its label animates.",
-    preview: "dynamic-button",
-  },
-  {
-    title: "Playing Cards",
-    href: "/experiments/playing-cards",
-    description:
-      "A composable playing card, plus a fanned hand you can thumb through and play.",
-    preview: "playing-cards",
-  },
-  {
-    title: "Ticket",
-    href: "/experiments/ticket",
-    description:
-      "A perforated ticket silhouette with composable sections and subtle parallax depth.",
-    preview: "ticket",
-  },
-  {
-    title: "Stamp",
-    href: "/experiments/stamp",
-    description:
-      "A reusable postage stamp frame for images, text, and custom React content.",
-    preview: "stamp",
-  },
-  {
-    title: "Scroll Fade List",
-    href: "/experiments/scroll-fade-list",
-    description: "A compact list surface with a soft overflow fade.",
-    preview: "scroll-fade-list",
-  },
-  {
-    title: "Advanced Model Selector",
-    href: "/experiments/model-selector",
-    description: "A benchmark-informed picker with model configuration.",
-    preview: "model-selector",
-  },
-  {
-    title: "Animated Signature",
-    href: "/experiments/signature",
-    description:
-      "A reusable SVG signature component that draws itself on mount.",
-    preview: "signature",
-  },
-  {
-    title: "Logo Trace Loader",
-    href: "/experiments/logo-trace-loader",
-    description: "A traced logo loader that resolves into a filled mark.",
-    preview: "logo-loader",
-  },
-  {
-    title: "Iridescent Foil",
-    href: "/experiments/iridescent-foil",
-    description:
-      "A layered CSS foil treatment that reacts to scroll and pointer.",
-    preview: "foil",
-  },
-] as const;
-
 const previewSurfaceClassName = "h-32 shrink-0 overflow-hidden rounded-lg";
 const featuredPreviewSurfaceClassName =
   "h-40 shrink-0 overflow-hidden rounded-lg";
+const playingCardPreviewClassName =
+  "shadow-[0_2px_8px_rgba(0,0,0,0.035),0_14px_30px_rgba(0,0,0,0.055)]";
 const experimentCardClassName =
   "group flex min-h-64 flex-col overflow-hidden rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4";
 const [featuredExperiment, ...secondaryExperiments] = experiments;
@@ -651,7 +557,7 @@ function CassettePlayerPreview({ featured = false }: { featured?: boolean }) {
   );
 }
 
-function ExperimentPreview({
+export function ExperimentPreview({
   featured = false,
   type,
 }: {
@@ -689,13 +595,28 @@ function ExperimentPreview({
       >
         <div className="-translate-x-1/2 absolute bottom-[-26px] left-1/2">
           <div className="-rotate-[14deg] absolute bottom-0 left-[-58px] origin-bottom transition-transform duration-300 group-hover:-rotate-[18deg] group-hover:-translate-y-1">
-            <PlayingCard rank="7" suit="clubs" width={64} />
+            <PlayingCard
+              className={playingCardPreviewClassName}
+              rank="7"
+              suit="clubs"
+              width={64}
+            />
           </div>
           <div className="absolute bottom-1 left-[-32px] origin-bottom transition-transform duration-300 group-hover:-translate-y-2">
-            <PlayingCard rank="Q" suit="hearts" width={64} />
+            <PlayingCard
+              className={playingCardPreviewClassName}
+              rank="Q"
+              suit="hearts"
+              width={64}
+            />
           </div>
           <div className="absolute bottom-0 left-[-6px] origin-bottom rotate-[14deg] transition-transform duration-300 group-hover:-translate-y-1 group-hover:rotate-[18deg]">
-            <PlayingCard rank="A" suit="spades" width={64} />
+            <PlayingCard
+              className={playingCardPreviewClassName}
+              rank="A"
+              suit="spades"
+              width={64}
+            />
           </div>
         </div>
       </div>
@@ -932,7 +853,7 @@ function ExperimentCard({
 
 export function NewExperimentCta({ className }: NewExperimentCtaProps) {
   return (
-    <section className={cn("flex flex-col gap-3", className)}>
+    <section className={cn("flex flex-col gap-3", className)} id="experiments">
       <div className="flex flex-col gap-px p-2">
         <h2 className="font-medium text-grayscale-11 text-sm">Experiments</h2>
         <p className="max-w-xl text-balance text-grayscale-10 text-sm">
