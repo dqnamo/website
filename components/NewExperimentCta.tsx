@@ -27,6 +27,7 @@ import {
 } from "react";
 import { ScrambleTextShowcase } from "@/app/experiments/scramble-text/scramble-text-showcase";
 import { experiments } from "@/components/experiment-catalog";
+import { GoldenTicket } from "@/components/GoldenTicket";
 import { IridescentFoil } from "@/components/IridescentFoil";
 import { LogoTraceLoader } from "@/components/LogoTraceLoader";
 import { PlayingCard } from "@/components/PlayingCard";
@@ -658,6 +659,28 @@ export function ExperimentPreview({
           }
           stubHeight={29}
           tilt={false}
+        />
+      </div>
+    );
+  }
+
+  if (type === "golden-ticket") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "relative flex items-center justify-center overflow-hidden bg-[#160f08] px-4",
+        )}
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(199,135,30,0.22),transparent_58%)]" />
+        <GoldenTicket
+          aria-hidden="true"
+          className="w-full max-w-[14rem] transition-transform duration-300 group-hover:scale-[1.025]"
+          date="17 Oct · 8PM"
+          invitee="Reserved for you"
+          message=""
+          venue="London"
         />
       </div>
     );

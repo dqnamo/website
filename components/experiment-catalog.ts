@@ -55,6 +55,13 @@ export const experiments = [
     preview: "ticket",
   },
   {
+    title: "Golden Ticket",
+    href: "/experiments/golden-ticket",
+    description:
+      "A luxurious special invitation with embossed details and pointer-responsive metallic shine.",
+    preview: "golden-ticket",
+  },
+  {
     title: "Stamp",
     href: "/experiments/stamp",
     description:
