@@ -115,7 +115,7 @@ export default function V2Page() {
                 The Kitchen
               </h2>
               <p className="mt-px text-pretty text-grayscale-10 text-sm leading-5">
-                The place where I cook up cool niche components.
+                The place where I cook up niche components.
               </p>
             </div>
             <div className="p-1">

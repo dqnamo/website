@@ -15,7 +15,7 @@ export default function KitchenPage() {
           <p className="font-pirata font-bold text-4xl">
             <Link
               className="text-grayscale-11 transition-colors hover:text-grayscale-12"
-              href="/v2"
+              href="/"
             >
               dqnamo
             </Link>
