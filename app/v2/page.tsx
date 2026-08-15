@@ -333,7 +333,7 @@ export default function V2Page() {
 
         <footer className="mt-8 flex justify-end p-3">
           <p className="font-medium text-[11px] text-grayscale-8">
-            Per gratiam dei
+            Per gratiam Dei
           </p>
         </footer>
       </div>
