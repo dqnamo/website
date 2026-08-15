@@ -14,10 +14,10 @@ const kitchenExperiments = [
   },
   {
     description:
-      "A perforated ticket silhouette with composable sections and subtle parallax depth.",
-    href: "/experiments/ticket",
-    preview: "ticket",
-    title: "Ticket",
+      "A SaaS checkout state that prints a physical receipt when payment clears.",
+    href: "/experiments/receipt-printer",
+    preview: "receipt-printer",
+    title: "Receipt Printer",
   },
   {
     description: "A button that smoothly resizes as its label animates.",
