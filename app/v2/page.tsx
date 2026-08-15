@@ -330,6 +330,10 @@ export default function V2Page() {
             </a>
           </div>
         </section> */}
+
+        <footer className="mt-16 flex justify-end p-3">
+          <p className="italic text-grayscale-9 text-xs">Per gratiam dei</p>
+        </footer>
       </div>
     </main>
   );
