@@ -158,7 +158,7 @@ export default function V2Page() {
                 />
                 <div
                   aria-hidden="true"
-                  className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.5)_0%,white_100%)]"
+                  className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.8)_0%,white_100%)]"
                 />
               </div>
               <div className="flex flex-col justify-end p-3">
