@@ -1,0 +1,9 @@
+GitHub Octicons mark
+Copyright 2018 GitHub Inc.
+Source: https://commons.wikimedia.org/wiki/File:Octicons-mark-github.svg
+License: MIT (https://opensource.org/licenses/MIT)
+
+Twitter X icon from Bootstrap Icons
+Copyright 2019-2024 The Bootstrap Authors
+Source: https://icons.getbootstrap.com/icons/twitter-x/
+License: MIT (https://opensource.org/licenses/MIT)

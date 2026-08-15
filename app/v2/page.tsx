@@ -1,9 +1,7 @@
 import {
   ArrowRightIcon,
   EnvelopeSimpleIcon,
-  GithubLogoIcon,
   PhoneCallIcon,
-  TwitterLogoIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import Link from "next/link";
@@ -259,7 +257,13 @@ export default function V2Page() {
               target="_blank"
             >
               <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-grayscale-2">
-                <TwitterLogoIcon aria-hidden="true" size={20} weight="fill" />
+                <Image
+                  alt=""
+                  className="size-5 dark:invert"
+                  height={20}
+                  src="/logos/twitter-x.svg"
+                  width={20}
+                />
               </div>
               <h3 className="font-normal text-grayscale-12 text-sm">Twitter</h3>
               <ArrowRightIcon
@@ -276,7 +280,13 @@ export default function V2Page() {
               target="_blank"
             >
               <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-grayscale-2">
-                <GithubLogoIcon aria-hidden="true" size={20} weight="fill" />
+                <Image
+                  alt=""
+                  className="size-5 dark:invert"
+                  height={20}
+                  src="/logos/github-mark.svg"
+                  width={20}
+                />
               </div>
               <h3 className="font-normal text-grayscale-12 text-sm">GitHub</h3>
               <ArrowRightIcon
