@@ -243,7 +243,12 @@ export default function V2Page() {
 
         <section className="mt-16">
           <div className="p-3">
-            <h2 className="font-medium text-grayscale-12 text-sm">More</h2>
+            <h2 className="font-medium text-grayscale-12 text-sm">
+              Looking for more?
+            </h2>
+            <p className="mt-px text-grayscale-10 text-sm leading-5">
+              These links might help.
+            </p>
           </div>
           <div className="mt-3 grid grid-cols-3 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5">
             <a
