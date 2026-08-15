@@ -15,6 +15,11 @@ const nextConfig: NextConfig = {
         hostname: "api.dicebear.com",
         pathname: "/10.x/initial-face/svg",
       },
+      {
+        protocol: "https",
+        hostname: "saintdex.vercel.app",
+        pathname: "/hero.jpeg",
+      },
     ],
   },
   async rewrites() {

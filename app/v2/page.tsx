@@ -141,7 +141,45 @@ export default function V2Page() {
               good.
             </p>
           </div>
-          <div className="mt-3 grid min-h-64 grid-cols-2 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5" />
+          <div className="mt-3 grid grid-cols-2 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5">
+            <a
+              className="grid min-h-64 grid-cols-2 rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 small-shadow transition-colors hover:border-grayscale-4 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-5"
+              href="https://saintdex.vercel.app"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <div className="relative min-h-0 overflow-hidden rounded-lg bg-grayscale-2">
+                <Image
+                  alt="Saintdex app preview"
+                  className="object-cover"
+                  fill
+                  sizes="(min-width: 896px) 200px, 25vw"
+                  src="https://saintdex.vercel.app/hero.jpeg"
+                />
+              </div>
+              <div className="flex flex-col justify-end p-3">
+                <h3 className="font-medium text-grayscale-12 text-sm">
+                  Saintdex
+                </h3>
+                <p className="mt-px text-grayscale-10 text-sm leading-5">
+                  A Catholic saint index for discovering saints and their
+                  stories.
+                </p>
+              </div>
+            </a>
+
+            <div className="grid min-h-64 grid-cols-2 rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 small-shadow dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none">
+              <div className="rounded-lg bg-grayscale-2" />
+              <div className="flex flex-col justify-end p-3">
+                <h3 className="font-medium text-grayscale-12 text-sm">
+                  Polaris
+                </h3>
+                <p className="mt-px text-grayscale-10 text-sm leading-5">
+                  A recovery companion for overcoming pornography addiction.
+                </p>
+              </div>
+            </div>
+          </div>
         </section>
       </div>
     </main>
