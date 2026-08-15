@@ -31,20 +31,22 @@ export default function V2Page() {
   return (
     <main className="mx-auto max-w-4xl">
       <div className="p-8">
-        <h1 className="font-pirata font-bold text-4xl">
-          <Link
-            className="text-grayscale-11 transition-colors hover:text-grayscale-12"
-            href="/"
-          >
-            dqnamo
-          </Link>
-        </h1>
-        <p className="font-medium text-grayscale-10 text-xs">JP</p>
-        <p className="mt-8 max-w-md font-sans text-sm text-grayscale-11">
-          I run a digital studio in London. I like building aesthteically
-          pleasing software. Interested in prosumer productivity and developer
-          tools.
-        </p>
+        <header className="px-3">
+          <h1 className="font-pirata font-bold text-4xl">
+            <Link
+              className="text-grayscale-11 transition-colors hover:text-grayscale-12"
+              href="/"
+            >
+              dqnamo
+            </Link>
+          </h1>
+          <p className="font-medium text-grayscale-10 text-xs">JP</p>
+          <p className="mt-8 max-w-md font-sans text-sm text-grayscale-11">
+            I run a digital studio in London. I like building aesthteically
+            pleasing software. Interested in prosumer productivity and developer
+            tools.
+          </p>
+        </header>
 
         <div className="mt-8 grid grid-cols-2 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5">
           <div className="flex min-h-64 flex-col rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 small-shadow dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none">
@@ -247,7 +249,7 @@ export default function V2Page() {
           </div>
           <div className="mt-3 flex flex-row flex-wrap gap-x-6 gap-y-3 p-3">
             <a
-              className="inline-flex items-center gap-1 bg-grayscale-2 p-1.5 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
+              className="inline-flex items-center gap-1 bg-grayscale-2 p-0 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
               href="https://x.com/dqnamo"
               rel="noopener noreferrer"
               target="_blank"
@@ -256,7 +258,7 @@ export default function V2Page() {
               <ArrowRightIcon aria-hidden="true" size={12} weight="bold" />
             </a>
             <a
-              className="inline-flex items-center gap-1 bg-grayscale-2 p-1.5 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
+              className="inline-flex items-center gap-1 bg-grayscale-2 p-0 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
               href="https://github.com/dqnamo"
               rel="noopener noreferrer"
               target="_blank"
@@ -265,7 +267,7 @@ export default function V2Page() {
               <ArrowRightIcon aria-hidden="true" size={12} weight="bold" />
             </a>
             <a
-              className="inline-flex items-center gap-1 bg-grayscale-2 p-1.5 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
+              className="inline-flex items-center gap-1 bg-grayscale-2 p-0 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
               href="https://cal.com/interface.london/20min"
               rel="noopener noreferrer"
               target="_blank"
@@ -274,7 +276,7 @@ export default function V2Page() {
               <ArrowRightIcon aria-hidden="true" size={12} weight="bold" />
             </a>
             <a
-              className="inline-flex items-center gap-1 bg-grayscale-2 p-1.5 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
+              className="inline-flex items-center gap-1 bg-grayscale-2 p-0 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
               href="mailto:jp@interface.london"
             >
               Email me
