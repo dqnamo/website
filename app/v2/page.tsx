@@ -130,6 +130,19 @@ export default function V2Page() {
             </div>
           </div>
         </div>
+
+        <section className="mt-16">
+          <div className="p-3">
+            <h2 className="font-medium text-grayscale-12 text-sm">
+              Pro bono publico
+            </h2>
+            <p className="mt-px text-grayscale-10 text-sm leading-5">
+              Design and engineering work for projects that serve the public
+              good.
+            </p>
+          </div>
+          <div className="mt-3 grid min-h-64 grid-cols-2 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5" />
+        </section>
       </div>
     </main>
   );
