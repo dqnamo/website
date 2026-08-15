@@ -1,4 +1,7 @@
-import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
+import {
+  ArrowRightIcon,
+  MusicNotesSimpleIcon,
+} from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import Link from "next/link";
 import { ExperimentPreview } from "@/components/NewExperimentCta";
@@ -233,6 +236,54 @@ export default function V2Page() {
                 </div>
               </Link>
             ))}
+          </div>
+        </section>
+
+        <section className="mt-16">
+          <div className="p-3">
+            <h2 className="font-medium text-grayscale-12 text-sm">
+              Other projects
+            </h2>
+          </div>
+          <div className="mt-3 grid grid-cols-2 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5">
+            <a
+              className="flex min-h-40 flex-col rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-4 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4"
+              href="https://chord.so"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <div className="flex size-8 items-center justify-center rounded-lg border border-grayscale-3 bg-white small-shadow dark:border-grayscale-6 dark:bg-grayscale-5">
+                <MusicNotesSimpleIcon
+                  aria-hidden="true"
+                  className="text-teal-9"
+                  weight="bold"
+                />
+              </div>
+              <h3 className="mt-3 font-medium text-grayscale-12 text-sm">
+                Chord
+              </h3>
+              <p className="mt-px max-w-sm text-pretty text-grayscale-10 text-xs leading-5">
+                An opinionated design language and UI library for building
+                beautiful web applications.
+              </p>
+            </a>
+
+            <a
+              className="flex min-h-40 flex-col rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-4 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4"
+              href="https://growdoro.com"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <div className="flex size-8 items-center justify-center rounded-lg border border-grayscale-3 bg-white small-shadow dark:border-grayscale-6 dark:bg-grayscale-5">
+                <span className="font-semibold text-grass-9 text-sm">G</span>
+              </div>
+              <h3 className="mt-3 font-medium text-grayscale-12 text-sm">
+                Growdoro
+              </h3>
+              <p className="mt-px max-w-sm text-pretty text-grayscale-10 text-xs leading-5">
+                A gamified focus timer where you can grow an infinite garden.
+              </p>
+            </a>
           </div>
         </section>
       </div>
