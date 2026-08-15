@@ -247,7 +247,7 @@ export default function V2Page() {
           </div>
           <div className="mt-3 flex flex-row flex-wrap gap-x-4 gap-y-2 p-3">
             <a
-              className="font-normal text-grayscale-10 text-sm transition-colors hover:text-grayscale-12"
+              className="bg-grayscale-3 p-0 font-normal text-grayscale-10 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-12"
               href="https://x.com/dqnamo"
               rel="noopener noreferrer"
               target="_blank"
@@ -255,7 +255,7 @@ export default function V2Page() {
               Follow me on Twitter
             </a>
             <a
-              className="font-normal text-grayscale-10 text-sm transition-colors hover:text-grayscale-12"
+              className="bg-grayscale-3 p-0 font-normal text-grayscale-10 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-12"
               href="https://github.com/dqnamo"
               rel="noopener noreferrer"
               target="_blank"
@@ -263,7 +263,7 @@ export default function V2Page() {
               View my GitHub
             </a>
             <a
-              className="font-normal text-grayscale-10 text-sm transition-colors hover:text-grayscale-12"
+              className="bg-grayscale-3 p-0 font-normal text-grayscale-10 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-12"
               href="https://cal.com/interface.london/20min"
               rel="noopener noreferrer"
               target="_blank"
@@ -271,7 +271,7 @@ export default function V2Page() {
               Talk to me
             </a>
             <a
-              className="font-normal text-grayscale-10 text-sm transition-colors hover:text-grayscale-12"
+              className="bg-grayscale-3 p-0 font-normal text-grayscale-10 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-12"
               href="mailto:jp@interface.london"
             >
               Email me
