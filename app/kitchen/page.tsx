@@ -31,12 +31,6 @@ export default function KitchenPage() {
         </header>
 
         <NewExperimentCta className="mt-12 [&>div:first-child]:hidden" />
-
-        <footer className="mt-8 flex justify-end p-3">
-          <p className="font-medium text-[11px] text-grayscale-8">
-            Per gratiam Dei
-          </p>
-        </footer>
       </div>
     </main>
   );
