@@ -31,7 +31,7 @@ const kitchenExperiments = [
 export default function V2Page() {
   return (
     <main className="mx-auto max-w-4xl">
-      <div className="p-8">
+      <div className="p-4 sm:p-8">
         <header className="px-3">
           <h1 className="font-pirata font-bold text-4xl">
             <Link
@@ -49,7 +49,7 @@ export default function V2Page() {
           </p>
         </header>
 
-        <div className="mt-8 grid grid-cols-2 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5">
+        <div className="mt-8 grid grid-cols-1 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5 sm:grid-cols-2">
           <div className="group relative flex min-h-64 flex-col rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4">
             <a
               aria-label="Visit The Interface Company of London"
@@ -115,7 +115,7 @@ export default function V2Page() {
                 The Kitchen
               </h2>
               <p className="mt-px text-pretty text-grayscale-10 text-sm leading-5">
-                The place where I cook up niche components.
+                Playful components and focused interface experiments.
               </p>
             </div>
             <div className="p-1">
@@ -231,10 +231,11 @@ export default function V2Page() {
               What&apos;s cooking in the kitchen
             </h2>
             <p className="mt-px text-pretty text-grayscale-10 text-sm leading-5">
-              Recent component experiments from the kitchen.
+              Fresh interaction patterns, component ideas, and visual
+              experiments.
             </p>
           </div>
-          <div className="mt-3 grid grid-cols-3 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5">
+          <div className="mt-3 grid grid-cols-1 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5 sm:grid-cols-2 lg:grid-cols-3">
             {kitchenExperiments.map((experiment) => (
               <Link
                 className="group flex min-h-64 flex-col overflow-hidden rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4"
@@ -253,7 +254,7 @@ export default function V2Page() {
               </Link>
             ))}
             <Link
-              className="group col-span-3 flex items-center gap-4 rounded-[13px] border border-grayscale-3 bg-grayscale-1 px-4 py-5 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4"
+              className="group flex items-center gap-4 rounded-[13px] border border-grayscale-3 bg-grayscale-1 px-4 py-5 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 sm:col-span-2 lg:col-span-3 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4"
               href="/kitchen"
             >
               <div className="flex min-w-0 flex-col">
@@ -264,8 +265,7 @@ export default function V2Page() {
                   View all components
                 </h3>
                 <p className="mt-px text-pretty text-grayscale-10 text-xs leading-5">
-                  Browse every component and interface experiment from the
-                  kitchen.
+                  Explore the complete collection in one place.
                 </p>
               </div>
               <ArrowRightIcon
@@ -372,12 +372,6 @@ export default function V2Page() {
             </a>
           </div>
         </section> */}
-
-        <footer className="mt-8 flex justify-end p-3">
-          <p className="font-medium text-[11px] text-grayscale-8">
-            Per gratiam Dei
-          </p>
-        </footer>
       </div>
     </main>
   );
