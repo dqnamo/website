@@ -251,7 +251,7 @@ export default function V2Page() {
               These links might help.
             </p>
           </div>
-          <div className="mt-3 grid grid-cols-4 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5">
+          <div className="mt-3 grid grid-cols-2 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5">
             <a
               className="group flex min-h-12 items-center gap-2 rounded-[13px] border border-grayscale-3 bg-grayscale-1 px-3 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4"
               href="https://x.com/dqnamo"
