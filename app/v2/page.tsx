@@ -1,7 +1,31 @@
 import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import Link from "next/link";
+import { ExperimentPreview } from "@/components/NewExperimentCta";
 import Button from "@/components/public/Button";
+
+const kitchenExperiments = [
+  {
+    description:
+      "A composable playing card, plus a fanned hand you can thumb through and play.",
+    href: "/experiments/playing-cards",
+    preview: "playing-cards",
+    title: "Playing Cards",
+  },
+  {
+    description:
+      "A perforated ticket silhouette with composable sections and subtle parallax depth.",
+    href: "/experiments/ticket",
+    preview: "ticket",
+    title: "Ticket",
+  },
+  {
+    description: "A button that smoothly resizes as its label animates.",
+    href: "/experiments/dynamic-button",
+    preview: "dynamic-button",
+    title: "Dynamic Button",
+  },
+] as const;
 
 export default function V2Page() {
   return (
@@ -179,6 +203,44 @@ export default function V2Page() {
                 </p>
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="mt-16">
+          <div className="p-3">
+            <h2 className="font-medium text-grayscale-12 text-sm">
+              What&apos;s cooking in the kitchen
+            </h2>
+            <p className="mt-px text-grayscale-10 text-sm leading-5">
+              Recent component experiments from the kitchen.
+            </p>
+          </div>
+          <div className="mt-3 grid grid-cols-3 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5">
+            {kitchenExperiments.map((experiment) => (
+              <Link
+                className="group flex min-h-64 flex-col overflow-hidden rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4"
+                href={experiment.href}
+                key={experiment.href}
+              >
+                <ExperimentPreview type={experiment.preview} />
+                <div className="mt-auto flex flex-col px-2 pt-4 pb-2">
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="font-medium text-grayscale-12 text-sm">
+                      {experiment.title}
+                    </h3>
+                    <ArrowRightIcon
+                      aria-hidden="true"
+                      className="mt-0.5 shrink-0 text-grayscale-9 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-grayscale-11"
+                      size={15}
+                      weight="bold"
+                    />
+                  </div>
+                  <p className="mt-2 text-pretty text-grayscale-10 text-xs leading-5">
+                    {experiment.description}
+                  </p>
+                </div>
+              </Link>
+            ))}
           </div>
         </section>
       </div>

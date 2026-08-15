@@ -651,7 +651,7 @@ function CassettePlayerPreview({ featured = false }: { featured?: boolean }) {
   );
 }
 
-function ExperimentPreview({
+export function ExperimentPreview({
   featured = false,
   type,
 }: {
