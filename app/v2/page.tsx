@@ -156,10 +156,6 @@ export default function V2Page() {
                   sizes="(min-width: 896px) 200px, 25vw"
                   src="https://saintdex.vercel.app/hero.jpeg"
                 />
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.8)_0%,white_100%)]"
-                />
               </div>
               <div className="flex flex-col justify-end p-3">
                 <h3 className="font-medium text-grayscale-12 text-sm">
