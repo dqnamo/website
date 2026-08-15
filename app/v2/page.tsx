@@ -245,7 +245,7 @@ export default function V2Page() {
               These links might help.
             </p>
           </div>
-          <div className="mt-3 flex flex-row flex-wrap gap-x-4 gap-y-2 p-3">
+          <div className="mt-3 flex flex-row flex-wrap gap-x-6 gap-y-3 p-3">
             <a
               className="inline-flex items-center gap-1 bg-grayscale-2 p-0 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
               href="https://x.com/dqnamo"
