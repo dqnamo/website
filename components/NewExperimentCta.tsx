@@ -26,6 +26,7 @@ import {
   useState,
 } from "react";
 import { ScrambleTextShowcase } from "@/app/experiments/scramble-text/scramble-text-showcase";
+import { experiments } from "@/components/experiment-catalog";
 import { IridescentFoil } from "@/components/IridescentFoil";
 import { LogoTraceLoader } from "@/components/LogoTraceLoader";
 import { PlayingCard } from "@/components/PlayingCard";
@@ -39,103 +40,6 @@ import { cn } from "@/helpers/classname-helper";
 type NewExperimentCtaProps = {
   className?: string;
 };
-
-const experiments = [
-  {
-    title: "Tactile Button",
-    href: "/experiments/tactile-button",
-    description:
-      "A physical button study built from a shaped face, firm edge, and compressible depth.",
-    preview: "tactile-button",
-  },
-  {
-    title: "Receipt Printer",
-    href: "/experiments/receipt-printer",
-    description:
-      "A SaaS checkout state that prints a physical receipt when payment clears.",
-    preview: "receipt-printer",
-  },
-  {
-    title: "Cassette Audio Player",
-    href: "/experiments/cassette-player",
-    description:
-      "A tactile audio player with turning reels and a compact-cassette control surface.",
-    preview: "cassette-player",
-  },
-  {
-    title: "Hold to Confirm",
-    href: "/experiments/hold-to-confirm",
-    description:
-      "A deliberate action that fills while held, then offers a timed undo.",
-    preview: "hold-to-confirm",
-  },
-  {
-    title: "Magnetic Drop Zone",
-    href: "/experiments/magnetic-drop-zone",
-    description:
-      "A file target that pulls toward an incoming drag before the file lands.",
-    preview: "magnetic-drop-zone",
-  },
-  {
-    title: "Dynamic Button",
-    href: "/experiments/dynamic-button",
-    description: "A button that smoothly resizes as its label animates.",
-    preview: "dynamic-button",
-  },
-  {
-    title: "Playing Cards",
-    href: "/experiments/playing-cards",
-    description:
-      "A composable playing card, plus a fanned hand you can thumb through and play.",
-    preview: "playing-cards",
-  },
-  {
-    title: "Ticket",
-    href: "/experiments/ticket",
-    description:
-      "A perforated ticket silhouette with composable sections and subtle parallax depth.",
-    preview: "ticket",
-  },
-  {
-    title: "Stamp",
-    href: "/experiments/stamp",
-    description:
-      "A reusable postage stamp frame for images, text, and custom React content.",
-    preview: "stamp",
-  },
-  {
-    title: "Scroll Fade List",
-    href: "/experiments/scroll-fade-list",
-    description: "A compact list surface with a soft overflow fade.",
-    preview: "scroll-fade-list",
-  },
-  {
-    title: "Advanced Model Selector",
-    href: "/experiments/model-selector",
-    description: "A benchmark-informed picker with model configuration.",
-    preview: "model-selector",
-  },
-  {
-    title: "Animated Signature",
-    href: "/experiments/signature",
-    description:
-      "A reusable SVG signature component that draws itself on mount.",
-    preview: "signature",
-  },
-  {
-    title: "Logo Trace Loader",
-    href: "/experiments/logo-trace-loader",
-    description: "A traced logo loader that resolves into a filled mark.",
-    preview: "logo-loader",
-  },
-  {
-    title: "Iridescent Foil",
-    href: "/experiments/iridescent-foil",
-    description:
-      "A layered CSS foil treatment that reacts to scroll and pointer.",
-    preview: "foil",
-  },
-] as const;
 
 const previewSurfaceClassName = "h-32 shrink-0 overflow-hidden rounded-lg";
 const featuredPreviewSurfaceClassName =
