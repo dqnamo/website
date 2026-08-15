@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Barlow, Inter, JetBrains_Mono, Pirata_One } from "next/font/google";
 import "../styles/globals.css";
+import { BottomDock } from "@/components/BottomDock";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
 const inter = Inter({
@@ -58,6 +59,7 @@ export default function RootLayout({
       <body className="min-h-full bg-grayscale-1 text-grayscale-12">
         <ThemeProvider>
           <div className="root">{children}</div>
+          <BottomDock />
         </ThemeProvider>
       </body>
     </html>

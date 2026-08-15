@@ -13,6 +13,7 @@ body {
 
 .root {
   isolation: isolate;
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom));
 }
 
 .small-shadow {

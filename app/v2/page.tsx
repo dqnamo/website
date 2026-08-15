@@ -1,8 +1,8 @@
-import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import Link from "next/link";
 import { experimentCount } from "@/components/experiment-catalog";
 import { ExperimentPreview } from "@/components/NewExperimentCta";
+import { PikaArrowRightIcon } from "@/components/PikaDockIcons";
 import Button, { getButtonClassName } from "@/components/public/Button";
 
 const kitchenExperiments = [
@@ -88,11 +88,10 @@ export default function V2Page() {
                 variant="secondary"
               >
                 Book a call
-                <ArrowRightIcon
+                <PikaArrowRightIcon
                   aria-hidden="true"
                   className="ml-auto"
                   size={14}
-                  weight="bold"
                 />
               </Button>
             </div>
@@ -126,11 +125,10 @@ export default function V2Page() {
                 })}
               >
                 View components
-                <ArrowRightIcon
+                <PikaArrowRightIcon
                   aria-hidden="true"
                   className="ml-auto"
                   size={14}
-                  weight="bold"
                 />
               </span>
             </div>
@@ -162,11 +160,10 @@ export default function V2Page() {
                 variant="secondary"
               >
                 Learn more
-                <ArrowRightIcon
+                <PikaArrowRightIcon
                   aria-hidden="true"
                   className="ml-auto"
                   size={14}
-                  weight="bold"
                 />
               </Button>
             </div>
@@ -267,60 +264,12 @@ export default function V2Page() {
                   Explore the complete collection in one place.
                 </p>
               </div>
-              <ArrowRightIcon
+              <PikaArrowRightIcon
                 aria-hidden="true"
                 className="ml-auto shrink-0 self-end text-grayscale-9 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-grayscale-11"
                 size={16}
-                weight="bold"
               />
             </Link>
-          </div>
-        </section>
-
-        <section className="mt-16">
-          <div className="p-3">
-            <h2 className="font-medium text-grayscale-12 text-sm">
-              Looking for more?
-            </h2>
-            <p className="mt-px text-pretty text-grayscale-10 text-sm leading-5">
-              These links might help.
-            </p>
-          </div>
-          <div className="mt-3 flex flex-row flex-wrap gap-x-6 gap-y-3 p-3">
-            <a
-              className="inline-flex items-center gap-1 bg-grayscale-3 p-0 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
-              href="https://x.com/dqnamo"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              Follow me on Twitter
-              <ArrowRightIcon aria-hidden="true" size={12} weight="bold" />
-            </a>
-            <a
-              className="inline-flex items-center gap-1 bg-grayscale-3 p-0 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
-              href="https://github.com/dqnamo"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              View my GitHub
-              <ArrowRightIcon aria-hidden="true" size={12} weight="bold" />
-            </a>
-            <a
-              className="inline-flex items-center gap-1 bg-grayscale-3 p-0 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
-              href="https://cal.com/interface.london/20min"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              Talk to me
-              <ArrowRightIcon aria-hidden="true" size={12} weight="bold" />
-            </a>
-            <a
-              className="inline-flex items-center gap-1 bg-grayscale-3 p-0 font-normal text-grayscale-9 text-sm leading-none transition-colors hover:bg-grayscale-4 hover:text-grayscale-11"
-              href="mailto:jp@interface.london"
-            >
-              Email me
-              <ArrowRightIcon aria-hidden="true" size={12} weight="bold" />
-            </a>
           </div>
         </section>
 
