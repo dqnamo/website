@@ -81,7 +81,7 @@ export default function V2Page() {
             </div>
             <div className="relative z-20 p-1">
               <Button
-                className="w-full justify-start border-b-2 bg-white text-left dark:bg-white dark:text-black"
+                className="w-full justify-start border-b-2 text-left"
                 href="https://cal.com/interface.london/20min"
                 rel="noopener noreferrer"
                 target="_blank"
@@ -121,8 +121,7 @@ export default function V2Page() {
             <div className="p-1">
               <span
                 className={getButtonClassName({
-                  className:
-                    "w-full justify-start border-b-2 bg-white text-left dark:bg-white dark:text-black",
+                  className: "w-full justify-start border-b-2 text-left",
                   variant: "secondary",
                 })}
               >
