@@ -16,6 +16,90 @@ const ASH_COUNT = 180;
 const TEXTURE_WIDTH = 1400;
 const TEXTURE_HEIGHT = Math.round(TEXTURE_WIDTH / TICKET_ASPECT);
 
+type BurnPalette = {
+  core: readonly [number, number, number];
+  inner: readonly [number, number, number];
+  outer: readonly [number, number, number];
+};
+
+const burnPalettes = {
+  blue: {
+    core: [0.08, 0.32, 1],
+    inner: [0.02, 0.18, 1],
+    outer: [0.015, 0.035, 0.55],
+  },
+  green: {
+    core: [0.24, 1, 0.12],
+    inner: [0.06, 1, 0.16],
+    outer: [0.012, 0.4, 0.025],
+  },
+  orange: {
+    core: [0.95, 0.16, 0.006],
+    inner: [1, 0.18, 0.004],
+    outer: [0.72, 0.012, 0.001],
+  },
+  purple: {
+    core: [1, 0.08, 0.62],
+    inner: [0.72, 0.04, 1],
+    outer: [0.22, 0.01, 0.55],
+  },
+} as const satisfies Record<string, BurnPalette>;
+
+export type BurnColor = keyof typeof burnPalettes;
+
+type BurnColorUniforms = {
+  uBurnCore: { value: THREE.Vector3 };
+  uBurnInner: { value: THREE.Vector3 };
+  uBurnOuter: { value: THREE.Vector3 };
+};
+
+function createBurnColorUniforms(burnColor: BurnColor): BurnColorUniforms {
+  const palette = burnPalettes[burnColor];
+
+  return {
+    uBurnCore: {
+      value: new THREE.Vector3(
+        palette.core[0],
+        palette.core[1],
+        palette.core[2],
+      ),
+    },
+    uBurnInner: {
+      value: new THREE.Vector3(
+        palette.inner[0],
+        palette.inner[1],
+        palette.inner[2],
+      ),
+    },
+    uBurnOuter: {
+      value: new THREE.Vector3(
+        palette.outer[0],
+        palette.outer[1],
+        palette.outer[2],
+      ),
+    },
+  };
+}
+
+function applyBurnPalette(uniforms: BurnColorUniforms, burnColor: BurnColor) {
+  const palette = burnPalettes[burnColor];
+  uniforms.uBurnCore.value.set(
+    palette.core[0],
+    palette.core[1],
+    palette.core[2],
+  );
+  uniforms.uBurnInner.value.set(
+    palette.inner[0],
+    palette.inner[1],
+    palette.inner[2],
+  );
+  uniforms.uBurnOuter.value.set(
+    palette.outer[0],
+    palette.outer[1],
+    palette.outer[2],
+  );
+}
+
 const ticketVertexShader = `
   uniform float uBurnProgress;
   uniform float uTime;
@@ -64,7 +148,7 @@ const ticketVertexShader = `
     ) - 0.5;
     vec2 warpedUv = uv + warp * 0.075;
     float diagonal =
-      (1.0 - warpedUv.x) * 0.69 + warpedUv.y * 0.31;
+      warpedUv.x * 0.69 + warpedUv.y * 0.31;
     float coarse = fbm(uv * 7.2 + vec2(4.6, 9.1)) - 0.5;
     float fine = valueNoise(uv * 31.0 + vec2(1.7, 6.2)) - 0.5;
 
@@ -97,6 +181,9 @@ const ticketFragmentShader = `
   uniform sampler2D uTicket;
   uniform float uBurnProgress;
   uniform float uTime;
+  uniform vec3 uBurnCore;
+  uniform vec3 uBurnInner;
+  uniform vec3 uBurnOuter;
 
   varying vec2 vUv;
   varying vec3 vNormalView;
@@ -142,7 +229,7 @@ const ticketFragmentShader = `
     ) - 0.5;
     vec2 warpedUv = uv + warp * 0.075;
     float diagonal =
-      (1.0 - warpedUv.x) * 0.69 + warpedUv.y * 0.31;
+      warpedUv.x * 0.69 + warpedUv.y * 0.31;
     float coarse = fbm(uv * 7.2 + vec2(4.6, 9.1)) - 0.5;
     float fine = valueNoise(uv * 31.0 + vec2(1.7, 6.2)) - 0.5;
 
@@ -181,9 +268,15 @@ const ticketFragmentShader = `
     float sweepPosition =
       0.5 + normal.x * 0.74 - normal.y * 0.28;
     float sweepCoordinate = vUv.x * 0.82 + vUv.y * 0.18;
-    float sweep = exp(
-      -pow((sweepCoordinate - sweepPosition) / 0.135, 2.0)
-    );
+    float sweepDelta = sweepCoordinate - sweepPosition;
+    float sweep = exp(-pow(sweepDelta / 0.19, 2.0));
+    float streakTexture =
+      0.78 + fbm(vec2(vUv.x * 14.0, vUv.y * 58.0)) * 0.22;
+    float foilStreaks =
+      exp(-pow(sweepDelta / 0.064, 2.0)) * 0.62 +
+      exp(-pow((sweepDelta - 0.105) / 0.043, 2.0)) * 0.3 +
+      exp(-pow((sweepDelta + 0.135) / 0.056, 2.0)) * 0.22;
+    foilStreaks *= streakTexture;
     float grain = (fbm(vUv * 320.0 + uTime * 0.018) - 0.5) * 0.075;
     float foilSparkle = pow(
       valueNoise(vUv * 460.0 + floor(uTime * 7.0) * 0.07),
@@ -198,10 +291,10 @@ const ticketFragmentShader = `
       horizontalEdge * metalMask
     );
     color +=
-      vec3(1.0, 0.77, 0.28) *
-      (specular * 1.02 + sweep * 0.16) *
+      vec3(1.0, 0.82, 0.1) *
+      (specular * 0.76 + sweep * 0.09 + foilStreaks * 0.38) *
       metalMask;
-    color += vec3(1.0, 0.91, 0.62) * clearcoat * 0.18;
+    color += vec3(1.0, 0.9, 0.52) * clearcoat * 0.065 * metalMask;
     color += vec3(1.0, 0.72, 0.13) * foilSparkle * 0.2 * metalMask;
 
     float charBand =
@@ -211,26 +304,18 @@ const ticketFragmentShader = `
     float heatBand =
       burnIsActive * (1.0 - smoothstep(0.0015, 0.014, distanceToFront));
     float charVariation = fbm(vUv * 38.0 + vec2(3.4, 8.2));
-    float blueVariation = valueNoise(vUv * 24.0 + uTime * 0.7);
+    float heatVariation = valueNoise(vUv * 24.0 + uTime * 0.7);
     vec3 charColor = mix(
-      vec3(0.009, 0.007, 0.025),
-      vec3(0.12, 0.028, 0.17),
+      vec3(0.012, 0.006, 0.002),
+      vec3(0.008) + uBurnOuter * 0.14,
       charVariation
     );
-    vec3 rimColor = mix(
-      vec3(1.0, 0.11, 0.005),
-      vec3(0.045, 0.15, 1.0),
-      0.52 + blueVariation * 0.38
-    );
-    vec3 coreColor = mix(
-      vec3(1.0, 0.74, 0.18),
-      vec3(0.28, 0.96, 1.0),
-      0.72
-    );
+    vec3 rimColor =
+      mix(uBurnOuter, uBurnInner, 0.35 + heatVariation * 0.55);
 
     color = mix(color, charColor, charBand * 0.985);
-    color += rimColor * emberBand * 1.42;
-    color += coreColor * heatBand * 1.8;
+    color += rimColor * emberBand * 1.08;
+    color += uBurnCore * heatBand * 0.55;
 
     gl_FragColor = vec4(color, design.a);
     #include <tonemapping_fragment>
@@ -242,6 +327,9 @@ const glowFragmentShader = `
   uniform sampler2D uTicket;
   uniform float uBurnProgress;
   uniform float uTime;
+  uniform vec3 uBurnCore;
+  uniform vec3 uBurnInner;
+  uniform vec3 uBurnOuter;
 
   varying vec2 vUv;
 
@@ -285,7 +373,7 @@ const glowFragmentShader = `
     ) - 0.5;
     vec2 warpedUv = uv + warp * 0.075;
     float diagonal =
-      (1.0 - warpedUv.x) * 0.69 + warpedUv.y * 0.31;
+      warpedUv.x * 0.69 + warpedUv.y * 0.31;
     float coarse = fbm(uv * 7.2 + vec2(4.6, 9.1)) - 0.5;
     float fine = valueNoise(uv * 31.0 + vec2(1.7, 6.2)) - 0.5;
 
@@ -308,23 +396,14 @@ const glowFragmentShader = `
       0.78 +
       0.22 * sin(uTime * 34.0 + vUv.y * 47.0) +
       (valueNoise(vUv * 53.0 + uTime * 2.1) - 0.5) * 0.24;
-    float hotCore = 1.0 - smoothstep(0.0, 0.018, abs(signedDistance));
+    float hotCore = 1.0 - smoothstep(0.0, 0.012, abs(signedDistance));
     float aura = 1.0 - smoothstep(0.004, 0.062, abs(signedDistance));
-    float alpha = (hotCore * 0.76 + aura * 0.2) * flicker;
-    float bluePulse =
-      0.58 +
-      0.28 * sin(uTime * 19.0 + vUv.x * 31.0 - vUv.y * 17.0);
-    vec3 auraColor = mix(
-      vec3(1.0, 0.07, 0.003),
-      vec3(0.035, 0.13, 1.0),
-      bluePulse
-    );
-    vec3 coreColor = mix(
-      vec3(1.0, 0.76, 0.18),
-      vec3(0.25, 0.97, 1.0),
-      0.76
-    );
-    vec3 color = mix(auraColor, coreColor, hotCore);
+    float alpha = (hotCore * 0.18 + aura * 0.08) * flicker;
+    float heatPulse =
+      0.5 +
+      0.35 * sin(uTime * 19.0 + vUv.x * 31.0 - vUv.y * 17.0);
+    vec3 auraColor = mix(uBurnOuter * 0.82, uBurnInner, heatPulse);
+    vec3 color = mix(auraColor, uBurnCore, hotCore);
 
     gl_FragColor = vec4(color, alpha * design.a);
     #include <tonemapping_fragment>
@@ -355,15 +434,15 @@ const particleVertexShader = `
     float isVisible =
       step(aEmission, uElapsed) *
       (1.0 - step(aEmission + aLife, uElapsed));
-    float swayRate = mix(5.0, 19.0, fract(aSeed * 0.173));
-    float swayAmount = mix(0.018, 0.14, fract(aSeed * 0.417));
+    float swayRate = mix(3.5, 10.0, fract(aSeed * 0.173));
+    float swayAmount = mix(0.008, 0.055, fract(aSeed * 0.417));
     float lift = mix(-0.17, 0.24, fract(aSeed * 0.291));
     vec3 emberPosition = position;
     emberPosition.x +=
       aVelocity.x * ageSeconds +
       sin(ageSeconds * swayRate + aSeed * 17.0) *
         swayAmount *
-        (0.25 + ageSeconds);
+        (0.2 + ageSeconds * 0.55);
     emberPosition.y +=
       aVelocity.y * ageSeconds + lift * ageSeconds * ageSeconds;
     emberPosition.z +=
@@ -371,7 +450,7 @@ const particleVertexShader = `
       sin(
         ageSeconds * mix(4.0, 13.0, fract(aSeed * 0.619)) +
           aSeed * 11.0
-      ) * mix(0.018, 0.075, fract(aSeed * 0.731));
+      ) * mix(0.008, 0.028, fract(aSeed * 0.731));
 
     vec3 ashPosition = position;
     ashPosition.x +=
@@ -401,11 +480,15 @@ const particleVertexShader = `
     vSparkAngle =
       atan(aVelocity.x, max(0.12, aVelocity.y)) * 0.72 +
       sin(ageSeconds * mix(2.0, 7.0, fract(aSeed * 0.853)) + aSeed) *
-        0.24;
+        0.09;
   }
 `;
 
 const particleFragmentShader = `
+  uniform vec3 uBurnCore;
+  uniform vec3 uBurnInner;
+  uniform vec3 uBurnOuter;
+
   varying float vAlpha;
   varying float vKind;
   varying float vLife;
@@ -434,21 +517,13 @@ const particleFragmentShader = `
         (1.0 - smoothstep(0.035, 0.15, abs(sparkPoint.x))) *
         (1.0 - smoothstep(-0.46, 0.42, sparkPoint.y));
       alpha = max(core, tail * 0.72) * vAlpha;
-      float blueSpark = smoothstep(
+      float sparkHeat = smoothstep(
         0.34,
         0.66,
         fract(vSeed * 0.1031)
       );
-      vec3 outerColor = mix(
-        vec3(1.0, 0.075, 0.001),
-        vec3(0.025, 0.12, 1.0),
-        blueSpark
-      );
-      vec3 innerColor = mix(
-        vec3(1.0, 0.82, 0.24),
-        vec3(0.25, 0.95, 1.0),
-        blueSpark
-      );
+      vec3 outerColor = mix(uBurnOuter, uBurnInner, sparkHeat);
+      vec3 innerColor = mix(uBurnInner, uBurnCore, sparkHeat);
       color = mix(outerColor, innerColor, core * (1.0 - vLife * 0.5));
     } else {
       float angle = vSeed * 6.2831853 + vLife * 5.0;
@@ -692,7 +767,7 @@ async function createTicketTexture() {
 type ParticleKind = "ash" | "ember";
 
 function getParticleArrival(uvX: number, uvY: number, variation: number) {
-  const diagonal = (1 - uvX) * 0.69 + uvY * 0.31;
+  const diagonal = uvX * 0.69 + uvY * 0.31;
   const broadNoise =
     Math.sin(uvX * 33.7 + uvY * 17.1) * 0.036 +
     Math.sin(uvX * 11.3 - uvY * 29.9) * 0.025;
@@ -757,18 +832,30 @@ function createParticleGeometry(
 }
 
 type ThreeTicketCanvasProps = {
+  burnColor: BurnColor;
   burning: boolean;
   onBurnComplete: () => void;
 };
 
 function ThreeTicketCanvas({
+  burnColor,
   burning,
   onBurnComplete,
 }: ThreeTicketCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const burnColorRef = useRef(burnColor);
+  const burnColorUniformsRef = useRef<BurnColorUniforms | null>(null);
   const burningRef = useRef(burning);
   const completionCallbackRef = useRef(onBurnComplete);
+
+  useEffect(() => {
+    burnColorRef.current = burnColor;
+
+    if (burnColorUniformsRef.current) {
+      applyBurnPalette(burnColorUniformsRef.current, burnColor);
+    }
+  }, [burnColor]);
 
   useEffect(() => {
     burningRef.current = burning;
@@ -816,12 +903,15 @@ function ThreeTicketCanvas({
     const pixelRatioUniform = { value: 1 };
     const textureUniform = { value: placeholderTexture as THREE.Texture };
     const timeUniform = { value: 0 };
+    const burnColorUniforms = createBurnColorUniforms(burnColorRef.current);
+    burnColorUniformsRef.current = burnColorUniforms;
     const ticketMaterial = new THREE.ShaderMaterial({
       depthWrite: false,
       fragmentShader: ticketFragmentShader,
       side: THREE.DoubleSide,
       transparent: true,
       uniforms: {
+        ...burnColorUniforms,
         uBurnProgress: burnProgressUniform,
         uTicket: textureUniform,
         uTime: timeUniform,
@@ -836,6 +926,7 @@ function ThreeTicketCanvas({
       side: THREE.DoubleSide,
       transparent: true,
       uniforms: {
+        ...burnColorUniforms,
         uBurnProgress: burnProgressUniform,
         uTicket: textureUniform,
         uTime: timeUniform,
@@ -862,6 +953,7 @@ function ThreeTicketCanvas({
       fragmentShader: particleFragmentShader,
       transparent: true,
       uniforms: {
+        ...burnColorUniforms,
         uElapsed: elapsedUniform,
         uKind: { value: 0 },
         uPixelRatio: pixelRatioUniform,
@@ -878,6 +970,7 @@ function ThreeTicketCanvas({
       fragmentShader: particleFragmentShader,
       transparent: true,
       uniforms: {
+        ...burnColorUniforms,
         uElapsed: elapsedUniform,
         uKind: { value: 1 },
         uPixelRatio: pixelRatioUniform,
@@ -1008,6 +1101,7 @@ function ThreeTicketCanvas({
 
     return () => {
       disposed = true;
+      burnColorUniformsRef.current = null;
       window.cancelAnimationFrame(animationFrame);
       resizeObserver.disconnect();
       containerElement.removeEventListener("pointermove", handlePointerMove);
@@ -1041,12 +1135,14 @@ export type ThreeWaitlistTicketProps = Omit<
   ComponentPropsWithoutRef<"section">,
   "children"
 > & {
+  burnColor?: BurnColor;
   buttonLabel?: string;
   onBurnComplete?: () => void;
   onJoin?: () => void;
 };
 
 export function ThreeWaitlistTicket({
+  burnColor = "orange",
   buttonLabel = "Accept invite",
   className,
   onBurnComplete,
@@ -1077,6 +1173,7 @@ export function ThreeWaitlistTicket({
       data-burning={burning}
     >
       <ThreeTicketCanvas
+        burnColor={burnColor}
         burning={burning}
         onBurnComplete={handleBurnComplete}
       />
