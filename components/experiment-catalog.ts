@@ -1,5 +1,12 @@
 export const experiments = [
   {
+    title: "Paper Burn",
+    href: "/experiments/paper-burn",
+    description:
+      "An arbitrary div burns away through an irregular flame edge, embers, and ash.",
+    preview: "paper-burn",
+  },
+  {
     title: "Tactile Button",
     href: "/experiments/tactile-button",
     description:
