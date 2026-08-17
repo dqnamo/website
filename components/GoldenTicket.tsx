@@ -1,14 +1,22 @@
 "use client";
 
+import {
+  useMotionValue,
+  useMotionValueEvent,
+  useReducedMotion,
+  useSpring,
+} from "motion/react";
 import Image from "next/image";
 import type {
   ComponentPropsWithoutRef,
   PointerEvent as ReactPointerEvent,
 } from "react";
+import { useRef } from "react";
 import { cn } from "@/helpers/classname-helper";
 import styles from "./GoldenTicket.module.css";
 
 const ticketToothCount = 24;
+const foilSpring = { damping: 20, mass: 0.55, stiffness: 150 };
 const rightToothPoints = Array.from(
   { length: ticketToothCount * 2 },
   (_, index) => {
@@ -49,6 +57,29 @@ export type GoldenTicketProps = ComponentPropsWithoutRef<"article"> & {
   eventName?: string;
 };
 
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function toPercent(value: number) {
+  return `${(value * 100).toFixed(3)}%`;
+}
+
+function applyGoldFoil(style: CSSStyleDeclaration, x: number, y: number) {
+  const foilX = 0.5 + (x - 0.5) * 0.72;
+  const foilY = 0.5 + (y - 0.5) * 0.44;
+  const shineAngle = 116 + (x - 0.5) * 26 + (y - 0.5) * 12;
+  const shineOpacity =
+    0.56 + Math.abs(x - 0.5) * 0.12 + Math.abs(y - 0.5) * 0.06;
+
+  style.setProperty("--gold-tilt-x", `${((0.5 - y) * 14).toFixed(3)}deg`);
+  style.setProperty("--gold-tilt-y", `${((x - 0.5) * 18).toFixed(3)}deg`);
+  style.setProperty("--gold-foil-x", toPercent(foilX));
+  style.setProperty("--gold-foil-y", toPercent(foilY));
+  style.setProperty("--gold-shine-angle", `${shineAngle.toFixed(3)}deg`);
+  style.setProperty("--gold-shine-opacity", shineOpacity.toFixed(3));
+}
+
 export function GoldenTicket({
   admit = "Admit one",
   "aria-hidden": ariaHidden,
@@ -61,28 +92,47 @@ export function GoldenTicket({
   style,
   ...props
 }: GoldenTicketProps) {
-  function handlePointerMove(event: ReactPointerEvent<HTMLElement>) {
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = (event.clientX - rect.left) / rect.width;
-    const y = (event.clientY - rect.top) / rect.height;
-    const style = event.currentTarget.style;
+  const ticketRef = useRef<HTMLElement>(null);
+  const shouldReduceMotion = useReducedMotion();
+  const pointerX = useMotionValue(0.5);
+  const pointerY = useMotionValue(0.5);
+  const springX = useSpring(pointerX, foilSpring);
+  const springY = useSpring(pointerY, foilSpring);
 
-    style.setProperty("--gold-tilt-x", `${(0.5 - y) * 14}deg`);
-    style.setProperty("--gold-tilt-y", `${(x - 0.5) * 18}deg`);
+  function paintFoil() {
+    const ticket = ticketRef.current;
+
+    if (ticket) {
+      applyGoldFoil(ticket.style, springX.get(), springY.get());
+    }
+  }
+
+  useMotionValueEvent(springX, "change", paintFoil);
+  useMotionValueEvent(springY, "change", paintFoil);
+
+  function handlePointerMove(event: ReactPointerEvent<HTMLElement>) {
+    if (!shouldReduceMotion) {
+      const rect = event.currentTarget.getBoundingClientRect();
+      const x = clamp((event.clientX - rect.left) / rect.width, 0, 1);
+      const y = clamp((event.clientY - rect.top) / rect.height, 0, 1);
+
+      pointerX.set(x);
+      pointerY.set(y);
+    }
+
     onPointerMove?.(event);
   }
 
   function handlePointerLeave(event: ReactPointerEvent<HTMLElement>) {
-    const style = event.currentTarget.style;
-
-    style.setProperty("--gold-tilt-x", "0deg");
-    style.setProperty("--gold-tilt-y", "0deg");
+    pointerX.set(0.5);
+    pointerY.set(0.5);
     onPointerLeave?.(event);
   }
 
   return (
     <article
       {...props}
+      ref={ticketRef}
       aria-hidden={ariaHidden}
       aria-label={ariaHidden ? undefined : (ariaLabel ?? "Hyperaide invite")}
       className={cn(styles.ticket, className)}
@@ -90,6 +140,9 @@ export function GoldenTicket({
       onPointerMove={handlePointerMove}
       style={{ clipPath: ticketClipPath, ...style }}
     >
+      <span aria-hidden="true" className={styles.foil} />
+      <span aria-hidden="true" className={styles.sheen} />
+      <span aria-hidden="true" className={styles.shine} />
       <span aria-hidden="true" className={styles.texture} />
 
       <div className={styles.invitation}>

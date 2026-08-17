@@ -7,7 +7,7 @@ import { GoldenTicketShowcase } from "./golden-ticket-showcase";
 export const metadata: Metadata = {
   title: "Golden Ticket | dqnamo",
   description:
-    "A luxurious special-invite ticket with a pointer-responsive metallic shine.",
+    "A luxurious special-invite ticket with gold foil that shifts as it tilts.",
 };
 
 export default async function GoldenTicketPage() {
@@ -37,7 +37,7 @@ export default async function GoldenTicketPage() {
 
   return (
     <ExperimentPage
-      description="A luxurious invitation ticket with embossed details, a perforated stub, and metallic shine that follows your pointer."
+      description="A luxurious invitation ticket with embossed details, a perforated stub, and gold foil that shifts as you tilt it."
       slug="golden-ticket"
       title="Golden Ticket"
     >

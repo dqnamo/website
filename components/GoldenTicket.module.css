@@ -1,6 +1,10 @@
 .ticket {
   --gold-tilt-x: 0deg;
   --gold-tilt-y: 0deg;
+  --gold-foil-x: 50%;
+  --gold-foil-y: 50%;
+  --gold-shine-angle: 118deg;
+  --gold-shine-opacity: 0.56;
   --gold-stub: 75%;
   --gold-notch: clamp(7px, 1.8cqw, 13px);
   --gold-tooth-depth: clamp(3px, 0.9cqw, 6px);
@@ -13,41 +17,120 @@
   container-type: inline-size;
   isolation: isolate;
   color: #3b2405;
-  background: radial-gradient(
-    circle at 50% 42%,
-    #fff2a6 0%,
-    #e9c24f 62%,
-    #d19b2f 100%
-  );
-  box-shadow: inset 0 0 0 1px rgb(255 249 184 / 58%);
+  background:
+    radial-gradient(
+      ellipse at 50% 42%,
+      rgb(246 207 91 / 58%) 0%,
+      transparent 60%
+    ),
+    linear-gradient(
+      135deg,
+      #75600d 0%,
+      #a98114 24%,
+      #cc981f 48%,
+      #987513 74%,
+      #67540c 100%
+    );
+  box-shadow:
+    inset 0 0 0 1px rgb(255 224 119 / 46%),
+    inset 0 -18px 40px rgb(92 49 3 / 12%);
   filter: drop-shadow(0 2px 2px rgb(35 20 0 / 18%))
     drop-shadow(0 20px 28px rgb(35 20 0 / 25%));
-  transform: perspective(700px) rotateX(var(--gold-tilt-x))
+  transform: perspective(820px) rotateX(var(--gold-tilt-x))
     rotateY(var(--gold-tilt-y));
   transform-style: preserve-3d;
-  transition: transform 260ms cubic-bezier(0.23, 1, 0.32, 1);
   will-change: transform;
 }
 
+.foil,
+.sheen,
+.shine,
 .texture {
   position: absolute;
   inset: 0;
   pointer-events: none;
 }
 
-.texture {
+.foil,
+.sheen,
+.shine {
+  inset: -42%;
+}
+
+.foil {
+  z-index: 1;
+  background: linear-gradient(
+    118deg,
+    #66540a 0%,
+    #93720f 16%,
+    #d4a72e 31%,
+    #f0d77a 43%,
+    #bd7c0d 56%,
+    #71590a 70%,
+    #d0a02a 85%,
+    #77600b 100%
+  );
+  background-repeat: no-repeat;
+  background-position: var(--gold-foil-x) var(--gold-foil-y);
+  background-size: 220% 170%;
+  mix-blend-mode: overlay;
+  opacity: 0.7;
+  will-change: background-position;
+}
+
+.sheen {
   z-index: 2;
+  background: linear-gradient(
+    calc(var(--gold-shine-angle) + 10deg),
+    transparent 16%,
+    rgb(73 36 0 / 18%) 31%,
+    rgb(240 177 48 / 24%) 43%,
+    rgb(255 222 119 / 30%) 50%,
+    rgb(100 54 3 / 20%) 63%,
+    transparent 84%
+  );
+  background-repeat: no-repeat;
+  background-position: var(--gold-foil-x) var(--gold-foil-y);
+  background-size: 170% 150%;
+  mix-blend-mode: overlay;
+  opacity: 0.68;
+  will-change: background-position;
+}
+
+.shine {
+  z-index: 4;
+  background: linear-gradient(
+    var(--gold-shine-angle),
+    transparent 18%,
+    rgb(255 202 67 / 7%) 32%,
+    rgb(255 226 137 / 34%) 42%,
+    rgb(255 242 190 / 58%) 50%,
+    rgb(255 211 87 / 28%) 58%,
+    rgb(134 76 4 / 8%) 69%,
+    transparent 82%
+  );
+  background-repeat: no-repeat;
+  background-position: var(--gold-foil-x) var(--gold-foil-y);
+  background-size: 190% 155%;
+  filter: blur(8px);
+  mix-blend-mode: screen;
+  opacity: var(--gold-shine-opacity);
+  will-change: background-position, opacity;
+}
+
+.texture {
+  z-index: 3;
   background: url("/textures/plastic-noise.svg");
   background-size: 105px 105px;
   filter: contrast(145%);
   mix-blend-mode: multiply;
-  opacity: 0.3;
+  opacity: 0.17;
 }
 
 .invitation,
 .stub {
   position: relative;
-  z-index: 3;
+  z-index: 5;
   min-width: 0;
 }
 
@@ -167,7 +250,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ticket {
-    transition: none;
+    transform: none;
   }
 }
 
