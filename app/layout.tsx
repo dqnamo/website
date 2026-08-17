@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
-import { Barlow, Inter, JetBrains_Mono, Pirata_One } from "next/font/google";
+import {
+  Alfa_Slab_One,
+  Barlow,
+  Inter,
+  JetBrains_Mono,
+  Pirata_One,
+} from "next/font/google";
 import "../styles/globals.css";
 import { BottomDock } from "@/components/BottomDock";
 import { ThemeProvider } from "@/components/ThemeProvider";
@@ -18,6 +24,12 @@ const jetbrainsMono = JetBrains_Mono({
 
 const pirataOne = Pirata_One({
   variable: "--font-pirata-one",
+  subsets: ["latin"],
+  weight: ["400"],
+});
+
+const alfaSlabOne = Alfa_Slab_One({
+  variable: "--font-alfa-slab-one",
   subsets: ["latin"],
   weight: ["400"],
 });
@@ -53,7 +65,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} ${pirataOne.variable} ${barlow.variable} h-full antialiased`}
+      className={`${inter.variable} ${jetbrainsMono.variable} ${pirataOne.variable} ${alfaSlabOne.variable} ${barlow.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full bg-grayscale-1 text-grayscale-12">

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import type {
   ComponentPropsWithoutRef,
   PointerEvent as ReactPointerEvent,
@@ -7,15 +8,45 @@ import type {
 import { cn } from "@/helpers/classname-helper";
 import styles from "./GoldenTicket.module.css";
 
+const ticketToothCount = 24;
+const rightToothPoints = Array.from(
+  { length: ticketToothCount * 2 },
+  (_, index) => {
+    const step = index + 1;
+    const x = step % 2 === 0 ? "calc(100% - var(--gold-tooth-depth))" : "100%";
+    const y = (step * 100) / (ticketToothCount * 2);
+
+    return `${x} ${y}%`;
+  },
+).join(", ");
+const leftToothPoints = Array.from(
+  { length: ticketToothCount * 2 },
+  (_, index) => {
+    const step = index + 1;
+    const x = step % 2 === 0 ? "var(--gold-tooth-depth)" : "0";
+    const y = 100 - (step * 100) / (ticketToothCount * 2);
+
+    return `${x} ${y}%`;
+  },
+).join(", ");
+const ticketClipPath = `polygon(
+  var(--gold-tooth-depth) 0,
+  calc(var(--gold-stub) - var(--gold-notch)) 0,
+  var(--gold-stub) var(--gold-notch),
+  calc(var(--gold-stub) + var(--gold-notch)) 0,
+  calc(100% - var(--gold-tooth-depth)) 0,
+  ${rightToothPoints},
+  calc(var(--gold-stub) + var(--gold-notch)) 100%,
+  var(--gold-stub) calc(100% - var(--gold-notch)),
+  calc(var(--gold-stub) - var(--gold-notch)) 100%,
+  var(--gold-tooth-depth) 100%,
+  ${leftToothPoints}
+)`;
+
 export type GoldenTicketProps = ComponentPropsWithoutRef<"article"> & {
   admit?: string;
   code?: string;
-  date?: string;
-  eyebrow?: string;
   eventName?: string;
-  invitee?: string;
-  message?: string;
-  venue?: string;
 };
 
 export function GoldenTicket({
@@ -23,15 +54,11 @@ export function GoldenTicket({
   "aria-hidden": ariaHidden,
   "aria-label": ariaLabel,
   className,
-  code = "GT · 001 · 2026",
-  date = "17 October · 8PM",
-  eyebrow = "Private invitation",
-  eventName = "The Golden Hour",
-  invitee = "For the bearer",
-  message = "An intimate evening reserved for a very small circle.",
+  code = "HA · 001 · 2026",
+  eventName = "Invite",
   onPointerLeave,
   onPointerMove,
-  venue = "The Orangery · London",
+  style,
   ...props
 }: GoldenTicketProps) {
   function handlePointerMove(event: ReactPointerEvent<HTMLElement>) {
@@ -40,18 +67,14 @@ export function GoldenTicket({
     const y = (event.clientY - rect.top) / rect.height;
     const style = event.currentTarget.style;
 
-    style.setProperty("--gold-x", `${x * 100}%`);
-    style.setProperty("--gold-y", `${y * 100}%`);
-    style.setProperty("--gold-tilt-x", `${(0.5 - y) * 5}deg`);
-    style.setProperty("--gold-tilt-y", `${(x - 0.5) * 7}deg`);
+    style.setProperty("--gold-tilt-x", `${(0.5 - y) * 14}deg`);
+    style.setProperty("--gold-tilt-y", `${(x - 0.5) * 18}deg`);
     onPointerMove?.(event);
   }
 
   function handlePointerLeave(event: ReactPointerEvent<HTMLElement>) {
     const style = event.currentTarget.style;
 
-    style.setProperty("--gold-x", "50%");
-    style.setProperty("--gold-y", "50%");
     style.setProperty("--gold-tilt-x", "0deg");
     style.setProperty("--gold-tilt-y", "0deg");
     onPointerLeave?.(event);
@@ -61,53 +84,36 @@ export function GoldenTicket({
     <article
       {...props}
       aria-hidden={ariaHidden}
-      aria-label={
-        ariaHidden ? undefined : (ariaLabel ?? `${eventName}, ${eyebrow}`)
-      }
+      aria-label={ariaHidden ? undefined : (ariaLabel ?? "Hyperaide invite")}
       className={cn(styles.ticket, className)}
       onPointerLeave={handlePointerLeave}
       onPointerMove={handlePointerMove}
+      style={{ clipPath: ticketClipPath, ...style }}
     >
       <span aria-hidden="true" className={styles.texture} />
-      <span aria-hidden="true" className={styles.engineTurn} />
-      <span aria-hidden="true" className={styles.shimmer} />
-      <span aria-hidden="true" className={styles.sweep} />
 
       <div className={styles.invitation}>
-        <header className={styles.header}>
-          <span className={styles.eyebrow}>{eyebrow}</span>
-          <span aria-hidden="true" className={styles.flourish}>
-            ✦
-          </span>
-        </header>
-
+        <Image
+          alt=""
+          className={styles.logo}
+          height={294}
+          src="/logos/hyperaide.svg"
+          width={313}
+        />
         <div className={styles.copy}>
-          <p className={styles.presents}>You are cordially invited to</p>
+          <span className={styles.leadIn}>Your</span>
           <h2 className={styles.eventName}>{eventName}</h2>
-          <p className={styles.message}>{message}</p>
+          <span className={styles.tagline}>
+            To try out the next generation personal assistant
+          </span>
         </div>
-
-        <dl className={styles.details}>
-          <div>
-            <dt>When</dt>
-            <dd>{date}</dd>
-          </div>
-          <div>
-            <dt>Where</dt>
-            <dd>{venue}</dd>
-          </div>
-        </dl>
       </div>
 
       <aside className={styles.stub}>
-        <span className={styles.stubLabel}>Special invite</span>
+        <span className={styles.stubLabel}>{admit}</span>
         <span aria-hidden="true" className={styles.seal}>
           <span>✦</span>
         </span>
-        <div className={styles.admission}>
-          <strong>{admit}</strong>
-          <span>{invitee}</span>
-        </div>
         <span className={styles.code}>{code}</span>
       </aside>
     </article>

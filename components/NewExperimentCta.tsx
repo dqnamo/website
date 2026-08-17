@@ -741,10 +741,6 @@ export function ExperimentPreview({
         <GoldenTicket
           aria-hidden="true"
           className="w-full max-w-[14rem] transition-transform duration-300 group-hover:scale-[1.025]"
-          date="17 Oct · 8PM"
-          invitee="Reserved for you"
-          message=""
-          venue="London"
         />
       </div>
     );
