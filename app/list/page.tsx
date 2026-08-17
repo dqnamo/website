@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { NewExperimentCta } from "@/components/NewExperimentCta";
+import { ListGrid } from "@/components/ListCard";
+import { listItems } from "@/components/list-catalog";
 
 export const metadata: Metadata = {
-  title: "The Kitchen | dqnamo",
-  description: "Component experiments and interface studies by dqnamo.",
+  title: "List | dqnamo",
+  description: "Products and tools recommended by dqnamo.",
 };
 
-export default function KitchenPage() {
+export default function ListPage() {
   return (
     <main className="mx-auto max-w-4xl">
       <div className="p-8">
@@ -21,15 +22,16 @@ export default function KitchenPage() {
             </Link>
           </p>
           <h1 className="font-bold font-mono text-3xl text-grayscale-12 uppercase">
-            Kitchen
+            List
           </h1>
           <p className="mt-8 max-w-md text-pretty text-grayscale-10 text-sm leading-5">
-            Components, interface studies, and small experiments cooked up in
-            the kitchen.
+            Products and tools I use constantly and trust enough to pass on.
           </p>
         </header>
 
-        <NewExperimentCta className="mt-12 [&>div:first-child]:hidden" />
+        <div className="mt-12">
+          <ListGrid items={listItems} />
+        </div>
       </div>
     </main>
   );

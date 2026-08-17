@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { experimentCount } from "@/components/experiment-catalog";
+import { ListCard } from "@/components/ListCard";
+import { featuredListItems, listCount } from "@/components/list-catalog";
 import { ExperimentPreview } from "@/components/NewExperimentCta";
 import { PikaArrowRightIcon } from "@/components/PikaDockIcons";
 import Button, { getButtonClassName } from "@/components/public/Button";
@@ -263,6 +265,43 @@ export default function HomePage() {
                 </h3>
                 <p className="mt-px text-pretty text-grayscale-10 text-xs leading-5">
                   Explore the complete collection in one place.
+                </p>
+              </div>
+              <PikaArrowRightIcon
+                aria-hidden="true"
+                className="ml-auto shrink-0 self-end text-grayscale-9 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-grayscale-11"
+                size={16}
+              />
+            </Link>
+          </div>
+        </section>
+
+        <section className="mt-16">
+          <div className="p-3">
+            <h2 className="font-medium text-grayscale-12 text-sm">
+              Products and tools I recommend
+            </h2>
+            <p className="mt-px text-pretty text-grayscale-10 text-sm leading-5">
+              Software I use constantly and trust enough to pass on.
+            </p>
+          </div>
+          <div className="mt-3 grid grid-cols-1 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5 sm:grid-cols-2 lg:grid-cols-3">
+            {featuredListItems.map((item) => (
+              <ListCard item={item} key={item.href} />
+            ))}
+            <Link
+              className="group flex items-center gap-4 rounded-[13px] border border-grayscale-3 bg-grayscale-1 px-4 py-5 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 sm:col-span-2 lg:col-span-3 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4"
+              href="/list"
+            >
+              <div className="flex min-w-0 flex-col">
+                <div className="mb-3 w-fit rounded-md bg-grayscale-12 p-1.5 font-medium text-[11px] text-grayscale-1 leading-none">
+                  {listCount}
+                </div>
+                <h3 className="font-medium text-grayscale-12 text-sm">
+                  View the full list
+                </h3>
+                <p className="mt-px text-pretty text-grayscale-10 text-xs leading-5">
+                  Every product and tool in one place.
                 </p>
               </div>
               <PikaArrowRightIcon

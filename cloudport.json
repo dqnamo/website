@@ -1,0 +1,19 @@
+{
+  "sandbox": {
+    "provider": "isorun",
+    "image": "node:22-slim",
+    "cpu": 2,
+    "memory": "4gb",
+    "disk": "4gb",
+    "workdir": "/workspace/app",
+    "timeoutSec": 300
+  },
+  "services": {
+    "web": {
+      "cwd": ".",
+      "install": "pnpm install",
+      "dev": "pnpm exec next dev --webpack --hostname 0.0.0.0 --port 5173",
+      "port": 5173
+    }
+  }
+}
