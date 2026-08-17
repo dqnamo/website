@@ -1,11 +1,9 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { ArrowRightIcon, MoonStarsIcon } from "@phosphor-icons/react/dist/ssr";
+import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 import { Arvo } from "next/font/google";
-import Link from "next/link";
+import { ExperimentPage } from "@/app/experiments/_components/ExperimentPage";
 import { IridescentFoil } from "@/components/IridescentFoil";
-import { ThemeToggle } from "@/components/ThemeToggle";
-import { WorkWithMeCta } from "@/components/WorkWithMeCta";
 import { tokenize } from "@/helpers/syntax";
 import { CopyActions } from "./copy-actions";
 import { buildAgentPrompt, buildMarkdown } from "./copy-content";
@@ -32,45 +30,16 @@ export default async function IridescentFoilPage() {
   const markdown = buildMarkdown(tsxSource, cssSource);
 
   return (
-    <main className=" w-full bg-grayscale-1">
-      <div className="mx-auto flex w-full max-w-4xl flex-col border-grayscale-3 border-x px-4 dark:border-grayscale-2 md:px-8 lg:px-16">
-        <div className="flex flex-row justify-between items-center px-2">
-          <div className="flex flex-col  gap-1.5 py-10">
-            <Link
-              href="/"
-              className="font-pirata w-max font-bold text-2xl text-grayscale-11 hover:text-grayscale-12 transition-colors duration-200"
-            >
-              dqnamo
-            </Link>
-            <span className="font-mono font-semibold text-[10px] text-grayscale-10 uppercase leading-none">
-              experiments / iridescent-foil
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5 p-1 text-grayscale-10 bg-grayscale-3 rounded-full">
-            <MoonStarsIcon
-              aria-hidden="true"
-              className="text-grayscale-10"
-              size={16}
-              weight="fill"
-            />
-            {/* <p className="text-grayscale-10 text-[11px] leading-none font-mono font-semibold uppercase">Dark Mode</p> */}
-            <ThemeToggle size={16} />
-          </div>
-        </div>
-
-        <div className="py-8 px-2 flex flex-col gap-px">
-          <h1 className="font-medium text-grayscale-12 text-md">
-            Iridescent Foil
-          </h1>
-          <p className="text-grayscale-11 text-sm leading-6 text-balance">
-            Holographic foil built from layered CSS gradients. Scroll the page
-            and move your pointer to shift the iridescent colour and specular
-            glare across the sticker.
-          </p>
+    <ExperimentPage
+      description="Holographic foil built from layered CSS gradients. Scroll the page and move your pointer to shift the iridescent colour and specular glare across the sticker."
+      headerExtra={
+        <div className="mt-4">
           <CopyActions agentPrompt={agentPrompt} markdown={markdown} />
         </div>
-
-        <section className="flex flex-col gap-1.5 items-center justify-center bg-grayscale-2 rounded-[16px] p-1.5 border border-grayscale-3">
+      }
+      slug="iridescent-foil"
+      title="Iridescent Foil"
+    >
           <div className="w-full p-28 flex items-center justify-center bg-grayscale-1 dark:bg-grayscale-2 dark:border-transparent dark:shadow-none rounded-[13px] small-shadow border border-grayscale-3">
             <IridescentFoil
               aria-label="Interactive iridescent foil sticker"
@@ -119,10 +88,6 @@ export default async function IridescentFoilPage() {
               tsxSource={tsxSource}
             />
           </div>
-        </section>
-
-        <WorkWithMeCta className="my-16" />
-      </div>
-    </main>
+    </ExperimentPage>
   );
 }
