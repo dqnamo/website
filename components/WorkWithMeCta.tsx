@@ -1,15 +1,11 @@
 "use client";
 
-import { Arvo } from "next/font/google";
+import Image from "next/image";
 import posthog from "posthog-js";
+import { PikaArrowRightIcon, PikaPhoneIcon } from "@/components/PikaDockIcons";
 import Button from "@/components/public/Button";
 import { GameOfLife } from "@/components/random/GameOfLife";
 import { cn } from "@/helpers/classname-helper";
-
-const arvo = Arvo({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
 
 type WorkWithMeCtaProps = {
   className?: string;
@@ -38,19 +34,21 @@ export function WorkWithMeCta({ className }: WorkWithMeCtaProps) {
               target="_blank"
               rel="noopener noreferrer"
               variant="primary"
-              className="w-max"
+              className="w-max justify-start border-b-2"
               onClick={() => posthog.capture("work_with_me_cta_clicked")}
             >
               Jump on a call
+              <PikaPhoneIcon aria-hidden="true" size={14} />
             </Button>
             <Button
               href="https://interface.london"
               target="_blank"
               rel="noopener noreferrer"
               variant="secondary"
-              className="w-max"
+              className="w-max justify-start border-b-2 text-left dark:border-grayscale-5 dark:bg-grayscale-4 dark:hover:border-grayscale-6 dark:hover:bg-grayscale-5"
             >
               Learn more
+              <PikaArrowRightIcon aria-hidden="true" size={14} />
             </Button>
           </div>
         </div>
@@ -60,7 +58,7 @@ export function WorkWithMeCta({ className }: WorkWithMeCtaProps) {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Visit The Interface Company of London"
-        className="group relative flex min-h-[12rem] w-full overflow-hidden rounded-[13px] border border-grayscale-3 bg-grayscale-1 small-shadow transition-colors hover:border-grayscale-4 focus-visible:outline-2 focus-visible:outline-grayscale-12 focus-visible:outline-offset-2 dark:border-grayscale-4 dark:bg-grayscale-3 dark:hover:border-grayscale-5"
+        className="group relative flex min-h-[12rem] w-full items-center justify-center overflow-hidden rounded-[13px] border border-grayscale-3 bg-grayscale-1 small-shadow transition-colors hover:border-grayscale-4 focus-visible:outline-2 focus-visible:outline-grayscale-12 focus-visible:outline-offset-2 dark:border-grayscale-4 dark:bg-grayscale-3 dark:hover:border-grayscale-5"
       >
         <GameOfLife
           aria-hidden
@@ -71,22 +69,13 @@ export function WorkWithMeCta({ className }: WorkWithMeCtaProps) {
           stepInterval={520}
           className="absolute inset-0 [--game-of-life-color:var(--color-grayscale-3)] dark:[--game-of-life-color:var(--color-grayscale-4)]"
         />
-        <div
-          className={`${arvo.className} relative z-10 flex min-h-full w-full flex-col items-center justify-center gap-px p-8 text-center uppercase leading-none text-grayscale-12`}
-        >
-          <span className="mb-px font-medium text-grayscale-8 text-xs leading-none transition-colors group-hover:text-grayscale-9 group-focus-visible:text-grayscale-9">
-            THE
-          </span>
-          <span className="font-medium text-grayscale-10 text-xl leading-none transition-colors group-hover:text-grayscale-11 group-focus-visible:text-grayscale-11">
-            INTERFACE
-          </span>
-          <span className="font-medium text-grayscale-10 text-xl leading-none transition-colors group-hover:text-grayscale-11 group-focus-visible:text-grayscale-11">
-            COMPANY
-          </span>
-          <span className="mt-px font-medium text-grayscale-8 text-xs leading-none transition-colors group-hover:text-grayscale-9 group-focus-visible:text-grayscale-9">
-            OF LONDON
-          </span>
-        </div>
+        <Image
+          alt=""
+          className="relative z-10 size-16 dark:invert"
+          height={64}
+          src="/logos/interface-logo-black.svg"
+          width={64}
+        />
       </a>
     </section>
   );
