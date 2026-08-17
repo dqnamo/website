@@ -12,7 +12,7 @@ export type ListLogo =
       type: "wordmark";
     };
 
-export const listTags = ["Free", "Dev tools", "Mac apps"] as const;
+export const listTags = ["Free", "Open source", "Dev tools", "Mac apps"] as const;
 
 export type ListTag = (typeof listTags)[number];
 
@@ -36,7 +36,7 @@ export const listItems: ListItem[] = [
       type: "image",
     },
     name: "Instant",
-    tags: ["Free", "Dev tools"],
+    tags: ["Free", "Open source", "Dev tools"],
     title: "Hosted backend / DB",
   },
   {
@@ -85,7 +85,7 @@ export const listItems: ListItem[] = [
       type: "image",
     },
     name: "Handy",
-    tags: ["Free", "Mac apps"],
+    tags: ["Free", "Open source", "Mac apps"],
     title: "Speech to text Mac app",
   },
   {
