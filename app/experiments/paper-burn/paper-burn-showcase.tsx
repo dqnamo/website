@@ -20,25 +20,19 @@ export function PaperBurnShowcase() {
         active={active}
         aria-live="polite"
         className="w-full max-w-[21rem]"
-        duration={1050}
+        duration={900}
         onBurnComplete={() => setBurnt(true)}
       >
-        <article className="relative min-h-52 -rotate-1 overflow-hidden rounded-sm border border-[#d8cfbd] bg-[#f3eddf] p-7 text-[#352f29] shadow-[0_12px_32px_rgba(55,42,25,0.12),inset_0_0_24px_rgba(118,91,49,0.07)] dark:border-[#c9bda7]">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-[url('/textures/receipt-paper.svg')] opacity-30 mix-blend-multiply"
-          />
-          <div className="relative">
-            <p className="font-mono font-semibold text-[9px] uppercase tracking-[0.2em] opacity-55">
-              Private note · 14 Aug
-            </p>
-            <h2 className="mt-8 font-pirata text-3xl leading-none">
-              Burn after reading.
-            </h2>
-            <p className="mt-4 max-w-60 text-sm leading-6 opacity-70">
-              Some messages are only meant to exist for a moment.
-            </p>
-          </div>
+        <article className="min-h-52 border border-[#d9d9d9] bg-white p-7 text-[#252525]">
+          <p className="font-mono font-semibold text-[9px] uppercase tracking-[0.2em] opacity-55">
+            Private note · 14 Aug
+          </p>
+          <h2 className="mt-8 font-pirata text-3xl leading-none">
+            Burn after reading.
+          </h2>
+          <p className="mt-4 max-w-60 text-sm leading-6 opacity-70">
+            Some messages are only meant to exist for a moment.
+          </p>
         </article>
       </PaperBurn>
 

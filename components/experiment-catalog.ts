@@ -1,9 +1,10 @@
-export const experiments = [
+const experimentCatalog = [
   {
     title: "Paper Burn",
     href: "/experiments/paper-burn",
     description:
       "An arbitrary div burns away through an irregular flame edge, embers, and ash.",
+    hidden: true,
     preview: "paper-burn",
   },
   {
@@ -115,6 +116,10 @@ export const experiments = [
     preview: "foil",
   },
 ] as const;
+
+export const experiments = experimentCatalog.filter(
+  (experiment) => !("hidden" in experiment && experiment.hidden),
+);
 
 // Scramble Text has a custom card in the grid rather than an ExperimentPreview.
 export const experimentCount = experiments.length + 1;

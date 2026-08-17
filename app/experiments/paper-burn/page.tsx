@@ -7,12 +7,13 @@ import { PaperBurnShowcase } from "./paper-burn-showcase";
 export const metadata: Metadata = {
   title: "Paper Burn | dqnamo",
   description:
-    "A reusable paper-burn effect made with an SVG turbulence mask, ember edge, and ash particles.",
+    "A reusable GPU paper-burn effect with a procedural ember edge and ash particles, rendered without Three.js.",
 };
 
 export default async function PaperBurnPage() {
-  const [componentSource, cssSource] = await Promise.all([
+  const [componentSource, rendererSource, cssSource] = await Promise.all([
     readSourceFile("components/PaperBurn.tsx"),
+    readSourceFile("components/PaperBurnWebGL.ts"),
     readSourceFile("components/PaperBurn.module.css"),
   ]);
   const tabs = await buildSourceTabs([
@@ -20,6 +21,12 @@ export default async function PaperBurnPage() {
       label: "PaperBurn.tsx",
       source: componentSource,
       value: "component",
+    },
+    {
+      label: "PaperBurnWebGL.ts",
+      language: "ts",
+      source: rendererSource,
+      value: "renderer",
     },
     {
       label: "PaperBurn.module.css",
@@ -31,7 +38,7 @@ export default async function PaperBurnPage() {
 
   return (
     <ExperimentPage
-      description="An arbitrary div burns away from one corner with a distorted SVG mask, a hot ember edge, and a short trail of ash."
+      description="An arbitrary div burns away with a procedural WebGL edge, glow, curl, embers, and ash—without Three.js."
       slug="paper-burn"
       title="Paper Burn"
     >

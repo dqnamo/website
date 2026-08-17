@@ -3,172 +3,47 @@
   isolation: isolate;
 }
 
-.definitions {
-  position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
 .paper {
   position: relative;
   z-index: 1;
-  mask-repeat: no-repeat;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-size: 100% 100%;
+  width: 100%;
+  opacity: 1;
 }
 
-.char,
-.ember,
-.yellowHeat {
+.canvasLayer {
   position: absolute;
   inset: 0;
-  pointer-events: none;
-  opacity: 0;
-  mask-repeat: no-repeat;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-size: 100% 100%;
-}
-
-.char {
   z-index: 2;
-  background: #432319;
-  filter: blur(0.2px)
-    drop-shadow(0 0 1px color-mix(in srgb, #160b07 76%, transparent));
-  mix-blend-mode: multiply;
-  transition: opacity 110ms cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.ember {
-  z-index: 3;
-  background: #df5a28;
-  filter: drop-shadow(0 0 1px var(--color-yellow-300))
-    drop-shadow(0 0 4px var(--color-orange-500))
-    drop-shadow(
-      0 0 8px color-mix(in srgb, var(--color-red-500) 58%, transparent)
-    );
-  transition: opacity 120ms cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.yellowHeat {
-  z-index: 4;
-  background: #ffd36a;
-  filter: drop-shadow(0 0 1px var(--color-yellow-100))
-    drop-shadow(0 0 3px var(--color-yellow-400));
-  mix-blend-mode: screen;
-  transition: opacity 120ms cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.root[data-burn-state="burning"] .char {
-  opacity: 0.9;
-}
-
-.root[data-burn-state="burning"] .ember {
-  opacity: 0.92;
-}
-
-.root[data-burn-state="burning"] .yellowHeat {
-  opacity: 0.88;
-}
-
-.ash {
-  position: absolute;
-  z-index: 5;
-  display: block;
-  border-radius: 38% 62% 54% 46%;
   pointer-events: none;
+}
+
+.canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.root[data-burn-state="burning"] .paper,
+.root[data-burn-state="burnt"] .paper {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.root[data-burn-state="fading"] .paper,
+.root[data-burn-state="burnt"] .paper {
   opacity: 0;
-  background: #342821;
-  box-shadow: 0 0 2px
-    color-mix(in srgb, var(--color-orange-500) 58%, transparent);
-  animation-name: paper-burn-ash;
-  animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
-  animation-fill-mode: both;
-  will-change: transform, opacity;
 }
 
-.ash:nth-of-type(3n) {
-  background: #6c4b36;
-}
-
-.ash:nth-of-type(4n) {
-  background: #171412;
-}
-
-.ash.spark {
-  border-radius: 999px;
-  background: var(--color-amber-200);
-  box-shadow:
-    0 0 3px var(--color-orange-500),
-    0 0 7px color-mix(in srgb, var(--color-red-500) 72%, transparent);
-  animation-name: paper-burn-spark;
-}
-
-@keyframes paper-burn-ash {
-  0% {
-    opacity: 0;
-    transform: translate3d(0, 0, 0) rotate(0) scale(0.7);
-  }
-
-  18% {
-    opacity: 0.88;
-  }
-
-  46% {
-    opacity: 0.68;
-    transform: translate3d(var(--ash-drift-mid-x), var(--ash-drift-mid-y), 0)
-      rotate(var(--ash-rotate-mid)) scale(0.82);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translate3d(var(--ash-drift-x), var(--ash-drift-y), 0)
-      rotate(var(--ash-rotate)) scale(0.18);
-  }
-}
-
-@keyframes paper-burn-spark {
-  0% {
-    opacity: 0;
-    transform: translate3d(0, 0, 0) scale(0.35);
-  }
-
-  16% {
-    opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1.1);
-  }
-
-  48% {
-    opacity: 0.9;
-    transform: translate3d(var(--ash-drift-mid-x), var(--ash-drift-mid-y), 0)
-      rotate(var(--ash-rotate-mid)) scale(0.76);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translate3d(var(--ash-drift-x), var(--ash-drift-y), 0)
-      rotate(var(--ash-rotate)) scale(0.08);
-  }
+.root[data-burn-state="fading"] .paper {
+  transition: opacity 180ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .paper {
-    opacity: 1;
-    transition: opacity 180ms cubic-bezier(0.23, 1, 0.32, 1);
-  }
-
-  .root[data-burn-state="burning"] .paper,
-  .root[data-burn-state="burnt"] .paper {
-    opacity: 0;
-  }
-
-  .char,
-  .ember,
-  .yellowHeat,
-  .ash {
+  .canvas {
     display: none;
   }
 }
