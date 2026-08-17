@@ -69,6 +69,13 @@ export const experiments = [
     preview: "golden-ticket",
   },
   {
+    title: "Waitlist Ticket",
+    href: "/experiments/waitlist-ticket",
+    description:
+      "A Three.js gold-foil invitation with physical tilt and shader-driven disintegration.",
+    preview: "waitlist-ticket",
+  },
+  {
     title: "Stamp",
     href: "/experiments/stamp",
     description:

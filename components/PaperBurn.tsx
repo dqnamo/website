@@ -58,6 +58,24 @@ const BURN_FRONTS = [
     emberWidth: 0.022,
     seed: 17,
   },
+  {
+    charWidth: 0.025,
+    yellowWidth: 0.0075,
+    cx: 0.52,
+    cy: 0.48,
+    delay: 0.08,
+    emberWidth: 0.019,
+    seed: 43,
+  },
+  {
+    charWidth: 0.026,
+    yellowWidth: 0.008,
+    cx: 0.94,
+    cy: 0.14,
+    delay: 0.16,
+    emberWidth: 0.02,
+    seed: 79,
+  },
 ] as const;
 const BURN_EDGE_POINTS = 84;
 const PARTICLE_COUNT = 34;
@@ -121,6 +139,10 @@ function buildBurnPath(
   aspectRatio: number,
   edgeOffset = 0,
 ) {
+  if (progress >= 1) {
+    return "M -0.5 -0.5 H 1.5 V 1.5 H -0.5 Z";
+  }
+
   const points = Array.from({ length: BURN_EDGE_POINTS }, (_, index) => {
     const angle = (index / BURN_EDGE_POINTS) * Math.PI * 2;
     const point = getBurnPoint(front, angle, progress, aspectRatio, edgeOffset);

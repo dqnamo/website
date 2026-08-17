@@ -728,7 +728,7 @@ export function ExperimentPreview({
     );
   }
 
-  if (type === "golden-ticket") {
+  if (type === "golden-ticket" || type === "waitlist-ticket") {
     return (
       <div
         aria-hidden="true"

@@ -11,7 +11,7 @@ import type {
   ComponentPropsWithoutRef,
   PointerEvent as ReactPointerEvent,
 } from "react";
-import { useRef } from "react";
+import { useId, useRef } from "react";
 import { cn } from "@/helpers/classname-helper";
 import styles from "./GoldenTicket.module.css";
 
@@ -93,6 +93,7 @@ export function GoldenTicket({
   ...props
 }: GoldenTicketProps) {
   const ticketRef = useRef<HTMLElement>(null);
+  const debossFilterId = `gold-deboss-${useId().replaceAll(":", "")}`;
   const shouldReduceMotion = useReducedMotion();
   const pointerX = useMotionValue(0.5);
   const pointerY = useMotionValue(0.5);
@@ -140,6 +141,78 @@ export function GoldenTicket({
       onPointerMove={handlePointerMove}
       style={{ clipPath: ticketClipPath, ...style }}
     >
+      <svg aria-hidden="true" className={styles.filterDefinitions}>
+        <defs>
+          <filter
+            id={debossFilterId}
+            x="-10%"
+            y="-10%"
+            width="120%"
+            height="120%"
+            colorInterpolationFilters="sRGB"
+          >
+            <feOffset in="SourceAlpha" dx="1.2" dy="1.2" result="shadowShift" />
+            <feGaussianBlur
+              in="shadowShift"
+              stdDeviation="0.45"
+              result="shadowBlur"
+            />
+            <feComposite
+              in="SourceAlpha"
+              in2="shadowBlur"
+              operator="out"
+              result="shadowEdge"
+            />
+            <feFlood
+              floodColor="#070400"
+              floodOpacity="0.9"
+              result="shadowColor"
+            />
+            <feComposite
+              in="shadowColor"
+              in2="shadowEdge"
+              operator="in"
+              result="innerShadow"
+            />
+
+            <feOffset
+              in="SourceAlpha"
+              dx="-1.1"
+              dy="-1.1"
+              result="highlightShift"
+            />
+            <feGaussianBlur
+              in="highlightShift"
+              stdDeviation="0.4"
+              result="highlightBlur"
+            />
+            <feComposite
+              in="SourceAlpha"
+              in2="highlightBlur"
+              operator="out"
+              result="highlightEdge"
+            />
+            <feFlood
+              floodColor="#c99b38"
+              floodOpacity="0.44"
+              result="highlightColor"
+            />
+            <feComposite
+              in="highlightColor"
+              in2="highlightEdge"
+              operator="in"
+              result="innerHighlight"
+            />
+
+            <feMerge>
+              <feMergeNode in="SourceGraphic" />
+              <feMergeNode in="innerShadow" />
+              <feMergeNode in="innerHighlight" />
+            </feMerge>
+          </filter>
+        </defs>
+      </svg>
+
       <span aria-hidden="true" className={styles.foil} />
       <span aria-hidden="true" className={styles.sheen} />
       <span aria-hidden="true" className={styles.shine} />
@@ -151,11 +224,17 @@ export function GoldenTicket({
           className={styles.logo}
           height={294}
           src="/logos/hyperaide.svg"
+          style={{ filter: `url(#${debossFilterId})` }}
           width={313}
         />
         <div className={styles.copy}>
           <span className={styles.leadIn}>Your</span>
-          <h2 className={styles.eventName}>{eventName}</h2>
+          <h2
+            className={styles.eventName}
+            style={{ filter: `url(#${debossFilterId})` }}
+          >
+            {eventName}
+          </h2>
           <span className={styles.tagline}>
             To try out the next generation personal assistant
           </span>
@@ -164,11 +243,14 @@ export function GoldenTicket({
 
       <aside className={styles.stub}>
         <span className={styles.stubLabel}>{admit}</span>
-        <span aria-hidden="true" className={styles.seal}>
-          <span>✦</span>
+        <span className={styles.stubAccess}>
+          <span>Early</span>
+          <strong>Access</strong>
         </span>
         <span className={styles.code}>{code}</span>
       </aside>
+
+      <span aria-hidden="true" className={styles.clearcoat} />
     </article>
   );
 }
