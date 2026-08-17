@@ -39,7 +39,7 @@ export default async function WaitlistTicketPage() {
 
   return (
     <ExperimentPage
-      description="A physically lit gold-foil invitation rendered in Three.js, with spring-like pointer tilt and a multi-origin shader burn."
+      description="A physically lit gold-foil invitation rendered in Three.js, with spring-like pointer tilt and a shader-driven combustion front."
       slug="waitlist-ticket"
       title="Waitlist Ticket"
     >

@@ -25,7 +25,16 @@
   );
   content: "";
   filter: blur(18px);
+  opacity: 1;
   transform: translateY(12%);
+  transition:
+    opacity 520ms cubic-bezier(0.23, 1, 0.32, 1),
+    transform 680ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.root[data-burning="true"] .viewport::before {
+  opacity: 0;
+  transform: translateY(18%) scale(0.78);
 }
 
 .canvas {
@@ -33,6 +42,10 @@
   width: 100%;
   height: 100%;
   cursor: crosshair;
+}
+
+.root[data-burning="true"] .canvas {
+  cursor: default;
 }
 
 .actions {
@@ -106,6 +119,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .viewport::before,
   .actions,
   .root[data-burning="true"] .actions {
     transition-duration: 100ms;
