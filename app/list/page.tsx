@@ -13,17 +13,14 @@ export default function ListPage() {
     <main className="mx-auto max-w-4xl">
       <div className="p-8">
         <header className="px-3">
-          <p className="font-pirata text-base text-grayscale-11">
-            <Link
-              className="transition-colors hover:text-grayscale-12"
-              href="/"
-            >
+          <h1 className="font-pirata font-bold text-4xl">
+            <Link className="text-grayscale-12" href="/">
               dqnamo&apos;s
             </Link>
-          </p>
-          <h1 className="font-bold font-mono text-3xl text-grayscale-12 uppercase">
-            List
           </h1>
+          <p className="font-medium font-sans text-sm text-grayscale-10">
+            List
+          </p>
           <p className="mt-8 max-w-md text-pretty text-grayscale-10 text-sm leading-5">
             Products and tools I use constantly and trust enough to pass on.
           </p>

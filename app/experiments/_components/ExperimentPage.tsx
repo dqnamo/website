@@ -25,15 +25,12 @@ export function ExperimentLayout({
     <main className="mx-auto max-w-4xl">
       <div className="p-8 pb-16">
         <header className="px-3">
-          <p className="font-pirata text-base text-grayscale-11">
-            <Link
-              className="transition-colors hover:text-grayscale-12"
-              href="/"
-            >
+          <p className="font-pirata font-bold text-4xl">
+            <Link className="text-grayscale-12" href="/">
               dqnamo&apos;s
             </Link>
           </p>
-          <p className="font-bold font-mono text-3xl text-grayscale-12 uppercase">
+          <p className="font-medium font-sans text-sm text-grayscale-10">
             <Link
               className="transition-colors hover:text-grayscale-11"
               href="/kitchen"
