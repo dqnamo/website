@@ -188,6 +188,7 @@ const ticketVertexShader = `
 
 const ticketFragmentShader = `
   uniform sampler2D uTicket;
+  uniform sampler2D uFoilMask;
   uniform float uBurnProgress;
   uniform float uTime;
   uniform vec3 uBurnCore;
@@ -217,49 +218,66 @@ const ticketFragmentShader = `
     vec3 normal = normalize(vNormalView);
     vec3 viewDirection = normalize(vViewPosition);
     vec3 lightDirection = normalize(vec3(-0.42, 0.58, 0.72));
-    vec3 halfDirection = normalize(lightDirection + viewDirection);
     float diffuse = max(dot(normal, lightDirection), 0.0);
-    float specular = pow(max(dot(normal, halfDirection), 0.0), 54.0);
-    float clearcoat = pow(max(dot(normal, halfDirection), 0.0), 120.0);
-    float luminance = dot(design.rgb, vec3(0.299, 0.587, 0.114));
-    float metalMask = smoothstep(0.2, 0.42, luminance);
-    float horizontalEdge = smoothstep(
-      0.48,
-      1.0,
-      abs(vUv.x - 0.5) * 2.0
+    float grainPrimary =
+      fbm(vUv * 210.0 + vec2(4.7, 8.2)) - 0.5;
+    float grainSecondary =
+      valueNoise(vUv * 520.0 + vec2(19.2, 3.4)) - 0.5;
+    vec3 foilNormal = normalize(
+      normal + vec3(grainPrimary * 0.022, grainSecondary * 0.022, 0.0)
     );
-
-    float sweepPosition =
-      0.5 + normal.x * 0.74 - normal.y * 0.28;
-    float sweepCoordinate = vUv.x * 0.82 + vUv.y * 0.18;
-    float sweepDelta = sweepCoordinate - sweepPosition;
-    float sweep = exp(-pow(sweepDelta / 0.19, 2.0));
-    float streakTexture =
-      0.78 + fbm(vec2(vUv.x * 14.0, vUv.y * 58.0)) * 0.22;
-    float foilStreaks =
-      exp(-pow(sweepDelta / 0.064, 2.0)) * 0.62 +
-      exp(-pow((sweepDelta - 0.105) / 0.043, 2.0)) * 0.3 +
-      exp(-pow((sweepDelta + 0.135) / 0.056, 2.0)) * 0.22;
-    foilStreaks *= streakTexture;
-    float grain = (fbm(vUv * 320.0 + uTime * 0.018) - 0.5) * 0.075;
+    vec3 reflectionDirection = normalize(
+      reflect(-viewDirection, foilNormal)
+    );
+    float studioAxis =
+      reflectionDirection.x * 0.78 +
+      reflectionDirection.y * 0.46 +
+      sin(uTime * 0.22) * 0.015;
+    float keyCard =
+      1.0 - smoothstep(0.18, 0.39, abs(studioAxis + 0.035));
+    float fillCard =
+      1.0 - smoothstep(0.12, 0.29, abs(studioAxis - 0.58));
+    float rimCard =
+      1.0 - smoothstep(0.1, 0.24, abs(studioAxis + 0.69));
+    float darkCard =
+      1.0 - smoothstep(0.075, 0.19, abs(studioAxis - 0.27));
+    float horizonReflection = pow(
+      clamp(1.0 - abs(reflectionDirection.z), 0.0, 1.0),
+      1.5
+    );
+    float facing = clamp(dot(foilNormal, viewDirection), 0.0, 1.0);
+    float fresnelFactor = pow(1.0 - facing, 5.0);
+    vec3 goldFresnel = mix(
+      vec3(1.0, 0.71, 0.24),
+      vec3(1.0, 0.92, 0.52),
+      fresnelFactor
+    );
+    vec3 studioReflection = vec3(0.075, 0.032, 0.004);
+    studioReflection += keyCard * vec3(1.0, 0.76, 0.1) * 1.18;
+    studioReflection += fillCard * vec3(1.0, 0.57, 0.035) * 0.62;
+    studioReflection += rimCard * vec3(1.0, 0.84, 0.2) * 0.38;
+    studioReflection +=
+      horizonReflection * vec3(0.92, 0.43, 0.025) * 0.32;
+    studioReflection *= 1.0 - darkCard * 0.48;
+    float metalMask = texture2D(uFoilMask, vUv).r;
+    float foilGrain =
+      0.92 +
+      (grainPrimary * 0.08 + grainSecondary * 0.04) *
+        (0.35 + keyCard);
     float foilSparkle = pow(
-      valueNoise(vUv * 460.0 + floor(uTime * 7.0) * 0.07),
-      18.0
+      valueNoise(vUv * 520.0 + floor(uTime * 5.0) * 0.055),
+      22.0
     );
 
     vec3 color = design.rgb;
-    color *= mix(1.0, 0.62 + diffuse * 0.64 + grain, metalMask);
-    color *= mix(
-      vec3(1.0),
-      vec3(1.1, 0.95, 0.72),
-      horizontalEdge * metalMask
-    );
-    color +=
-      vec3(1.0, 0.82, 0.1) *
-      (specular * 0.76 + sweep * 0.09 + foilStreaks * 0.38) *
-      metalMask;
-    color += vec3(1.0, 0.9, 0.52) * clearcoat * 0.065 * metalMask;
-    color += vec3(1.0, 0.72, 0.13) * foilSparkle * 0.2 * metalMask;
+    vec3 goldBody = design.rgb * (0.48 + diffuse * 0.28);
+    vec3 reflectedGold =
+      goldBody + studioReflection * goldFresnel * foilGrain;
+    reflectedGold +=
+      vec3(1.0, 0.67, 0.055) *
+      foilSparkle *
+      (0.08 + keyCard * 0.16);
+    color = mix(color, reflectedGold, metalMask * 0.92);
 
     float charBand =
       burnIsActive * (1.0 - smoothstep(0.022, 0.13, distanceToFront));
@@ -496,33 +514,18 @@ function getTicketPath(width: number, height: number) {
   const path = new Path2D();
   const stubX = width * 0.75;
   const notch = height * 0.045;
-  const toothDepth = width * 0.0085;
-  const toothSteps = 48;
 
-  path.moveTo(toothDepth, 0);
+  path.moveTo(0, 0);
   path.lineTo(stubX - notch, 0);
   path.lineTo(stubX, notch);
   path.lineTo(stubX + notch, 0);
-  path.lineTo(width - toothDepth, 0);
-
-  for (let step = 1; step <= toothSteps; step += 1) {
-    path.lineTo(
-      step % 2 === 0 ? width - toothDepth : width,
-      (step / toothSteps) * height,
-    );
-  }
+  path.lineTo(width, 0);
+  path.lineTo(width, height);
 
   path.lineTo(stubX + notch, height);
   path.lineTo(stubX, height - notch);
   path.lineTo(stubX - notch, height);
-  path.lineTo(toothDepth, height);
-
-  for (let step = 1; step <= toothSteps; step += 1) {
-    path.lineTo(
-      step % 2 === 0 ? toothDepth : 0,
-      height - (step / toothSteps) * height,
-    );
-  }
+  path.lineTo(0, height);
 
   path.closePath();
   return path;
@@ -646,12 +649,19 @@ async function createTicketTexture() {
   canvas.width = Math.round(TICKET_DESIGN_WIDTH * TICKET_TEXTURE_SCALE);
   canvas.height = Math.round(TICKET_DESIGN_HEIGHT * TICKET_TEXTURE_SCALE);
   const context = canvas.getContext("2d");
+  const foilMaskCanvas = document.createElement("canvas");
+  foilMaskCanvas.width = canvas.width;
+  foilMaskCanvas.height = canvas.height;
+  const foilMaskContext = foilMaskCanvas.getContext("2d");
 
-  if (!context) {
+  if (!context || !foilMaskContext) {
     throw new Error("Unable to create the waitlist ticket texture.");
   }
 
+  const resolvedContext = context;
+  const resolvedFoilMaskContext = foilMaskContext;
   context.scale(TICKET_TEXTURE_SCALE, TICKET_TEXTURE_SCALE);
+  foilMaskContext.scale(TICKET_TEXTURE_SCALE, TICKET_TEXTURE_SCALE);
   const rootStyles = getComputedStyle(document.documentElement);
   const displayFont =
     rootStyles.getPropertyValue("--font-alfa-slab-one").trim() || "serif";
@@ -661,7 +671,7 @@ async function createTicketTexture() {
     rootStyles.getPropertyValue("--font-inter").trim() || "sans-serif";
   await Promise.all([
     document.fonts.load(`174px ${displayFont}`, "INVITE"),
-    document.fonts.load(`27px ${sansFont}`, "Your"),
+    document.fonts.load(`500 30px ${sansFont}`, "Your"),
     document.fonts.load(`16px ${monoFont}`, "ADMIT ONE"),
   ]);
   const logo = await loadImage("/logos/hyperaide.svg").catch(() => null);
@@ -669,6 +679,31 @@ async function createTicketTexture() {
   const stubX = TICKET_DESIGN_WIDTH * 0.75;
   const invitationCenter = stubX * 0.5;
   const stubCenter = stubX + (TICKET_DESIGN_WIDTH - stubX) * 0.5;
+
+  foilMaskContext.fillStyle = "#fff";
+  foilMaskContext.fill(ticketPath);
+
+  function excludeFromFoilMask(
+    draw: (maskContext: CanvasRenderingContext2D) => void,
+  ) {
+    resolvedFoilMaskContext.save();
+    resolvedFoilMaskContext.globalCompositeOperation = "destination-out";
+    draw(resolvedFoilMaskContext);
+    resolvedFoilMaskContext.restore();
+  }
+
+  function drawPrintedText(text: string, x: number, y: number) {
+    resolvedContext.fillText(text, x, y);
+    excludeFromFoilMask((maskContext) => {
+      maskContext.font = resolvedContext.font;
+      maskContext.textAlign = resolvedContext.textAlign;
+      maskContext.textBaseline = resolvedContext.textBaseline;
+      maskContext.lineJoin = "round";
+      maskContext.lineWidth = 2;
+      maskContext.strokeText(text, x, y);
+      maskContext.fillText(text, x, y);
+    });
+  }
 
   context.save();
   context.clip(ticketPath);
@@ -679,13 +714,13 @@ async function createTicketTexture() {
     TICKET_DESIGN_WIDTH,
     TICKET_DESIGN_HEIGHT,
   );
-  baseGradient.addColorStop(0, "#ef9e0b");
-  baseGradient.addColorStop(0.15, "#f8b313");
-  baseGradient.addColorStop(0.4, "#f8bb19");
-  baseGradient.addColorStop(0.55, "#ffca2d");
-  baseGradient.addColorStop(0.73, "#f7b51b");
-  baseGradient.addColorStop(0.9, "#e98b05");
-  baseGradient.addColorStop(1, "#dc7902");
+  baseGradient.addColorStop(0, "#dc8b08");
+  baseGradient.addColorStop(0.15, "#eaa00c");
+  baseGradient.addColorStop(0.4, "#efa914");
+  baseGradient.addColorStop(0.55, "#f6bd28");
+  baseGradient.addColorStop(0.73, "#e9a312");
+  baseGradient.addColorStop(0.9, "#d77b04");
+  baseGradient.addColorStop(1, "#c96b02");
   context.fillStyle = baseGradient;
   context.fillRect(0, 0, TICKET_DESIGN_WIDTH, TICKET_DESIGN_HEIGHT);
 
@@ -728,8 +763,16 @@ async function createTicketTexture() {
   context.lineTo(stubX, TICKET_DESIGN_HEIGHT * 0.955);
   context.stroke();
   context.setLineDash([]);
+  excludeFromFoilMask((maskContext) => {
+    maskContext.lineWidth = 2;
+    maskContext.setLineDash([7, 8]);
+    maskContext.beginPath();
+    maskContext.moveTo(stubX, TICKET_DESIGN_HEIGHT * 0.045);
+    maskContext.lineTo(stubX, TICKET_DESIGN_HEIGHT * 0.955);
+    maskContext.stroke();
+  });
 
-  context.fillStyle = "#2c1d07";
+  context.fillStyle = "#2a2116";
 
   if (logo) {
     const logoWidth = 72;
@@ -752,6 +795,15 @@ async function createTicketTexture() {
       logoLayerWidth,
       logoLayerHeight,
     );
+    excludeFromFoilMask((maskContext) => {
+      maskContext.drawImage(
+        logoLayer,
+        invitationCenter - logoLayerWidth / 2,
+        56,
+        logoLayerWidth,
+        logoLayerHeight,
+      );
+    });
   }
 
   context.font = `400 174px ${displayFont}`;
@@ -760,8 +812,8 @@ async function createTicketTexture() {
   const titleRight = invitationCenter + titleWidth / 2;
 
   context.textAlign = "left";
-  context.font = `400 27px ${sansFont}`;
-  context.fillText("Your", titleLeft, 232);
+  context.font = `500 30px ${sansFont}`;
+  drawPrintedText("Your", titleLeft, 232);
 
   const titleLayerWidth = titleWidth + 16;
   const titleLayerHeight = 200;
@@ -784,21 +836,30 @@ async function createTicketTexture() {
     titleLayerWidth,
     titleLayerHeight,
   );
+  excludeFromFoilMask((maskContext) => {
+    maskContext.drawImage(
+      titleLayer,
+      invitationCenter - titleLayerWidth / 2,
+      390 - titleBaseline,
+      titleLayerWidth,
+      titleLayerHeight,
+    );
+  });
 
   context.textAlign = "right";
-  context.font = `400 25px ${sansFont}`;
-  context.fillText("To try out the next generation", titleRight, 442);
-  context.fillText("personal assistant", titleRight, 474);
+  context.font = `500 26px ${sansFont}`;
+  drawPrintedText("To try out the next generation", titleRight, 442);
+  drawPrintedText("personal assistant", titleRight, 474);
 
   context.textAlign = "center";
   context.font = `700 16px ${monoFont}`;
-  context.fillText("ADMIT ONE", stubCenter, 78);
+  drawPrintedText("ADMIT ONE", stubCenter, 78);
   context.font = `650 17px ${monoFont}`;
-  context.fillText("EARLY", stubCenter, 320);
+  drawPrintedText("EARLY", stubCenter, 320);
   context.font = `800 27px ${monoFont}`;
-  context.fillText("ACCESS", stubCenter, 354);
+  drawPrintedText("ACCESS", stubCenter, 354);
   context.font = `700 15px ${monoFont}`;
-  context.fillText("HA · 001 · 2026", stubCenter, TICKET_DESIGN_HEIGHT - 64);
+  drawPrintedText("HA · 001 · 2026", stubCenter, TICKET_DESIGN_HEIGHT - 64);
 
   context.restore();
 
@@ -808,7 +869,12 @@ async function createTicketTexture() {
   texture.generateMipmaps = true;
   texture.colorSpace = THREE.SRGBColorSpace;
   texture.needsUpdate = true;
-  return texture;
+  const foilMaskTexture = new THREE.CanvasTexture(foilMaskCanvas);
+  foilMaskTexture.minFilter = THREE.LinearMipmapLinearFilter;
+  foilMaskTexture.magFilter = THREE.LinearFilter;
+  foilMaskTexture.generateMipmaps = true;
+  foilMaskTexture.needsUpdate = true;
+  return { foilMaskTexture, texture };
 }
 
 type ParticleKind = "ash" | "ember";
@@ -949,7 +1015,7 @@ function ThreeTicketCanvas({
     renderer.setClearColor(0x000000, 0);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.08;
+    renderer.toneMappingExposure = 1;
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(32, TICKET_ASPECT, 0.1, 100);
@@ -963,9 +1029,19 @@ function ThreeTicketCanvas({
       THREE.RGBAFormat,
     );
     placeholderTexture.needsUpdate = true;
+    const placeholderFoilMask = new THREE.DataTexture(
+      new Uint8Array([255, 255, 255, 255]),
+      1,
+      1,
+      THREE.RGBAFormat,
+    );
+    placeholderFoilMask.needsUpdate = true;
 
     const burnProgressUniform = { value: 0 };
     const elapsedUniform = { value: 0 };
+    const foilMaskUniform = {
+      value: placeholderFoilMask as THREE.Texture,
+    };
     const pixelRatioUniform = { value: 1 };
     const textureUniform = { value: placeholderTexture as THREE.Texture };
     const timeUniform = { value: 0 };
@@ -979,6 +1055,7 @@ function ThreeTicketCanvas({
       uniforms: {
         ...burnColorUniforms,
         uBurnProgress: burnProgressUniform,
+        uFoilMask: foilMaskUniform,
         uTicket: textureUniform,
         uTime: timeUniform,
       },
@@ -1051,21 +1128,28 @@ function ThreeTicketCanvas({
     scene.add(ticketGroup);
 
     let disposed = false;
+    let foilMaskTexture: THREE.Texture | null = null;
     let ticketTexture: THREE.Texture | null = null;
 
     createTicketTexture()
-      .then((texture) => {
+      .then((textures) => {
         if (disposed) {
-          texture.dispose();
+          textures.foilMaskTexture.dispose();
+          textures.texture.dispose();
           return;
         }
 
-        ticketTexture = texture;
-        texture.anisotropy = Math.min(
+        foilMaskTexture = textures.foilMaskTexture;
+        ticketTexture = textures.texture;
+        const anisotropy = Math.min(
           8,
           renderer.capabilities.getMaxAnisotropy(),
         );
-        textureUniform.value = texture;
+        foilMaskTexture.anisotropy = anisotropy;
+        ticketTexture.anisotropy = anisotropy;
+        foilMaskUniform.value = foilMaskTexture;
+        textureUniform.value = ticketTexture;
+        placeholderFoilMask.dispose();
         placeholderTexture.dispose();
         wakeAnimationRef.current?.();
       })
@@ -1310,7 +1394,9 @@ function ThreeTicketCanvas({
       emberMaterial.dispose();
       ashGeometry.dispose();
       ashMaterial.dispose();
+      foilMaskTexture?.dispose();
       ticketTexture?.dispose();
+      placeholderFoilMask.dispose();
       placeholderTexture.dispose();
       renderer.dispose();
     };
