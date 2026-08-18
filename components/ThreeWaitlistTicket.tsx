@@ -575,6 +575,7 @@ function createDebossedLayer({
     throw new Error("Unable to create the deboss layer.");
   }
 
+  const resolvedLayerContext = layerContext;
   layerContext.fillStyle = "#2a2a2a";
   layerContext.fillRect(0, 0, pixelWidth, pixelHeight);
   layerContext.globalCompositeOperation = "destination-in";
@@ -630,7 +631,7 @@ function createDebossedLayer({
     edgeContext.globalCompositeOperation = "source-in";
     edgeContext.fillStyle = color;
     edgeContext.fillRect(0, 0, pixelWidth, pixelHeight);
-    layerContext.drawImage(edge, 0, 0);
+    resolvedLayerContext.drawImage(edge, 0, 0);
   }
 
   addInnerEdge(depth, "rgba(0, 0, 0, 0.95)");
@@ -881,6 +882,7 @@ type ThreeTicketCanvasProps = {
   burnColor: BurnColor;
   burning: boolean;
   onBurnComplete: () => void;
+  onEffectComplete: () => void;
   resetVersion: number;
 };
 
@@ -888,6 +890,7 @@ function ThreeTicketCanvas({
   burnColor,
   burning,
   onBurnComplete,
+  onEffectComplete,
   resetVersion,
 }: ThreeTicketCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -896,6 +899,7 @@ function ThreeTicketCanvas({
   const burnColorUniformsRef = useRef<BurnColorUniforms | null>(null);
   const burningRef = useRef(burning);
   const completionCallbackRef = useRef(onBurnComplete);
+  const effectCompletionCallbackRef = useRef(onEffectComplete);
   const resetVersionRef = useRef(resetVersion);
   const wakeAnimationRef = useRef<(() => void) | null>(null);
 
@@ -917,6 +921,10 @@ function ThreeTicketCanvas({
   useEffect(() => {
     completionCallbackRef.current = onBurnComplete;
   }, [onBurnComplete]);
+
+  useEffect(() => {
+    effectCompletionCallbackRef.current = onEffectComplete;
+  }, [onEffectComplete]);
 
   useEffect(() => {
     resetVersionRef.current = resetVersion;
@@ -1250,6 +1258,7 @@ function ThreeTicketCanvas({
 
       if (burnStart !== null && effectElapsed >= effectDuration) {
         effectsFinished = true;
+        effectCompletionCallbackRef.current();
         return;
       }
 
@@ -1323,6 +1332,7 @@ export type ThreeWaitlistTicketProps = Omit<
   ComponentPropsWithoutRef<"section">,
   "children"
 > & {
+  autoReset?: boolean;
   burnColor?: BurnColor;
   buttonLabel?: string;
   onBurnComplete?: () => void;
@@ -1330,6 +1340,7 @@ export type ThreeWaitlistTicketProps = Omit<
 };
 
 export function ThreeWaitlistTicket({
+  autoReset = false,
   burnColor = "blue",
   buttonLabel = "Accept invite",
   className,
@@ -1339,6 +1350,7 @@ export function ThreeWaitlistTicket({
 }: ThreeWaitlistTicketProps) {
   const [burning, setBurning] = useState(false);
   const [burnt, setBurnt] = useState(false);
+  const [resetting, setResetting] = useState(false);
   const [resetVersion, setResetVersion] = useState(0);
   const previousBurnColorRef = useRef(burnColor);
 
@@ -1352,6 +1364,24 @@ export function ThreeWaitlistTicket({
     setBurnt(false);
     setResetVersion((version) => version + 1);
   }, [burnColor]);
+
+  useEffect(() => {
+    if (!resetting) {
+      return;
+    }
+
+    let revealFrame = 0;
+    const resetFrame = window.requestAnimationFrame(() => {
+      revealFrame = window.requestAnimationFrame(() => {
+        setResetting(false);
+      });
+    });
+
+    return () => {
+      window.cancelAnimationFrame(resetFrame);
+      window.cancelAnimationFrame(revealFrame);
+    };
+  }, [resetting]);
 
   function handleJoin() {
     if (burning) {
@@ -1367,16 +1397,29 @@ export function ThreeWaitlistTicket({
     onBurnComplete?.();
   }
 
+  function handleEffectComplete() {
+    if (!autoReset) {
+      return;
+    }
+
+    setResetting(true);
+    setBurning(false);
+    setBurnt(false);
+    setResetVersion((version) => version + 1);
+  }
+
   return (
     <section
       {...props}
       className={cn(styles.root, className)}
       data-burning={burning}
+      data-resetting={resetting}
     >
       <ThreeTicketCanvas
         burnColor={burnColor}
         burning={burning}
         onBurnComplete={handleBurnComplete}
+        onEffectComplete={handleEffectComplete}
         resetVersion={resetVersion}
       />
 
