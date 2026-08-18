@@ -11,10 +11,15 @@ const TICKET_ASPECT = 2.08;
 const TICKET_WIDTH = 4.8;
 const TICKET_HEIGHT = TICKET_WIDTH / TICKET_ASPECT;
 const BURN_DURATION = 900;
+const PARTICLE_TAIL_SECONDS = 1.8;
 const EMBER_COUNT = 520;
 const ASH_COUNT = 180;
-const TEXTURE_WIDTH = 1400;
-const TEXTURE_HEIGHT = Math.round(TEXTURE_WIDTH / TICKET_ASPECT);
+const TICKET_DESIGN_WIDTH = 1400;
+const TICKET_DESIGN_HEIGHT = Math.round(TICKET_DESIGN_WIDTH / TICKET_ASPECT);
+const TICKET_TEXTURE_SCALE = 1.5;
+const MAX_PIXEL_RATIO = 3;
+const MAX_RENDER_PIXELS = 3_000_000;
+const IDLE_FRAME_INTERVAL = 1000 / 30;
 
 type BurnPalette = {
   core: readonly [number, number, number];
@@ -100,14 +105,7 @@ function applyBurnPalette(uniforms: BurnColorUniforms, burnColor: BurnColor) {
   );
 }
 
-const ticketVertexShader = `
-  uniform float uBurnProgress;
-  uniform float uTime;
-
-  varying vec2 vUv;
-  varying vec3 vNormalView;
-  varying vec3 vViewPosition;
-
+const burnNoiseShader = `
   float hash21(vec2 point) {
     return fract(sin(dot(point, vec2(127.1, 311.7))) * 43758.5453123);
   }
@@ -154,6 +152,17 @@ const ticketVertexShader = `
 
     return clamp(diagonal + coarse * 0.14 + fine * 0.04, 0.015, 0.985);
   }
+`;
+
+const ticketVertexShader = `
+  uniform float uBurnProgress;
+  uniform float uTime;
+
+  varying vec2 vUv;
+  varying vec3 vNormalView;
+  varying vec3 vViewPosition;
+
+  ${burnNoiseShader}
 
   void main() {
     vUv = uv;
@@ -189,52 +198,7 @@ const ticketFragmentShader = `
   varying vec3 vNormalView;
   varying vec3 vViewPosition;
 
-  float hash21(vec2 point) {
-    return fract(sin(dot(point, vec2(127.1, 311.7))) * 43758.5453123);
-  }
-
-  float valueNoise(vec2 point) {
-    vec2 cell = floor(point);
-    vec2 local = fract(point);
-    local = local * local * (3.0 - 2.0 * local);
-
-    return mix(
-      mix(hash21(cell), hash21(cell + vec2(1.0, 0.0)), local.x),
-      mix(
-        hash21(cell + vec2(0.0, 1.0)),
-        hash21(cell + vec2(1.0, 1.0)),
-        local.x
-      ),
-      local.y
-    );
-  }
-
-  float fbm(vec2 point) {
-    float value = 0.0;
-    float amplitude = 0.5;
-
-    for (int octave = 0; octave < 4; octave++) {
-      value += valueNoise(point) * amplitude;
-      point = point * 2.03 + vec2(13.1, 7.7);
-      amplitude *= 0.5;
-    }
-
-    return value;
-  }
-
-  float burnArrival(vec2 uv) {
-    vec2 warp = vec2(
-      fbm(uv * 4.1 + vec2(7.3, 1.9)),
-      fbm(uv * 4.1 + vec2(2.7, 8.6))
-    ) - 0.5;
-    vec2 warpedUv = uv + warp * 0.075;
-    float diagonal =
-      warpedUv.x * 0.69 + warpedUv.y * 0.31;
-    float coarse = fbm(uv * 7.2 + vec2(4.6, 9.1)) - 0.5;
-    float fine = valueNoise(uv * 31.0 + vec2(1.7, 6.2)) - 0.5;
-
-    return clamp(diagonal + coarse * 0.14 + fine * 0.04, 0.015, 0.985);
-  }
+  ${burnNoiseShader}
 
   void main() {
     vec4 design = texture2D(uTicket, vUv);
@@ -333,52 +297,7 @@ const glowFragmentShader = `
 
   varying vec2 vUv;
 
-  float hash21(vec2 point) {
-    return fract(sin(dot(point, vec2(127.1, 311.7))) * 43758.5453123);
-  }
-
-  float valueNoise(vec2 point) {
-    vec2 cell = floor(point);
-    vec2 local = fract(point);
-    local = local * local * (3.0 - 2.0 * local);
-
-    return mix(
-      mix(hash21(cell), hash21(cell + vec2(1.0, 0.0)), local.x),
-      mix(
-        hash21(cell + vec2(0.0, 1.0)),
-        hash21(cell + vec2(1.0, 1.0)),
-        local.x
-      ),
-      local.y
-    );
-  }
-
-  float fbm(vec2 point) {
-    float value = 0.0;
-    float amplitude = 0.5;
-
-    for (int octave = 0; octave < 4; octave++) {
-      value += valueNoise(point) * amplitude;
-      point = point * 2.03 + vec2(13.1, 7.7);
-      amplitude *= 0.5;
-    }
-
-    return value;
-  }
-
-  float burnArrival(vec2 uv) {
-    vec2 warp = vec2(
-      fbm(uv * 4.1 + vec2(7.3, 1.9)),
-      fbm(uv * 4.1 + vec2(2.7, 8.6))
-    ) - 0.5;
-    vec2 warpedUv = uv + warp * 0.075;
-    float diagonal =
-      warpedUv.x * 0.69 + warpedUv.y * 0.31;
-    float coarse = fbm(uv * 7.2 + vec2(4.6, 9.1)) - 0.5;
-    float fine = valueNoise(uv * 31.0 + vec2(1.7, 6.2)) - 0.5;
-
-    return clamp(diagonal + coarse * 0.14 + fine * 0.04, 0.015, 0.985);
-  }
+  ${burnNoiseShader}
 
   void main() {
     vec4 design = texture2D(uTicket, vUv);
@@ -619,17 +538,119 @@ function loadImage(source: string) {
   });
 }
 
+function createDebossedLayer({
+  depth,
+  drawMask,
+  height,
+  strokeWidth,
+  width,
+}: {
+  depth: number;
+  drawMask: (context: CanvasRenderingContext2D) => void;
+  height: number;
+  strokeWidth: number;
+  width: number;
+}) {
+  const pixelWidth = Math.ceil(width * TICKET_TEXTURE_SCALE);
+  const pixelHeight = Math.ceil(height * TICKET_TEXTURE_SCALE);
+  const mask = document.createElement("canvas");
+  mask.width = pixelWidth;
+  mask.height = pixelHeight;
+  const maskContext = mask.getContext("2d");
+
+  if (!maskContext) {
+    throw new Error("Unable to create the deboss mask.");
+  }
+
+  maskContext.scale(TICKET_TEXTURE_SCALE, TICKET_TEXTURE_SCALE);
+  maskContext.fillStyle = "#fff";
+  drawMask(maskContext);
+
+  const layer = document.createElement("canvas");
+  layer.width = pixelWidth;
+  layer.height = pixelHeight;
+  const layerContext = layer.getContext("2d");
+
+  if (!layerContext) {
+    throw new Error("Unable to create the deboss layer.");
+  }
+
+  layerContext.fillStyle = "#2a2a2a";
+  layerContext.fillRect(0, 0, pixelWidth, pixelHeight);
+  layerContext.globalCompositeOperation = "destination-in";
+  layerContext.drawImage(mask, 0, 0);
+  layerContext.globalCompositeOperation = "source-over";
+
+  const stroke = document.createElement("canvas");
+  stroke.width = pixelWidth;
+  stroke.height = pixelHeight;
+  const strokeContext = stroke.getContext("2d");
+
+  if (!strokeContext) {
+    throw new Error("Unable to create the deboss stroke.");
+  }
+
+  const strokeRadius = strokeWidth * TICKET_TEXTURE_SCALE;
+
+  for (let index = 0; index < 16; index += 1) {
+    const angle = (index / 16) * Math.PI * 2;
+    strokeContext.drawImage(
+      mask,
+      Math.cos(angle) * strokeRadius,
+      Math.sin(angle) * strokeRadius,
+    );
+  }
+
+  strokeContext.globalCompositeOperation = "source-in";
+  strokeContext.fillStyle = "rgba(255, 242, 92, 0.92)";
+  strokeContext.fillRect(0, 0, pixelWidth, pixelHeight);
+  strokeContext.globalCompositeOperation = "destination-out";
+  strokeContext.drawImage(mask, 0, 0);
+  layerContext.globalCompositeOperation = "destination-over";
+  layerContext.drawImage(stroke, 0, 0);
+  layerContext.globalCompositeOperation = "source-over";
+
+  function addInnerEdge(offset: number, color: string) {
+    const edge = document.createElement("canvas");
+    edge.width = pixelWidth;
+    edge.height = pixelHeight;
+    const edgeContext = edge.getContext("2d");
+
+    if (!edgeContext) {
+      throw new Error("Unable to create the deboss edge.");
+    }
+
+    edgeContext.drawImage(mask, 0, 0);
+    edgeContext.globalCompositeOperation = "destination-out";
+    edgeContext.drawImage(
+      mask,
+      offset * TICKET_TEXTURE_SCALE,
+      offset * TICKET_TEXTURE_SCALE,
+    );
+    edgeContext.globalCompositeOperation = "source-in";
+    edgeContext.fillStyle = color;
+    edgeContext.fillRect(0, 0, pixelWidth, pixelHeight);
+    layerContext.drawImage(edge, 0, 0);
+  }
+
+  addInnerEdge(depth, "rgba(0, 0, 0, 0.95)");
+  addInnerEdge(-depth, "rgba(255, 210, 82, 0.42)");
+
+  return layer;
+}
+
 async function createTicketTexture() {
   await document.fonts.ready;
   const canvas = document.createElement("canvas");
-  canvas.width = TEXTURE_WIDTH;
-  canvas.height = TEXTURE_HEIGHT;
+  canvas.width = Math.round(TICKET_DESIGN_WIDTH * TICKET_TEXTURE_SCALE);
+  canvas.height = Math.round(TICKET_DESIGN_HEIGHT * TICKET_TEXTURE_SCALE);
   const context = canvas.getContext("2d");
 
   if (!context) {
     throw new Error("Unable to create the waitlist ticket texture.");
   }
 
+  context.scale(TICKET_TEXTURE_SCALE, TICKET_TEXTURE_SCALE);
   const rootStyles = getComputedStyle(document.documentElement);
   const displayFont =
     rootStyles.getPropertyValue("--font-alfa-slab-one").trim() || "serif";
@@ -643,10 +664,10 @@ async function createTicketTexture() {
     document.fonts.load(`16px ${monoFont}`, "ADMIT ONE"),
   ]);
   const logo = await loadImage("/logos/hyperaide.svg").catch(() => null);
-  const ticketPath = getTicketPath(TEXTURE_WIDTH, TEXTURE_HEIGHT);
-  const stubX = TEXTURE_WIDTH * 0.75;
+  const ticketPath = getTicketPath(TICKET_DESIGN_WIDTH, TICKET_DESIGN_HEIGHT);
+  const stubX = TICKET_DESIGN_WIDTH * 0.75;
   const invitationCenter = stubX * 0.5;
-  const stubCenter = stubX + (TEXTURE_WIDTH - stubX) * 0.5;
+  const stubCenter = stubX + (TICKET_DESIGN_WIDTH - stubX) * 0.5;
 
   context.save();
   context.clip(ticketPath);
@@ -654,8 +675,8 @@ async function createTicketTexture() {
   const baseGradient = context.createLinearGradient(
     0,
     0,
-    TEXTURE_WIDTH,
-    TEXTURE_HEIGHT,
+    TICKET_DESIGN_WIDTH,
+    TICKET_DESIGN_HEIGHT,
   );
   baseGradient.addColorStop(0, "#ef9e0b");
   baseGradient.addColorStop(0.15, "#f8b313");
@@ -665,22 +686,22 @@ async function createTicketTexture() {
   baseGradient.addColorStop(0.9, "#e98b05");
   baseGradient.addColorStop(1, "#dc7902");
   context.fillStyle = baseGradient;
-  context.fillRect(0, 0, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+  context.fillRect(0, 0, TICKET_DESIGN_WIDTH, TICKET_DESIGN_HEIGHT);
 
   const glow = context.createRadialGradient(
     invitationCenter,
-    TEXTURE_HEIGHT * 0.42,
+    TICKET_DESIGN_HEIGHT * 0.42,
     0,
     invitationCenter,
-    TEXTURE_HEIGHT * 0.42,
-    TEXTURE_WIDTH * 0.46,
+    TICKET_DESIGN_HEIGHT * 0.42,
+    TICKET_DESIGN_WIDTH * 0.46,
   );
   glow.addColorStop(0, "rgba(255, 205, 52, 0.14)");
   glow.addColorStop(0.38, "rgba(255, 177, 24, 0.07)");
   glow.addColorStop(1, "rgba(255, 182, 28, 0)");
   context.globalCompositeOperation = "screen";
   context.fillStyle = glow;
-  context.fillRect(0, 0, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+  context.fillRect(0, 0, TICKET_DESIGN_WIDTH, TICKET_DESIGN_HEIGHT);
   context.globalCompositeOperation = "source-over";
 
   const random = seededRandom(31);
@@ -690,8 +711,8 @@ async function createTicketTexture() {
     const opacity = 0.008 + random() * 0.016;
     context.fillStyle = `rgba(92, 47, 0, ${opacity})`;
     context.fillRect(
-      random() * TEXTURE_WIDTH,
-      random() * TEXTURE_HEIGHT,
+      random() * TICKET_DESIGN_WIDTH,
+      random() * TICKET_DESIGN_HEIGHT,
       0.6 + random() * 1.2,
       0.6 + random() * 1.2,
     );
@@ -702,22 +723,33 @@ async function createTicketTexture() {
   context.lineWidth = 2;
   context.setLineDash([7, 8]);
   context.beginPath();
-  context.moveTo(stubX, TEXTURE_HEIGHT * 0.045);
-  context.lineTo(stubX, TEXTURE_HEIGHT * 0.955);
+  context.moveTo(stubX, TICKET_DESIGN_HEIGHT * 0.045);
+  context.lineTo(stubX, TICKET_DESIGN_HEIGHT * 0.955);
   context.stroke();
   context.setLineDash([]);
 
   context.fillStyle = "#2c1d07";
 
   if (logo) {
-    const logoWidth = 82;
+    const logoWidth = 72;
     const logoHeight = (logoWidth * 294) / 313;
+    const logoLayerWidth = logoWidth + 12;
+    const logoLayerHeight = logoHeight + 12;
+    const logoLayer = createDebossedLayer({
+      depth: 1.5,
+      drawMask: (maskContext) => {
+        maskContext.drawImage(logo, 6, 6, logoWidth, logoHeight);
+      },
+      height: logoLayerHeight,
+      strokeWidth: 4,
+      width: logoLayerWidth,
+    });
     context.drawImage(
-      logo,
-      invitationCenter - logoWidth / 2,
-      62,
-      logoWidth,
-      logoHeight,
+      logoLayer,
+      invitationCenter - logoLayerWidth / 2,
+      56,
+      logoLayerWidth,
+      logoLayerHeight,
     );
   }
 
@@ -728,15 +760,29 @@ async function createTicketTexture() {
 
   context.textAlign = "left";
   context.font = `400 27px ${sansFont}`;
-  context.fillText("Your", titleLeft, 252);
+  context.fillText("Your", titleLeft, 232);
 
-  context.save();
-  context.translate(invitationCenter, 390);
-  context.rotate((-2 * Math.PI) / 180);
-  context.textAlign = "center";
-  context.font = `400 174px ${displayFont}`;
-  context.fillText("INVITE", 0, 0);
-  context.restore();
+  const titleLayerWidth = titleWidth + 16;
+  const titleLayerHeight = 200;
+  const titleBaseline = 176;
+  const titleLayer = createDebossedLayer({
+    depth: 2.5,
+    drawMask: (maskContext) => {
+      maskContext.font = `400 174px ${displayFont}`;
+      maskContext.textAlign = "center";
+      maskContext.fillText("INVITE", titleLayerWidth / 2, titleBaseline);
+    },
+    height: titleLayerHeight,
+    strokeWidth: 4,
+    width: titleLayerWidth,
+  });
+  context.drawImage(
+    titleLayer,
+    invitationCenter - titleLayerWidth / 2,
+    390 - titleBaseline,
+    titleLayerWidth,
+    titleLayerHeight,
+  );
 
   context.textAlign = "right";
   context.font = `400 25px ${sansFont}`;
@@ -751,7 +797,7 @@ async function createTicketTexture() {
   context.font = `800 27px ${monoFont}`;
   context.fillText("ACCESS", stubCenter, 354);
   context.font = `700 15px ${monoFont}`;
-  context.fillText("HA · 001 · 2026", stubCenter, TEXTURE_HEIGHT - 64);
+  context.fillText("HA · 001 · 2026", stubCenter, TICKET_DESIGN_HEIGHT - 64);
 
   context.restore();
 
@@ -835,12 +881,14 @@ type ThreeTicketCanvasProps = {
   burnColor: BurnColor;
   burning: boolean;
   onBurnComplete: () => void;
+  resetVersion: number;
 };
 
 function ThreeTicketCanvas({
   burnColor,
   burning,
   onBurnComplete,
+  resetVersion,
 }: ThreeTicketCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -848,6 +896,8 @@ function ThreeTicketCanvas({
   const burnColorUniformsRef = useRef<BurnColorUniforms | null>(null);
   const burningRef = useRef(burning);
   const completionCallbackRef = useRef(onBurnComplete);
+  const resetVersionRef = useRef(resetVersion);
+  const wakeAnimationRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     burnColorRef.current = burnColor;
@@ -855,15 +905,23 @@ function ThreeTicketCanvas({
     if (burnColorUniformsRef.current) {
       applyBurnPalette(burnColorUniformsRef.current, burnColor);
     }
+
+    wakeAnimationRef.current?.();
   }, [burnColor]);
 
   useEffect(() => {
     burningRef.current = burning;
+    wakeAnimationRef.current?.();
   }, [burning]);
 
   useEffect(() => {
     completionCallbackRef.current = onBurnComplete;
   }, [onBurnComplete]);
+
+  useEffect(() => {
+    resetVersionRef.current = resetVersion;
+    wakeAnimationRef.current?.();
+  }, [resetVersion]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -1001,6 +1059,7 @@ function ThreeTicketCanvas({
         );
         textureUniform.value = texture;
         placeholderTexture.dispose();
+        wakeAnimationRef.current?.();
       })
       .catch(() => {
         // Leave the transparent placeholder in place if texture creation fails.
@@ -1036,27 +1095,114 @@ function ThreeTicketCanvas({
     function resize() {
       const width = Math.max(1, containerElement.clientWidth);
       const height = Math.max(1, containerElement.clientHeight);
-      const pixelRatio = Math.min(window.devicePixelRatio, 2);
+      const pixelBudgetRatio = Math.sqrt(MAX_RENDER_PIXELS / (width * height));
+      const pixelRatio = Math.min(
+        Math.max(1, window.devicePixelRatio),
+        MAX_PIXEL_RATIO,
+        Math.max(1, pixelBudgetRatio),
+      );
       renderer.setPixelRatio(pixelRatio);
       renderer.setSize(width, height, false);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       pixelRatioUniform.value = pixelRatio;
+      wakeAnimationRef.current?.();
     }
 
     resize();
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(containerElement);
+    window.addEventListener("resize", resize, { passive: true });
 
     let animationFrame = 0;
     let previousTime = performance.now();
+    let previousRenderTime = 0;
     let burnStart: number | null = null;
     let completionSent = false;
+    let effectsFinished = false;
+    let isIntersecting = true;
+    let pausedAt: number | null = null;
+    let renderedResetVersion = resetVersionRef.current;
+
+    function applyPendingReset() {
+      if (renderedResetVersion === resetVersionRef.current) {
+        return;
+      }
+
+      renderedResetVersion = resetVersionRef.current;
+      burnStart = null;
+      completionSent = false;
+      effectsFinished = false;
+      burnProgressUniform.value = 0;
+      elapsedUniform.value = 0;
+      targetRotation.x = 0;
+      targetRotation.y = 0;
+      ticketGroup.rotation.set(0, 0, 0);
+    }
+
+    function pauseAnimation() {
+      if (animationFrame !== 0) {
+        window.cancelAnimationFrame(animationFrame);
+        animationFrame = 0;
+      }
+
+      if (pausedAt === null && !effectsFinished) {
+        pausedAt = performance.now();
+      }
+    }
+
+    function startAnimation() {
+      const hasPendingReset = renderedResetVersion !== resetVersionRef.current;
+
+      if (
+        animationFrame !== 0 ||
+        !isIntersecting ||
+        document.hidden ||
+        (effectsFinished && !hasPendingReset)
+      ) {
+        return;
+      }
+
+      const now = performance.now();
+
+      if (pausedAt !== null && burnStart !== null && !hasPendingReset) {
+        burnStart += now - pausedAt;
+      }
+
+      pausedAt = null;
+      previousTime = now;
+      previousRenderTime = 0;
+      animationFrame = window.requestAnimationFrame(animate);
+    }
 
     function animate(time: number) {
+      animationFrame = 0;
+
+      if (!isIntersecting || document.hidden) {
+        pauseAnimation();
+        return;
+      }
+
+      applyPendingReset();
+      const isBurning = burningRef.current;
+      const isTiltAnimating =
+        Math.abs(ticketGroup.rotation.x - targetRotation.x) > 0.0005 ||
+        Math.abs(ticketGroup.rotation.y - targetRotation.y) > 0.0005;
+
+      if (
+        !isBurning &&
+        !isTiltAnimating &&
+        !reducedMotion.matches &&
+        previousRenderTime > 0 &&
+        time - previousRenderTime < IDLE_FRAME_INTERVAL
+      ) {
+        animationFrame = window.requestAnimationFrame(animate);
+        return;
+      }
+
       const delta = Math.min((time - previousTime) / 1000, 0.05);
       previousTime = time;
-      const isBurning = burningRef.current;
+      previousRenderTime = time;
 
       if (isBurning) {
         burnStart ??= time;
@@ -1078,11 +1224,14 @@ function ThreeTicketCanvas({
       );
 
       let burnProgress = 0;
+      let effectElapsed = 0;
 
       if (burnStart !== null) {
         const duration = reducedMotion.matches ? 180 : BURN_DURATION;
-        burnProgress = Math.min(1, (time - burnStart) / duration);
-        elapsedUniform.value = (time - burnStart) / 1000;
+        const elapsedMilliseconds = time - burnStart;
+        burnProgress = Math.min(1, elapsedMilliseconds / duration);
+        effectElapsed = elapsedMilliseconds / 1000;
+        elapsedUniform.value = effectElapsed;
       }
 
       burnProgressUniform.value = burnProgress;
@@ -1094,16 +1243,55 @@ function ThreeTicketCanvas({
       }
 
       renderer.render(scene, camera);
-      animationFrame = window.requestAnimationFrame(animate);
+
+      const effectDuration = reducedMotion.matches
+        ? 0.18
+        : BURN_DURATION / 1000 + PARTICLE_TAIL_SECONDS;
+
+      if (burnStart !== null && effectElapsed >= effectDuration) {
+        effectsFinished = true;
+        return;
+      }
+
+      if (!reducedMotion.matches || isBurning) {
+        animationFrame = window.requestAnimationFrame(animate);
+      }
     }
 
-    animationFrame = window.requestAnimationFrame(animate);
+    function handleVisibilityChange() {
+      if (document.hidden) {
+        pauseAnimation();
+      } else {
+        startAnimation();
+      }
+    }
+
+    const intersectionObserver = new IntersectionObserver(
+      ([entry]) => {
+        isIntersecting = entry?.isIntersecting ?? true;
+
+        if (isIntersecting) {
+          startAnimation();
+        } else {
+          pauseAnimation();
+        }
+      },
+      { rootMargin: "160px 0px" },
+    );
+    intersectionObserver.observe(containerElement);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    wakeAnimationRef.current = startAnimation;
+    startAnimation();
 
     return () => {
       disposed = true;
       burnColorUniformsRef.current = null;
-      window.cancelAnimationFrame(animationFrame);
+      wakeAnimationRef.current = null;
+      pauseAnimation();
+      intersectionObserver.disconnect();
       resizeObserver.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("resize", resize);
       containerElement.removeEventListener("pointermove", handlePointerMove);
       containerElement.removeEventListener("pointerleave", resetTilt);
       ticketGeometry.dispose();
@@ -1142,7 +1330,7 @@ export type ThreeWaitlistTicketProps = Omit<
 };
 
 export function ThreeWaitlistTicket({
-  burnColor = "orange",
+  burnColor = "blue",
   buttonLabel = "Accept invite",
   className,
   onBurnComplete,
@@ -1151,6 +1339,19 @@ export function ThreeWaitlistTicket({
 }: ThreeWaitlistTicketProps) {
   const [burning, setBurning] = useState(false);
   const [burnt, setBurnt] = useState(false);
+  const [resetVersion, setResetVersion] = useState(0);
+  const previousBurnColorRef = useRef(burnColor);
+
+  useEffect(() => {
+    if (previousBurnColorRef.current === burnColor) {
+      return;
+    }
+
+    previousBurnColorRef.current = burnColor;
+    setBurning(false);
+    setBurnt(false);
+    setResetVersion((version) => version + 1);
+  }, [burnColor]);
 
   function handleJoin() {
     if (burning) {
@@ -1176,6 +1377,7 @@ export function ThreeWaitlistTicket({
         burnColor={burnColor}
         burning={burning}
         onBurnComplete={handleBurnComplete}
+        resetVersion={resetVersion}
       />
 
       <div aria-hidden={burning} className={styles.actions}>

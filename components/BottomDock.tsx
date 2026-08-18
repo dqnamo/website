@@ -87,8 +87,39 @@ function ThemeButton() {
 export function BottomDock() {
   const { resolvedTheme } = useTheme();
   const pathname = usePathname();
+  const [isVisible, setIsVisible] = useState(true);
   const isHome = pathname === "/";
   const isSiteDark = resolvedTheme === "dark";
+
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      if (
+        event.defaultPrevented ||
+        event.repeat ||
+        !event.altKey ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.code !== "KeyK" ||
+        isEditableTarget(event.target)
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+      setIsVisible((current) => !current);
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, []);
+
+  if (!isVisible) {
+    return null;
+  }
 
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-[max(1rem,env(safe-area-inset-bottom))] z-100 flex justify-center px-3">
@@ -153,5 +184,20 @@ export function BottomDock() {
         </div>
       </Tooltip.Provider>
     </div>
+  );
+}
+
+function isEditableTarget(target: EventTarget | null) {
+  if (!(target instanceof HTMLElement)) {
+    return false;
+  }
+
+  const tagName = target.tagName.toLowerCase();
+
+  return (
+    target.isContentEditable ||
+    tagName === "input" ||
+    tagName === "textarea" ||
+    tagName === "select"
   );
 }

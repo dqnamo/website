@@ -18,7 +18,7 @@ const burnOptions = [
 }>;
 
 export function WaitlistTicketShowcase() {
-  const [burnColor, setBurnColor] = useState<BurnColor>("orange");
+  const [burnColor, setBurnColor] = useState<BurnColor>("blue");
 
   return (
     <div className="w-full overflow-hidden rounded-[13px] border border-grayscale-3 bg-grayscale-1 small-shadow dark:border-grayscale-4 dark:bg-grayscale-2 dark:shadow-none">
@@ -26,7 +26,6 @@ export function WaitlistTicketShowcase() {
         <ThreeWaitlistTicket
           burnColor={burnColor}
           className="w-full max-w-[40rem]"
-          key={burnColor}
         />
       </div>
 
