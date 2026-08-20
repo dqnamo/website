@@ -59,10 +59,21 @@ function ListLogoMark({
   );
 }
 
-export function ListCard({ item }: { item: ListItem }) {
+export function ListCard({
+  homepage = false,
+  item,
+}: {
+  homepage?: boolean;
+  item: ListItem;
+}) {
   return (
     <a
-      className="group flex flex-col overflow-hidden rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4"
+      className={cn(
+        "group flex flex-col overflow-hidden rounded-[13px] border border-grayscale-3 p-1 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 dark:shadow-none",
+        homepage
+          ? "bg-white dark:border-grayscale-4 dark:bg-grayscale-3 dark:hover:border-grayscale-5 dark:hover:bg-grayscale-4"
+          : "bg-grayscale-1 dark:border-grayscale-4 dark:bg-grayscale-3 dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4",
+      )}
       href={getListItemHref(item.href)}
       rel="noopener noreferrer"
       target="_blank"

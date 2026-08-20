@@ -52,7 +52,7 @@ export default function HomePage() {
         </header>
 
         <div className="mt-8 grid grid-cols-1 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5 sm:grid-cols-2">
-          <div className="group relative flex min-h-64 flex-col rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4">
+          <div className="group relative flex min-h-64 flex-col rounded-[13px] border border-grayscale-3 bg-white p-1 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-5 dark:hover:bg-grayscale-4">
             <a
               aria-label="Visit The Interface Company of London"
               className="absolute inset-0 z-10 rounded-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7"
@@ -99,7 +99,7 @@ export default function HomePage() {
             </div>
           </div>
           <Link
-            className="group flex min-h-64 flex-col rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4"
+            className="group flex min-h-64 flex-col rounded-[13px] border border-grayscale-3 bg-white p-1 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-5 dark:hover:bg-grayscale-4"
             href="/kitchen"
           >
             <div className="flex items-center justify-center rounded-lg bg-grayscale-2 p-16 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3">
@@ -237,7 +237,7 @@ export default function HomePage() {
           <div className="mt-3 grid grid-cols-1 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5 sm:grid-cols-2 lg:grid-cols-3">
             {kitchenExperiments.map((experiment) => (
               <Link
-                className="group flex min-h-64 flex-col overflow-hidden rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4"
+                className="group flex min-h-64 flex-col overflow-hidden rounded-[13px] border border-grayscale-3 bg-white p-1 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-5 dark:hover:bg-grayscale-4"
                 href={experiment.href}
                 key={experiment.href}
               >
@@ -253,23 +253,18 @@ export default function HomePage() {
               </Link>
             ))}
             <Link
-              className="group flex items-center gap-4 rounded-[13px] border border-grayscale-3 bg-grayscale-1 px-4 py-5 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 sm:col-span-2 lg:col-span-3 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4"
+              className="group flex items-center gap-3 rounded-[13px] border border-grayscale-3 bg-white p-2 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 sm:col-span-2 lg:col-span-3 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-5 dark:hover:bg-grayscale-4"
               href="/kitchen"
             >
-              <div className="flex min-w-0 flex-col">
-                <div className="mb-3 w-fit rounded-md bg-grayscale-12 p-1.5 font-medium text-[11px] text-grayscale-1 leading-none">
-                  {experimentCount}
-                </div>
-                <h3 className="font-medium text-grayscale-12 text-sm">
-                  View all components
-                </h3>
-                <p className="mt-px text-pretty text-grayscale-10 text-xs leading-5">
-                  Explore the complete collection in one place.
-                </p>
+              <div className="flex h-6 min-w-6 shrink-0 items-center justify-center rounded-md border border-transparent bg-grayscale-12 px-1 font-medium text-[11px] text-grayscale-1 leading-none transition-colors dark:border-grayscale-5 dark:bg-grayscale-4 dark:text-grayscale-12 dark:group-hover:border-grayscale-6 dark:group-hover:bg-grayscale-5">
+                {experimentCount}
               </div>
+              <h3 className="min-w-0 font-medium text-grayscale-12 text-sm">
+                View all components
+              </h3>
               <PikaArrowRightIcon
                 aria-hidden="true"
-                className="ml-auto shrink-0 self-end text-grayscale-9 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-grayscale-11"
+                className="ml-auto shrink-0 text-grayscale-9 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-grayscale-11"
                 size={16}
               />
             </Link>
@@ -287,26 +282,21 @@ export default function HomePage() {
           </div>
           <div className="mt-3 grid grid-cols-1 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5 sm:grid-cols-2 lg:grid-cols-3">
             {featuredListItems.map((item) => (
-              <ListCard item={item} key={item.href} />
+              <ListCard homepage item={item} key={item.href} />
             ))}
             <Link
-              className="group flex items-center gap-4 rounded-[13px] border border-grayscale-3 bg-grayscale-1 px-4 py-5 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 sm:col-span-2 lg:col-span-3 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4"
+              className="group flex items-center gap-3 rounded-[13px] border border-grayscale-3 bg-white p-2 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 sm:col-span-2 lg:col-span-3 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-5 dark:hover:bg-grayscale-4"
               href="/list"
             >
-              <div className="flex min-w-0 flex-col">
-                <div className="mb-3 w-fit rounded-md bg-grayscale-12 p-1.5 font-medium text-[11px] text-grayscale-1 leading-none">
-                  {listCount}
-                </div>
-                <h3 className="font-medium text-grayscale-12 text-sm">
-                  View the full list
-                </h3>
-                <p className="mt-px text-pretty text-grayscale-10 text-xs leading-5">
-                  Every product and tool in one place.
-                </p>
+              <div className="flex h-6 min-w-6 shrink-0 items-center justify-center rounded-md border border-transparent bg-grayscale-12 px-1 font-medium text-[11px] text-grayscale-1 leading-none transition-colors dark:border-grayscale-5 dark:bg-grayscale-4 dark:text-grayscale-12 dark:group-hover:border-grayscale-6 dark:group-hover:bg-grayscale-5">
+                {listCount}
               </div>
+              <h3 className="min-w-0 font-medium text-grayscale-12 text-sm">
+                View the full list
+              </h3>
               <PikaArrowRightIcon
                 aria-hidden="true"
-                className="ml-auto shrink-0 self-end text-grayscale-9 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-grayscale-11"
+                className="ml-auto shrink-0 text-grayscale-9 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-grayscale-11"
                 size={16}
               />
             </Link>
