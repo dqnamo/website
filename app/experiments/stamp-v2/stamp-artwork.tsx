@@ -1,19 +1,19 @@
 import Image from "next/image";
 import dublin from "@/public/experiments/stamp-v2/dublin.png";
+import london from "@/public/experiments/stamp-v2/london.png";
 import sanFrancisco from "@/public/experiments/stamp-v2/san-francisco.png";
 import tokyo from "@/public/experiments/stamp-v2/tokyo.png";
 import styles from "./stamp-artwork.module.css";
 
-const tokyoDesign = {
-  city: "TYO",
-  year: "2026",
-  image: tokyo,
-  alt: "Purple illustration of Tokyo's skyline, Mount Fuji and cherry blossoms",
-  ink: "#512181",
-};
-
 export const stampDesigns = [
-  { ...tokyoDesign, id: "tokyo-01" },
+  {
+    id: "tokyo-01",
+    city: "TYO",
+    year: "2026",
+    image: tokyo,
+    alt: "Purple illustration of Tokyo's skyline, Mount Fuji and cherry blossoms",
+    ink: "#512181",
+  },
   {
     id: "dublin",
     city: "DUB",
@@ -30,7 +30,14 @@ export const stampDesigns = [
     alt: "Blue illustration of San Francisco's Bay Bridge and skyline",
     ink: "#225da0",
   },
-  { ...tokyoDesign, id: "tokyo-04" },
+  {
+    id: "london",
+    city: "LDN",
+    year: "2026",
+    image: london,
+    alt: "Red illustration of London's River Thames, St Paul's Cathedral and skyline",
+    ink: "#b71910",
+  },
 ];
 
 export function StampArtwork({
