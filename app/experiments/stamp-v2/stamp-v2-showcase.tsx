@@ -8,8 +8,8 @@ import styles from "./stamp-v2-showcase.module.css";
 
 const layouts = [
   { label: "Single", value: "single", columns: 1, count: 1 },
-  { label: "2 × 1", value: "strip", columns: 2, count: 2 },
-  { label: "2 × 2", value: "sheet", columns: 2, count: 4 },
+  { label: "2x1 sheet", value: "strip", columns: 2, count: 2 },
+  { label: "2x2 sheet", value: "sheet", columns: 2, count: 4 },
 ] as const;
 
 export function StampV2Showcase({ children }: { children: ReactNode }) {
@@ -29,7 +29,7 @@ export function StampV2Showcase({ children }: { children: ReactNode }) {
               </StampV2>
             ) : (
               <StampSheet
-                aria-label={`${layout.label} stamp sheet`}
+                aria-label={`${layout.columns} by ${layout.count / layout.columns} stamp sheet`}
                 columns={layout.columns}
               >
                 {stampDesigns.slice(0, layout.count).map((design) => (
