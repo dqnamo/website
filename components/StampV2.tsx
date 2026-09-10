@@ -1,3 +1,6 @@
+"use client";
+
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import {
   Children,
   type ComponentPropsWithoutRef,
@@ -5,6 +8,7 @@ import {
   Fragment,
   isValidElement,
   type ReactNode,
+  useState,
 } from "react";
 import styles from "./StampV2.module.css";
 
@@ -33,6 +37,8 @@ export type StampV2Props = Omit<ComponentPropsWithoutRef<"div">, "children"> & {
 export type StampSheetProps = StampV2Props & {
   /** Each direct child is one stamp's content, in reading order. */
   columns?: number;
+  /** Keep keyed stamps in place through animated additions and removals. */
+  animateLayout?: boolean;
 };
 
 function cssLength(value: CssLength) {
@@ -65,10 +71,11 @@ function sheetPosition(index: number, columns: number, count: number) {
   };
 }
 
-/** Matching perforations join the stamps into a sheet. No DOM measurement. */
+/** Matching perforations join the stamps into a sheet. */
 export function StampSheet({
   children,
   columns = 2,
+  animateLayout = false,
   stampWidth = 184,
   aspectRatio,
   paper = "#fffdf7",
@@ -84,17 +91,37 @@ export function StampSheet({
   ...props
 }: StampSheetProps) {
   const stamps = Children.toArray(children);
-  if (stamps.length === 0) return null;
-
   const resolvedColumns = Math.min(
-    stamps.length,
+    Math.max(1, stamps.length),
     Math.max(1, Math.floor(positiveNumber(columns, 2))),
   );
+  const reducedMotion = useReducedMotion();
+  const shouldAnimate = animateLayout && !reducedMotion;
+  const [layout, setLayout] = useState({
+    columns: resolvedColumns,
+    count: stamps.length,
+  });
+
+  // Exiting stamps keep their grid cells until the pop-out finishes. Only then
+  // may the sheet shrink and the surviving stamps travel to their new places.
+  if (
+    (!shouldAnimate || stamps.length >= layout.count) &&
+    (layout.columns !== resolvedColumns || layout.count !== stamps.length)
+  ) {
+    setLayout({ columns: resolvedColumns, count: stamps.length });
+  }
+
+  if (stamps.length === 0 && (!shouldAnimate || layout.count === 0))
+    return null;
+
+  const layoutColumns = shouldAnimate ? layout.columns : resolvedColumns;
+  const layoutCount = shouldAnimate ? layout.count : stamps.length;
+  const Stamp = animateLayout ? motion.div : "div";
   const contentClasses = [styles.content, contentClassName]
     .filter(Boolean)
     .join(" ");
   const rootStyle: StampStyle = {
-    "--stamp-v2-columns": resolvedColumns,
+    "--stamp-v2-columns": layoutColumns,
     "--stamp-v2-width": cssLength(stampWidth),
     "--stamp-v2-ratio":
       aspectRatio === undefined ? "auto" : positiveNumber(aspectRatio, 4 / 5),
@@ -122,31 +149,61 @@ export function StampSheet({
       {...props}
     >
       <div className={styles.sheet}>
-        {stamps.map((content, index) => {
-          const position = sheetPosition(index, resolvedColumns, stamps.length);
-          return (
-            <div
-              className={styles.stamp}
-              data-corner={position.corner}
-              data-joined={position.joined || undefined}
-              key={isValidElement(content) ? content.key : index}
-            >
-              <div className={styles.surface}>
-                {tugOnHover && position.joined && (
-                  <div
-                    aria-hidden="true"
-                    className={`${styles.paper} ${styles.connections}`}
-                  />
-                )}
-                <div className={styles.tug}>
-                  <div className={styles.paper}>
-                    <div className={contentClasses}>{content}</div>
+        <AnimatePresence
+          initial={false}
+          onExitComplete={() =>
+            setLayout({ columns: resolvedColumns, count: stamps.length })
+          }
+        >
+          {stamps.map((content, index) => {
+            const position = sheetPosition(index, layoutColumns, layoutCount);
+            return (
+              <Stamp
+                className={styles.stamp}
+                data-corner={position.corner}
+                data-joined={position.joined || undefined}
+                key={isValidElement(content) ? content.key : index}
+                {...(animateLayout && {
+                  layout: shouldAnimate,
+                  initial: { opacity: 0, scale: shouldAnimate ? 0.6 : 1 },
+                  animate: { opacity: 1, scale: 1 },
+                  exit: {
+                    opacity: 0,
+                    scale: shouldAnimate ? 0.6 : 1,
+                    transition: { duration: shouldAnimate ? 0.16 : 0 },
+                  },
+                  transition: {
+                    layout: { type: "spring", duration: 0.4, bounce: 0.12 },
+                    scale: {
+                      type: "spring",
+                      duration: shouldAnimate ? 0.32 : 0,
+                      bounce: 0.2,
+                      delay: shouldAnimate ? 0.12 + index * 0.035 : 0,
+                    },
+                    opacity: {
+                      duration: shouldAnimate ? 0.14 : 0,
+                      delay: shouldAnimate ? 0.12 + index * 0.035 : 0,
+                    },
+                  },
+                })}
+              >
+                <div className={styles.surface}>
+                  {tugOnHover && position.joined && (
+                    <div
+                      aria-hidden="true"
+                      className={`${styles.paper} ${styles.connections}`}
+                    />
+                  )}
+                  <div className={styles.tug}>
+                    <div className={styles.paper}>
+                      <div className={contentClasses}>{content}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          );
-        })}
+              </Stamp>
+            );
+          })}
+        </AnimatePresence>
       </div>
     </div>
   );

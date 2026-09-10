@@ -52,6 +52,7 @@ export function SingleStamp() {
 
 // Each direct child is one stamp. Two columns + four children = 2 × 2.
 // Use two children for a strip, or columns={1} for a vertical strip.
+// Enable animateLayout to move surviving keyed stamps and pop others in/out.
 // Set tugOnHover={false} to keep it flat.
 export function ConnectedSheet() {
   return (
