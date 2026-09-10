@@ -1,10 +1,7 @@
 .artwork {
-  container-type: inline-size;
   display: flex;
-  height: 100%;
   flex-direction: column;
   margin: 0;
-  color: #512181;
 }
 
 .image {
@@ -18,17 +15,17 @@
 
 .caption {
   display: flex;
-  flex: 1;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: space-between;
-  gap: 4cqi;
-  padding-block-start: 4cqi;
+  gap: 3.4cqi;
+  padding-block-start: var(--stamp-v2-padding);
 }
 
 .city {
   display: block;
   font-family: var(--font-jetbrains-mono), monospace;
-  font-size: 17cqi;
+  font-size: 14.45cqi;
   font-weight: 800;
   line-height: 1;
   letter-spacing: -0.045em;
@@ -38,7 +35,7 @@
   display: flex;
   flex-direction: column;
   font-family: var(--font-barlow), sans-serif;
-  font-size: 9.5cqi;
+  font-size: 8.075cqi;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   line-height: 0.85;

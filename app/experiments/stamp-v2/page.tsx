@@ -24,11 +24,11 @@ function Artwork() {
         sizes="160px"
         style={{ display: "block", width: "100%", height: "auto", aspectRatio: "1" }}
       />
-      <figcaption style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 7 }}>
-        <span style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 28, fontWeight: 800, lineHeight: 1 }}>
+      <figcaption style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "var(--stamp-v2-padding)" }}>
+        <span style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: "14.45cqi", fontWeight: 800, lineHeight: 1 }}>
           TYO
         </span>
-        <span style={{ display: "flex", flexDirection: "column", fontFamily: "var(--font-barlow), sans-serif", fontSize: 16, fontWeight: 600, lineHeight: 0.85 }}>
+        <span style={{ display: "flex", flexDirection: "column", fontFamily: "var(--font-barlow), sans-serif", fontSize: "8.075cqi", fontWeight: 600, lineHeight: 0.85 }}>
           <span className="sr-only">2026</span>
           <span aria-hidden="true">20</span>
           <span aria-hidden="true">26</span>
@@ -39,10 +39,11 @@ function Artwork() {
 }
 
 // Uses the JetBrains Mono and Barlow font variables from the root layout.
-// The image stays square, with a paper border and caption underneath.
+// The stamp fits its content. One inset spaces the border and caption equally.
+// cqi units are relative to the stamp's width. Use aspectRatio for a fixed frame.
 export function SingleStamp() {
   return (
-    <StampV2 stampWidth={184} aspectRatio={4 / 5} padding="7.5%">
+    <StampV2 stampWidth={184} padding="7.5cqi">
       <Artwork />
     </StampV2>
   );

@@ -1,12 +1,37 @@
 import Image from "next/image";
+import dublin from "@/public/experiments/stamp-v2/dublin.png";
+import sanFrancisco from "@/public/experiments/stamp-v2/san-francisco.png";
 import tokyo from "@/public/experiments/stamp-v2/tokyo.png";
 import styles from "./stamp-artwork.module.css";
 
-export const stampDesigns = ["01", "02", "03", "04"].map((value) => ({
-  id: `tokyo-${value}`,
+const tokyoDesign = {
   city: "TYO",
   year: "2026",
-}));
+  image: tokyo,
+  alt: "Purple illustration of Tokyo's skyline, Mount Fuji and cherry blossoms",
+  ink: "#512181",
+};
+
+export const stampDesigns = [
+  { ...tokyoDesign, id: "tokyo-01" },
+  {
+    id: "dublin",
+    city: "DUB",
+    year: "2026",
+    image: dublin,
+    alt: "Green illustration of Dublin's River Liffey, a bridge and the Spire",
+    ink: "#00562e",
+  },
+  {
+    id: "san-francisco",
+    city: "SFO",
+    year: "2026",
+    image: sanFrancisco,
+    alt: "Blue illustration of San Francisco's Bay Bridge and skyline",
+    ink: "#225da0",
+  },
+  { ...tokyoDesign, id: "tokyo-04" },
+];
 
 export function StampArtwork({
   design,
@@ -14,12 +39,16 @@ export function StampArtwork({
   design: (typeof stampDesigns)[number];
 }) {
   return (
-    <figure className={styles.artwork} data-design={design.id}>
+    <figure
+      className={styles.artwork}
+      data-design={design.id}
+      style={{ color: design.ink }}
+    >
       <Image
-        alt="Purple illustration of Tokyo's skyline, Mount Fuji and cherry blossoms"
+        alt={design.alt}
         className={styles.image}
         sizes="(max-width: 480px) 40vw, 160px"
-        src={tokyo}
+        src={design.image}
       />
       <figcaption className={styles.caption}>
         <span className={styles.city}>{design.city}</span>

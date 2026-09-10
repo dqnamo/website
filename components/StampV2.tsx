@@ -16,10 +16,11 @@ export type StampV2Props = Omit<ComponentPropsWithoutRef<"div">, "children"> & {
   children: ReactNode;
   /** Preferred width of each stamp. The whole sheet shrinks to fit its parent. */
   stampWidth?: CssLength;
-  /** Width / height of each stamp. */
+  /** Optional width / height. Omit to fit the stamp to its content. */
   aspectRatio?: number;
   paper?: string;
   ink?: string;
+  /** Paper inset. cqi units stay relative to each stamp's width. */
   padding?: CssLength;
   perforationRadius?: CssLength;
   horizontalPerforations?: number;
@@ -69,10 +70,10 @@ export function StampSheet({
   children,
   columns = 2,
   stampWidth = 184,
-  aspectRatio = 4 / 5,
+  aspectRatio,
   paper = "#fffdf7",
   ink = "#292820",
-  padding = "7.5%",
+  padding = "7.5cqi",
   perforationRadius = 2.5,
   horizontalPerforations = 16,
   verticalPerforations = 20,
@@ -95,7 +96,8 @@ export function StampSheet({
   const rootStyle: StampStyle = {
     "--stamp-v2-columns": resolvedColumns,
     "--stamp-v2-width": cssLength(stampWidth),
-    "--stamp-v2-ratio": positiveNumber(aspectRatio, 4 / 5),
+    "--stamp-v2-ratio":
+      aspectRatio === undefined ? "auto" : positiveNumber(aspectRatio, 4 / 5),
     "--stamp-v2-paper": paper,
     "--stamp-v2-ink": ink,
     "--stamp-v2-padding": cssLength(padding),
@@ -114,6 +116,7 @@ export function StampSheet({
   return (
     <div
       className={[styles.root, className].filter(Boolean).join(" ")}
+      data-fixed-aspect={aspectRatio === undefined ? undefined : "true"}
       data-tug={tugOnHover ? "true" : undefined}
       style={rootStyle}
       {...props}

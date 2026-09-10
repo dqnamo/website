@@ -22,6 +22,7 @@
   --mirror-x: calc(var(--corner-x) * var(--reading-direction));
 
   position: relative;
+  container-type: inline-size;
   min-width: 0;
   aspect-ratio: var(--stamp-v2-ratio);
 }
@@ -41,14 +42,12 @@
 /* Build one outward pull from the bottom-right corner. Mirror the paper,
    then counter-mirror its content to preserve text and image orientation. */
 .surface {
-  position: absolute;
-  inset: 0;
+  position: relative;
   transform: scale(var(--mirror-x), var(--corner-y));
 }
 
 .tug {
-  position: absolute;
-  inset: 0;
+  position: relative;
 }
 
 .paper {
@@ -58,7 +57,7 @@
   position: relative;
   display: grid;
   width: 100%;
-  height: 100%;
+  height: auto;
   padding: var(--stamp-v2-padding);
   overflow: hidden;
   background: var(--stamp-v2-paper);
@@ -92,6 +91,18 @@
     100% var(--step-y);
   mask-repeat: repeat;
   mask-composite: intersect;
+}
+
+/* Content sets the natural height; an explicit aspect ratio can still
+   provide a fixed frame for artwork that needs to fill available space. */
+.root[data-fixed-aspect="true"] .surface {
+  position: absolute;
+  inset: 0;
+}
+
+.root[data-fixed-aspect="true"] .tug,
+.root[data-fixed-aspect="true"] .paper {
+  height: 100%;
 }
 
 .content {
