@@ -72,7 +72,7 @@ export function StampSheet({
   aspectRatio = 4 / 5,
   paper = "#fffdf7",
   ink = "#292820",
-  padding = "7.5%",
+  padding = "4%",
   perforationRadius = 2.5,
   horizontalPerforations = 16,
   verticalPerforations = 20,

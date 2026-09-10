@@ -4,8 +4,8 @@ import styles from "./stamp-artwork.module.css";
 
 export const stampDesigns = ["01", "02", "03", "04"].map((value) => ({
   id: `tokyo-${value}`,
-  title: "Tokyo",
-  value,
+  city: "TYO",
+  year: "2026",
 }));
 
 export function StampArtwork({
@@ -22,11 +22,12 @@ export function StampArtwork({
         src={tokyo}
       />
       <figcaption className={styles.caption}>
-        <div>
-          <span className={styles.title}>{design.title}</span>
-          <span className={styles.collection}>Japan · 2026</span>
-        </div>
-        <span className={styles.value}>{design.value}</span>
+        <span className={styles.city}>{design.city}</span>
+        <span className={styles.year}>
+          <span className="sr-only">{design.year}</span>
+          <span aria-hidden="true">{design.year.slice(0, 2)}</span>
+          <span aria-hidden="true">{design.year.slice(2)}</span>
+        </span>
       </figcaption>
     </figure>
   );

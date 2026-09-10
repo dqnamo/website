@@ -22,31 +22,25 @@
   align-items: center;
   justify-content: space-between;
   gap: 4cqi;
-  padding-block-start: 5cqi;
+  padding-block-start: 4cqi;
 }
 
-.title {
+.city {
   display: block;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 14cqi;
-  line-height: 1.1;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 17cqi;
+  font-weight: 800;
+  line-height: 1;
   letter-spacing: -0.045em;
 }
 
-.collection {
-  display: block;
-  margin-block-start: 2cqi;
-  font-family: var(--font-jetbrains-mono), monospace;
-  font-size: 4.5cqi;
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.value {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 17cqi;
-  line-height: 1;
-  letter-spacing: -0.075em;
+.year {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-barlow), sans-serif;
+  font-size: 9.5cqi;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 0.85;
+  letter-spacing: -0.025em;
 }

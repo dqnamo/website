@@ -24,22 +24,25 @@ function Artwork() {
         sizes="160px"
         style={{ display: "block", width: "100%", height: "auto", aspectRatio: "1" }}
       />
-      <figcaption style={{ paddingTop: 8 }}>
-        <div style={{ fontFamily: "Georgia, serif", fontSize: 20, lineHeight: 1.1 }}>
-          Tokyo
-        </div>
-        <div style={{ marginTop: 3, fontSize: 8, letterSpacing: "0.06em" }}>
-          JAPAN · 2026
-        </div>
+      <figcaption style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 7 }}>
+        <span style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 28, fontWeight: 800, lineHeight: 1 }}>
+          TYO
+        </span>
+        <span style={{ display: "flex", flexDirection: "column", fontFamily: "var(--font-barlow), sans-serif", fontSize: 16, fontWeight: 600, lineHeight: 0.85 }}>
+          <span className="sr-only">2026</span>
+          <span aria-hidden="true">20</span>
+          <span aria-hidden="true">26</span>
+        </span>
       </figcaption>
     </figure>
   );
 }
 
-// The image stays square; the taller stamp leaves room for the caption.
+// Uses the JetBrains Mono and Barlow font variables from the root layout.
+// The image stays square, with a thin paper border and caption underneath.
 export function SingleStamp() {
   return (
-    <StampV2 stampWidth={184} aspectRatio={4 / 5}>
+    <StampV2 stampWidth={184} aspectRatio={4 / 5} padding="4%">
       <Artwork />
     </StampV2>
   );
