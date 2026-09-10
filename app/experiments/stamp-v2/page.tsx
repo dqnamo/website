@@ -25,7 +25,7 @@ export function SingleStamp() {
 
 // Each direct child is one stamp. Two columns + four children = 2 × 2.
 // Use two children for a strip, or columns={1} for a vertical strip.
-// Hover gently peels the paper. Set peelOnHover={false} to keep it flat.
+// Hover peels back a corner. Set peelOnHover={false} to keep it flat.
 export function ConnectedSheet() {
   return (
     <StampSheet columns={2} stampWidth={184} paper="#fffdf7">

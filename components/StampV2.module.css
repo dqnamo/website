@@ -15,17 +15,38 @@
   isolation: isolate;
 }
 
-/* The slot stays still so the moving paper never loses its hover target. */
 .stamp {
+  --corner-fraction: min(0.56, calc(0.56 / var(--stamp-v2-ratio)));
+  --corner-x: 1;
+  --corner-y: 1;
+  --reading-direction: 1;
+  --mirror-x: calc(var(--corner-x) * var(--reading-direction));
+  --cut-x: calc(100% * var(--corner-fraction));
+  --cut-y: calc(100% * var(--corner-fraction) * var(--stamp-v2-ratio));
+
   position: relative;
   min-width: 0;
   aspect-ratio: var(--stamp-v2-ratio);
 }
 
-.lift {
+.stamp[data-corner$="start"] {
+  --corner-x: -1;
+}
+
+.stamp[data-corner^="top"] {
+  --corner-y: -1;
+}
+
+.stamp:dir(rtl) {
+  --reading-direction: -1;
+}
+
+/* Build one bottom-right fold and mirror its geometry to the chosen corner.
+   Counter-mirror the content so text and images always keep their orientation. */
+.surface {
   position: absolute;
   inset: 0;
-  transform-origin: 50% 0;
+  transform: scale(var(--mirror-x), var(--corner-y));
 }
 
 .paper {
@@ -40,8 +61,7 @@
   overflow: hidden;
   background: var(--stamp-v2-paper);
 
-  /* Matching half-holes meet at the seams when flat. Each paper carries its
-     own mask so the perforations travel with it as it lifts from the sheet. */
+  /* Aligned half-holes make full perforations between neighbouring stamps. */
   mask-image:
     radial-gradient(
       circle at 50% 0,
@@ -77,91 +97,101 @@
   min-width: 0;
   min-height: 0;
   overflow: hidden;
+  transform: scale(var(--mirror-x), var(--corner-y));
+}
+
+.corner {
+  display: none;
 }
 
 @media (hover: hover) and (pointer: fine) and (
     prefers-reduced-motion: no-preference
   ) {
-  .root[data-peel="true"] .lift {
+  .root[data-peel="true"] .paper {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 100% 100%, 0 100%);
+    transition: clip-path 240ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .root[data-peel="true"] .corner {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: block;
+    width: var(--cut-x);
+    aspect-ratio: 1;
+    pointer-events: none;
+    filter: drop-shadow(2px 5px 4px rgb(31 28 20 / 28%));
+    opacity: 0;
+    transition: opacity 180ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .turn {
+    width: 100%;
+    height: 100%;
+    transform-origin: 50% 50%;
     transition: transform 240ms cubic-bezier(0.23, 1, 0.32, 1);
   }
 
-  .root[data-peel="true"] .stamp::before {
-    position: absolute;
-    inset: 2% 3%;
-    pointer-events: none;
-    background: rgb(30 25 15 / 28%);
-    filter: blur(8px);
-    opacity: 0;
-    content: "";
-    transition:
-      opacity 240ms cubic-bezier(0.23, 1, 0.32, 1),
-      transform 240ms cubic-bezier(0.23, 1, 0.32, 1);
-  }
+  .reverse {
+    width: 100%;
+    height: 100%;
+    background:
+      linear-gradient(
+        135deg,
+        rgb(70 53 24 / 18%) 42%,
+        rgb(70 53 24 / 10%) 50%,
+        rgb(255 255 255 / 42%) 66%,
+        transparent 88%
+      ),
+      var(--stamp-v2-paper);
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
 
-  .root[data-peel="true"] .paper::after {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: linear-gradient(
-      180deg,
-      rgb(42 31 14 / 14%),
-      transparent 18%,
-      rgb(255 255 255 / 30%) 58%,
-      rgb(255 255 255 / 8%) 82%,
-      rgb(42 31 14 / 10%)
-    );
-    opacity: 0;
-    content: "";
-    transition: opacity 240ms cubic-bezier(0.23, 1, 0.32, 1);
+    /* The back has the same hole spacing as the front. Align the repeating
+       masks to the outer corner, even when the fold ends between two holes. */
+    mask-image:
+      radial-gradient(
+        circle at 100% 50%,
+        transparent var(--stamp-v2-hole),
+        #000 calc(var(--stamp-v2-hole) + 0.5px)
+      ),
+      radial-gradient(
+        circle at 50% 100%,
+        transparent var(--stamp-v2-hole),
+        #000 calc(var(--stamp-v2-hole) + 0.5px)
+      );
+    mask-size:
+      100%
+      calc(
+        100% /
+        (var(--stamp-v2-down) * var(--corner-fraction) * var(--stamp-v2-ratio))
+      ),
+      calc(100% / (var(--stamp-v2-across) * var(--corner-fraction))) 100%;
+    mask-position: 100% 100%;
+    mask-repeat: repeat;
+    mask-composite: intersect;
   }
 
   .root[data-peel="true"] .stamp:hover {
     z-index: 2;
   }
 
-  .root[data-peel="true"] .stamp:hover::before {
+  .root[data-peel="true"] .stamp:hover .paper {
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      100% calc(100% - var(--cut-y)),
+      calc(100% - var(--cut-x)) 100%,
+      0 100%
+    );
+  }
+
+  .root[data-peel="true"] .stamp:hover .corner {
     opacity: 1;
-    transform: translateY(9px) scale(0.96);
   }
 
-  .root[data-peel="true"] .stamp:hover .paper::after {
-    opacity: 1;
-  }
-
-  .root[data-peel="true"] .stamp[data-hinge="top"]:hover .lift {
-    transform: perspective(1200px) rotateX(32deg);
-  }
-
-  .stamp[data-hinge="bottom"] .lift {
-    transform-origin: 50% 100%;
-  }
-
-  .root[data-peel="true"] .stamp[data-hinge="bottom"]:hover .lift {
-    transform: perspective(1200px) rotateX(-32deg);
-  }
-
-  .stamp[data-hinge="bottom"] .paper::after {
-    transform: rotate(180deg);
-  }
-
-  .stamp[data-hinge="start"]:dir(ltr) .lift,
-  .stamp[data-hinge="end"]:dir(rtl) .lift {
-    transform-origin: 0 50%;
-  }
-
-  .root[data-peel="true"] .stamp[data-hinge="start"]:dir(ltr):hover .lift,
-  .root[data-peel="true"] .stamp[data-hinge="end"]:dir(rtl):hover .lift {
-    transform: perspective(1200px) rotateY(-32deg);
-  }
-
-  .stamp[data-hinge="end"]:dir(ltr) .lift,
-  .stamp[data-hinge="start"]:dir(rtl) .lift {
-    transform-origin: 100% 50%;
-  }
-
-  .root[data-peel="true"] .stamp[data-hinge="end"]:dir(ltr):hover .lift,
-  .root[data-peel="true"] .stamp[data-hinge="start"]:dir(rtl):hover .lift {
-    transform: perspective(1200px) rotateY(32deg);
+  /* Only the triangular corner rotates. Its diagonal hinge and the rest of
+     the paper stay in place; the free tip moves toward the viewer. */
+  .root[data-peel="true"] .stamp:hover .turn {
+    transform: perspective(800px) rotate3d(1, -1, 0, 135deg);
   }
 }

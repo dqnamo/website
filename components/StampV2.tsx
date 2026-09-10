@@ -25,7 +25,7 @@ export type StampV2Props = Omit<ComponentPropsWithoutRef<"div">, "children"> & {
   horizontalPerforations?: number;
   verticalPerforations?: number;
   contentClassName?: string;
-  /** Gently lift a stamp from its attached edge on devices with hover. */
+  /** Peel a corner forward while the rest of the stamp stays attached. */
   peelOnHover?: boolean;
 };
 
@@ -42,11 +42,10 @@ function positiveNumber(value: number, fallback: number) {
   return Number.isFinite(value) && value > 0 ? value : fallback;
 }
 
-function attachedEdge(index: number, columns: number, count: number) {
-  if (index >= columns) return "top";
-  if (index + columns < count) return "bottom";
-  if (index % columns > 0) return "start";
-  return columns > 1 ? "end" : "top";
+function peelCorner(index: number, columns: number) {
+  const vertical = index >= columns ? "top" : "bottom";
+  const horizontal = index % columns > 0 ? "start" : "end";
+  return `${vertical}-${horizontal}`;
 }
 
 /** Matching perforations join the stamps into a sheet. No DOM measurement. */
@@ -104,10 +103,10 @@ export function StampSheet({
         {stamps.map((content, index) => (
           <div
             className={styles.stamp}
-            data-hinge={attachedEdge(index, resolvedColumns, stamps.length)}
+            data-corner={peelCorner(index, resolvedColumns)}
             key={isValidElement(content) ? content.key : index}
           >
-            <div className={styles.lift}>
+            <div className={styles.surface}>
               <div className={styles.paper}>
                 <div
                   className={[styles.content, contentClassName]
@@ -115,6 +114,11 @@ export function StampSheet({
                     .join(" ")}
                 >
                   {content}
+                </div>
+              </div>
+              <div aria-hidden="true" className={styles.corner}>
+                <div className={styles.turn}>
+                  <div className={styles.reverse} />
                 </div>
               </div>
             </div>
