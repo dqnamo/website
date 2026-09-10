@@ -43,7 +43,7 @@ function DockTooltip({
       />
       <Tooltip.Portal>
         <Tooltip.Positioner sideOffset={8}>
-          <Tooltip.Popup>{label}</Tooltip.Popup>
+          <Tooltip.Popup data-recording-hide="">{label}</Tooltip.Popup>
         </Tooltip.Positioner>
       </Tooltip.Portal>
     </Tooltip.Root>
@@ -77,7 +77,7 @@ function ThemeButton() {
       </Tooltip.Trigger>
       <Tooltip.Portal>
         <Tooltip.Positioner sideOffset={8}>
-          <Tooltip.Popup>{label}</Tooltip.Popup>
+          <Tooltip.Popup data-recording-hide="">{label}</Tooltip.Popup>
         </Tooltip.Positioner>
       </Tooltip.Portal>
     </Tooltip.Root>
@@ -91,7 +91,10 @@ export function BottomDock() {
   const isSiteDark = resolvedTheme === "dark";
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-[max(1rem,env(safe-area-inset-bottom))] z-100 flex justify-center px-3">
+    <div
+      className="pointer-events-none fixed inset-x-0 bottom-[max(1rem,env(safe-area-inset-bottom))] z-100 flex justify-center px-3"
+      data-recording-hide=""
+    >
       <Tooltip.Provider>
         <div
           className={cn(
