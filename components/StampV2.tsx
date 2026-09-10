@@ -170,19 +170,19 @@ export function StampSheet({
                   exit: {
                     opacity: 0,
                     scale: shouldAnimate ? 0.6 : 1,
-                    transition: { duration: shouldAnimate ? 0.16 : 0 },
+                    transition: { duration: shouldAnimate ? 0.12 : 0 },
                   },
                   transition: {
-                    layout: { type: "spring", duration: 0.4, bounce: 0.12 },
+                    layout: { type: "spring", duration: 0.3, bounce: 0.12 },
                     scale: {
                       type: "spring",
-                      duration: shouldAnimate ? 0.32 : 0,
+                      duration: shouldAnimate ? 0.24 : 0,
                       bounce: 0.2,
-                      delay: shouldAnimate ? 0.12 + index * 0.035 : 0,
+                      delay: shouldAnimate ? 0.08 + index * 0.025 : 0,
                     },
                     opacity: {
-                      duration: shouldAnimate ? 0.14 : 0,
-                      delay: shouldAnimate ? 0.12 + index * 0.035 : 0,
+                      duration: shouldAnimate ? 0.1 : 0,
+                      delay: shouldAnimate ? 0.08 + index * 0.025 : 0,
                     },
                   },
                 })}
