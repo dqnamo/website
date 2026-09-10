@@ -25,6 +25,7 @@
   container-type: inline-size;
   min-width: 0;
   aspect-ratio: var(--stamp-v2-ratio);
+  cursor: pointer;
 }
 
 .stamp[data-corner$="start"] {
