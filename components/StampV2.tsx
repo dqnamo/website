@@ -160,6 +160,11 @@ export function StampSheet({
 
   const layoutColumns = shouldAnimate ? layout.columns : resolvedColumns;
   const layoutCount = shouldAnimate ? layout.count : stamps.length;
+  const movementSpring = {
+    type: "spring" as const,
+    duration: stamps.length === 1 ? 0.36 : 0.3,
+    bounce: stamps.length === 1 ? 0.08 : 0.12,
+  };
   const Stamp = onStampDetach
     ? motion.button
     : animateLayout
@@ -280,7 +285,7 @@ export function StampSheet({
                       transition: {
                         type: "tween",
                         duration: 0.22,
-                        ease: [0.77, 0, 0.175, 1],
+                        ease: [0.23, 1, 0.32, 1],
                       },
                     },
                   },
@@ -304,10 +309,9 @@ export function StampSheet({
                     transition: { duration: shouldAnimate ? 0.12 : 0 },
                   },
                   transition: {
-                    type: "spring",
-                    duration: shouldAnimate ? 0.3 : 0,
-                    bounce: 0.12,
-                    layout: { type: "spring", duration: 0.3, bounce: 0.12 },
+                    ...movementSpring,
+                    duration: shouldAnimate ? movementSpring.duration : 0,
+                    layout: movementSpring,
                     scale: {
                       type: "spring",
                       duration: shouldAnimate ? 0.24 : 0,
