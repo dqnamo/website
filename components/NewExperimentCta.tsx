@@ -677,7 +677,7 @@ export function ExperimentPreview({
         <StampSheet
           columns={2}
           horizontalPerforations={8}
-          peelOnHover={false}
+          tugOnHover={false}
           perforationRadius={0.9}
           stampWidth={44}
           verticalPerforations={10}

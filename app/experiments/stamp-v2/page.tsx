@@ -12,8 +12,7 @@ export const metadata: Metadata = {
 
 const example = `import { StampSheet, StampV2 } from "@/components/StampV2";
 
-// Use decorative artwork: the folded corner renders a second, inert copy.
-// Keep stateful controls outside, or set peelOnHover={false}.
+// Any React content fits inside the frame and renders once.
 export function SingleStamp() {
   return (
     <StampV2 stampWidth={184}>
@@ -26,7 +25,7 @@ export function SingleStamp() {
 
 // Each direct child is one stamp. Two columns + four children = 2 × 2.
 // Use two children for a strip, or columns={1} for a vertical strip.
-// Hover peels back a corner. Set peelOnHover={false} to keep it flat.
+// Hover gently tugs the outside corner. Set tugOnHover={false} to keep it flat.
 export function ConnectedSheet() {
   return (
     <StampSheet columns={2} stampWidth={184} paper="#fffdf7">

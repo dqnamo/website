@@ -16,13 +16,10 @@
 }
 
 .stamp {
-  --corner-fraction: min(0.4, calc(0.4 / var(--stamp-v2-ratio)));
   --corner-x: 1;
   --corner-y: 1;
   --reading-direction: 1;
   --mirror-x: calc(var(--corner-x) * var(--reading-direction));
-  --cut-x: calc(100% * var(--corner-fraction));
-  --cut-y: calc(100% * var(--corner-fraction) * var(--stamp-v2-ratio));
 
   position: relative;
   min-width: 0;
@@ -41,12 +38,17 @@
   --reading-direction: -1;
 }
 
-/* Build one bottom-right fold and mirror its geometry to the chosen corner.
-   Counter-mirror the content so text and images always keep their orientation. */
+/* Build one outward pull from the bottom-right corner. Mirror the paper,
+   then counter-mirror its content to preserve text and image orientation. */
 .surface {
   position: absolute;
   inset: 0;
   transform: scale(var(--mirror-x), var(--corner-y));
+}
+
+.tug {
+  position: absolute;
+  inset: 0;
 }
 
 .paper {
@@ -100,86 +102,74 @@
   transform: scale(var(--mirror-x), var(--corner-y));
 }
 
-.corner {
+.connections {
   display: none;
+  pointer-events: none;
 }
 
 @media (hover: hover) and (pointer: fine) and (
     prefers-reduced-motion: no-preference
   ) {
-  /* The seam never moves. The clips meet with a subpixel overlap to avoid
-     an antialiased hairline when flat; the corner's artwork moves with it. */
-  .root[data-peel="true"] .surface > .paper {
-    clip-path: polygon(
-      0 0,
-      100% 0,
-      100% calc(100% - var(--cut-y) + 0.75px),
-      calc(100% - var(--cut-x) + 0.75px) 100%,
-      0 100%
-    );
-  }
-
-  .root[data-peel="true"] .corner {
+  /* Keep the first third of each joined edge in place. These masked paper
+     bridges stay under the moving stamp; only the outer seam opens up. */
+  .root[data-tug="true"] .connections {
     position: absolute;
     inset: 0;
     display: block;
-    pointer-events: none;
+  }
+
+  .stamp[data-joined="inline"] .connections {
+    clip-path: polygon(0 0, 2% 0, 2% 34%, 0 34%);
+  }
+
+  .stamp[data-joined="block"] .connections {
+    clip-path: polygon(0 0, 34% 0, 34% 2%, 0 2%);
+  }
+
+  .stamp[data-joined="inline block"] .connections {
+    clip-path: polygon(0 0, 34% 0, 34% 2%, 2% 2%, 2% 34%, 0 34%);
+  }
+
+  .root[data-tug="true"] .tug {
+    transform-origin: 0 0;
+    transform: perspective(650px) rotate3d(1, -1, 0, 0deg) skew(0deg, 0deg);
     filter: drop-shadow(0 0 0 rgb(31 28 20 / 0%));
-    transition: filter 400ms cubic-bezier(0.23, 1, 0.32, 1);
+    transition:
+      transform 400ms cubic-bezier(0.23, 1, 0.32, 1),
+      filter 400ms cubic-bezier(0.23, 1, 0.32, 1);
   }
 
-  .turn {
-    width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
-    transform-origin: calc(100% - var(--cut-x) / 2)
-      calc(100% - var(--cut-y) / 2);
-    transform: perspective(800px) rotate3d(1, -1, 0, 0deg);
-    transition: transform 400ms cubic-bezier(0.23, 1, 0.32, 1);
-  }
-
-  .front,
-  .reverse {
+  /* A broad, faint highlight suggests tension across the paper's face,
+     without drawing a fold line or changing the artwork itself. */
+  .root[data-tug="true"] .tug > .paper::after {
     position: absolute;
     inset: 0;
-    backface-visibility: hidden;
-  }
-
-  .front {
-    clip-path: polygon(
-      100% calc(100% - var(--cut-y)),
-      100% 100%,
-      calc(100% - var(--cut-x)) 100%
+    background: linear-gradient(
+      135deg,
+      rgb(47 38 24 / 9%),
+      transparent 28%,
+      rgb(255 255 255 / 12%) 62%,
+      transparent
     );
+    content: "";
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 400ms cubic-bezier(0.23, 1, 0.32, 1);
   }
 
-  /* Mirror the back's clip before turning it over: both faces then occupy
-     exactly the same triangle and share the same perforation spacing. */
-  .reverse {
-    background:
-      linear-gradient(
-        225deg,
-        rgb(70 53 24 / 18%),
-        rgb(255 255 255 / 42%) 65%,
-        transparent
-      )
-      bottom left / var(--cut-x) var(--cut-y) no-repeat,
-      var(--stamp-v2-paper);
-    clip-path: polygon(0 calc(100% - var(--cut-y)), var(--cut-x) 100%, 0 100%);
-    transform: rotateY(180deg);
-  }
-
-  .root[data-peel="true"] .stamp:hover {
+  .root[data-tug="true"] .stamp:hover {
     z-index: 2;
   }
 
-  .root[data-peel="true"] .stamp:hover .corner {
-    filter: drop-shadow(2px 5px 4px rgb(31 28 20 / 28%));
+  /* The inner corner stays fixed while the free corner moves out and toward
+     the viewer. Small shear opens a tapered gap along the perforations. */
+  .root[data-tug="true"] .stamp:hover .tug {
+    transform: perspective(650px) rotate3d(1, -1, 0, 4.5deg)
+      skew(0.9deg, 0.7deg);
+    filter: drop-shadow(0 2px 3px rgb(31 28 20 / 20%));
   }
 
-  /* One rotation carries both the printed face and the paper back.
-     The browser switches the visible face as it crosses the edge-on position. */
-  .root[data-peel="true"] .stamp:hover .turn {
-    transform: perspective(800px) rotate3d(1, -1, 0, 135deg);
+  .root[data-tug="true"] .stamp:hover .tug > .paper::after {
+    opacity: 1;
   }
 }

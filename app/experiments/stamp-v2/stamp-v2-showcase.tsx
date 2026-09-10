@@ -59,7 +59,7 @@ export function StampV2Showcase() {
           ) : (
             <>
               <span className={styles.hoverHint}>
-                Hover a stamp to peel back a corner.
+                Hover a stamp to give it a little tug.
               </span>
               <span className={styles.staticHint}>
                 A little collection. Still connected.
