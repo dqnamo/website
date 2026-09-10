@@ -16,10 +16,15 @@ export type SourcePanelTab = {
 
 type SourcePanelProps = {
   defaultValue?: string;
+  tabClassName?: string;
   tabs: SourcePanelTab[];
 };
 
-export function SourcePanel({ defaultValue, tabs }: SourcePanelProps) {
+export function SourcePanel({
+  defaultValue,
+  tabClassName = "font-mono font-semibold",
+  tabs,
+}: SourcePanelProps) {
   const initialValue = defaultValue ?? tabs[0]?.value ?? "";
   const [activeTab, setActiveTab] = useState(initialValue);
   const [copied, setCopied] = useState(false);
@@ -53,7 +58,7 @@ export function SourcePanel({ defaultValue, tabs }: SourcePanelProps) {
           <Tabs.List className="min-w-max">
             {tabs.map((tab) => (
               <Tabs.Tab
-                className="font-mono font-semibold"
+                className={tabClassName}
                 key={tab.value}
                 value={tab.value}
               >

@@ -5,6 +5,16 @@ body {
   position: relative;
 }
 
+/* Keep the recording frame steady when its navigation chrome is hidden. */
+html[data-recording] [data-recording-hide] {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+html[data-recording] nextjs-portal {
+  display: none;
+}
+
 @keyframes logo-trace-loader-loop {
   to {
     stroke-dashoffset: -1;
