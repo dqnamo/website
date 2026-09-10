@@ -93,6 +93,17 @@
   mask-composite: intersect;
 }
 
+/* A static grain sits beneath the artwork and lettering, clipped with the paper. */
+.paper::before {
+  position: absolute;
+  inset: 0;
+  background-image: url("/textures/plastic-noise.svg");
+  background-size: 180px 180px;
+  opacity: 0.05;
+  pointer-events: none;
+  content: "";
+}
+
 /* Content sets the natural height; an explicit aspect ratio can still
    provide a fixed frame for artwork that needs to fill available space. */
 .root[data-fixed-aspect="true"] .surface {
