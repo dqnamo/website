@@ -42,9 +42,13 @@ function positiveNumber(value: number, fallback: number) {
   return Number.isFinite(value) && value > 0 ? value : fallback;
 }
 
-function peelCorner(index: number, columns: number) {
-  const vertical = index >= columns ? "top" : "bottom";
-  const horizontal = index % columns > 0 ? "start" : "end";
+function peelCorner(index: number, columns: number, count: number) {
+  const rows = Math.ceil(count / columns);
+  const row = Math.floor(index / columns);
+  // Reach in from the outside of the sheet, away from its shared centre.
+  const vertical = rows === 1 || row >= rows / 2 ? "bottom" : "top";
+  const horizontal =
+    columns === 1 || index % columns >= columns / 2 ? "end" : "start";
   return `${vertical}-${horizontal}`;
 }
 
@@ -103,7 +107,7 @@ export function StampSheet({
         {stamps.map((content, index) => (
           <div
             className={styles.stamp}
-            data-corner={peelCorner(index, resolvedColumns)}
+            data-corner={peelCorner(index, resolvedColumns, stamps.length)}
             key={isValidElement(content) ? content.key : index}
           >
             <div className={styles.surface}>
