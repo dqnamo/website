@@ -12,12 +12,15 @@ export default function KitchenPage() {
     <main className="mx-auto max-w-4xl">
       <div className="p-8">
         <header className="px-3">
-          <h1 className="font-pirata font-bold text-4xl">
+          <h1 className="font-pirata font-bold text-4xl" data-recording-hide="">
             <Link className="text-grayscale-12" href="/">
               dqnamo&apos;s
             </Link>
           </h1>
-          <p className="font-medium font-sans text-sm text-grayscale-10">
+          <p
+            className="font-medium font-sans text-sm text-grayscale-10"
+            data-recording-hide=""
+          >
             Kitchen
           </p>
           <p className="mt-8 max-w-md text-pretty text-grayscale-10 text-sm leading-5">
