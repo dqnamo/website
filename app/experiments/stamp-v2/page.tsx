@@ -39,10 +39,10 @@ function Artwork() {
 }
 
 // Uses the JetBrains Mono and Barlow font variables from the root layout.
-// The image stays square, with a thin paper border and caption underneath.
+// The image stays square, with a paper border and caption underneath.
 export function SingleStamp() {
   return (
-    <StampV2 stampWidth={184} aspectRatio={4 / 5} padding="4%">
+    <StampV2 stampWidth={184} aspectRatio={4 / 5} padding="7.5%">
       <Artwork />
     </StampV2>
   );
