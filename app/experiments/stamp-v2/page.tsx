@@ -10,30 +10,48 @@ export const metadata: Metadata = {
     "A little postage, made of paper and perforations. One stamp or a connected sheet, shaped entirely with CSS.",
 };
 
-const example = `import { StampSheet, StampV2 } from "@/components/StampV2";
+const example = `import Image from "next/image";
+import { StampSheet, StampV2 } from "@/components/StampV2";
 
-// Any React content fits inside the frame and renders once.
+function Artwork() {
+  return (
+    <figure style={{ margin: 0, color: "#512181" }}>
+      <Image
+        src="/experiments/stamp-v2/tokyo.png"
+        alt="Tokyo skyline, Mount Fuji and cherry blossoms"
+        width={1254}
+        height={1254}
+        sizes="160px"
+        style={{ display: "block", width: "100%", height: "auto", aspectRatio: "1" }}
+      />
+      <figcaption style={{ paddingTop: 8 }}>
+        <div style={{ fontFamily: "Georgia, serif", fontSize: 20, lineHeight: 1.1 }}>
+          Tokyo
+        </div>
+        <div style={{ marginTop: 3, fontSize: 8, letterSpacing: "0.06em" }}>
+          JAPAN · 2026
+        </div>
+      </figcaption>
+    </figure>
+  );
+}
+
+// The image stays square; the taller stamp leaves room for the caption.
 export function SingleStamp() {
   return (
-    <StampV2 stampWidth={184}>
-      <div style={{ height: "100%", background: "#b6d6d6", padding: 16 }}>
-        A little elsewhere.
-      </div>
+    <StampV2 stampWidth={184} aspectRatio={4 / 5}>
+      <Artwork />
     </StampV2>
   );
 }
 
 // Each direct child is one stamp. Two columns + four children = 2 × 2.
 // Use two children for a strip, or columns={1} for a vertical strip.
-// Hover gently tugs the outside corner. Set tugOnHover={false} to keep it flat.
+// Set tugOnHover={false} to keep it flat.
 export function ConnectedSheet() {
   return (
     <StampSheet columns={2} stampWidth={184} paper="#fffdf7">
-      {["#ebbe7c", "#b6d6d6", "#c7cba6", "#75819a"].map((color, index) => (
-        <div key={color} style={{ height: "100%", background: color, padding: 16 }}>
-          {String(index + 1).padStart(2, "0")}
-        </div>
-      ))}
+      {[1, 2, 3, 4].map((number) => <Artwork key={number} />)}
     </StampSheet>
   );
 }`;
