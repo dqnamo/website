@@ -3,8 +3,8 @@
   max-width: 100%;
   min-width: 0;
   color: var(--stamp-v2-ink);
-  filter: drop-shadow(0 1px 1px rgb(31 28 20 / 14%))
-    drop-shadow(0 12px 18px rgb(31 28 20 / 12%));
+  /* Keep soft and edge shadows on separate layers; Safari can drop chained filters. */
+  filter: drop-shadow(0 12px 18px rgb(31 28 20 / 12%));
 }
 
 .sheet {
@@ -13,6 +13,7 @@
   grid-auto-rows: 1fr;
   gap: 0;
   isolation: isolate;
+  filter: drop-shadow(0 1px 1px rgb(31 28 20 / 14%));
 }
 
 .stamp {
