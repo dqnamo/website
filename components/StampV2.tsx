@@ -25,6 +25,8 @@ export type StampV2Props = Omit<ComponentPropsWithoutRef<"div">, "children"> & {
   horizontalPerforations?: number;
   verticalPerforations?: number;
   contentClassName?: string;
+  /** Gently lift a stamp from its attached edge on devices with hover. */
+  peelOnHover?: boolean;
 };
 
 export type StampSheetProps = StampV2Props & {
@@ -40,7 +42,14 @@ function positiveNumber(value: number, fallback: number) {
   return Number.isFinite(value) && value > 0 ? value : fallback;
 }
 
-/** One paper surface, one mask, and one shadow for the entire sheet. No measuring. */
+function attachedEdge(index: number, columns: number, count: number) {
+  if (index >= columns) return "top";
+  if (index + columns < count) return "bottom";
+  if (index % columns > 0) return "start";
+  return columns > 1 ? "end" : "top";
+}
+
+/** Matching perforations join the stamps into a sheet. No DOM measurement. */
 export function StampSheet({
   children,
   columns = 2,
@@ -52,6 +61,7 @@ export function StampSheet({
   perforationRadius = 2.5,
   horizontalPerforations = 16,
   verticalPerforations = 20,
+  peelOnHover = true,
   className,
   contentClassName,
   style,
@@ -66,7 +76,6 @@ export function StampSheet({
   );
   const rootStyle: StampStyle = {
     "--stamp-v2-columns": resolvedColumns,
-    "--stamp-v2-rows": Math.ceil(stamps.length / resolvedColumns),
     "--stamp-v2-width": cssLength(stampWidth),
     "--stamp-v2-ratio": positiveNumber(aspectRatio, 4 / 5),
     "--stamp-v2-paper": paper,
@@ -87,6 +96,7 @@ export function StampSheet({
   return (
     <div
       className={[styles.root, className].filter(Boolean).join(" ")}
+      data-peel={peelOnHover ? "true" : undefined}
       style={rootStyle}
       {...props}
     >
@@ -94,14 +104,19 @@ export function StampSheet({
         {stamps.map((content, index) => (
           <div
             className={styles.stamp}
+            data-hinge={attachedEdge(index, resolvedColumns, stamps.length)}
             key={isValidElement(content) ? content.key : index}
           >
-            <div
-              className={[styles.content, contentClassName]
-                .filter(Boolean)
-                .join(" ")}
-            >
-              {content}
+            <div className={styles.lift}>
+              <div className={styles.paper}>
+                <div
+                  className={[styles.content, contentClassName]
+                    .filter(Boolean)
+                    .join(" ")}
+                >
+                  {content}
+                </div>
+              </div>
             </div>
           </div>
         ))}

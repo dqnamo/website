@@ -77,6 +77,22 @@
   line-height: 18px;
 }
 
+.hoverHint {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) and (
+    prefers-reduced-motion: no-preference
+  ) {
+  .hoverHint {
+    display: inline;
+  }
+
+  .staticHint {
+    display: none;
+  }
+}
+
 @media (max-width: 520px) {
   .stage {
     min-height: 390px;

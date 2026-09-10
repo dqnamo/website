@@ -54,9 +54,18 @@ export function StampV2Showcase() {
           ))}
         </fieldset>
         <p aria-live="polite" className={styles.note}>
-          {layout.count === 1
-            ? "One little escape."
-            : "A little collection. Still connected."}
+          {layout.count === 1 ? (
+            "One little escape."
+          ) : (
+            <>
+              <span className={styles.hoverHint}>
+                Hover a stamp to lift it from the sheet.
+              </span>
+              <span className={styles.staticHint}>
+                A little collection. Still connected.
+              </span>
+            </>
+          )}
         </p>
       </div>
     </div>
