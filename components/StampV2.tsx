@@ -8,6 +8,8 @@ import {
   Fragment,
   isValidElement,
   type ReactNode,
+  useLayoutEffect,
+  useRef,
   useState,
 } from "react";
 import styles from "./StampV2.module.css";
@@ -39,6 +41,22 @@ export type StampSheetProps = StampV2Props & {
   columns?: number;
   /** Keep keyed stamps in place through animated additions and removals. */
   animateLayout?: boolean;
+  /** Called after a stamp pulls free. Update the children to keep that stamp. */
+  onStampDetach?: (index: number) => void;
+  /** Accessible name for each detachable stamp, e.g. "Tokyo stamp". */
+  getStampLabel?: (index: number) => string;
+};
+
+type StampTear = {
+  key: string | number;
+  source: string;
+  index: number;
+  corner: string;
+  joined: string;
+  x: number;
+  y: number;
+  rotate: number;
+  phase: "pulling" | "released";
 };
 
 function cssLength(value: CssLength) {
@@ -76,6 +94,8 @@ export function StampSheet({
   children,
   columns = 2,
   animateLayout = false,
+  onStampDetach,
+  getStampLabel,
   stampWidth = 184,
   aspectRatio,
   paper = "#fffdf7",
@@ -91,12 +111,36 @@ export function StampSheet({
   ...props
 }: StampSheetProps) {
   const stamps = Children.toArray(children);
+  const stampKeys = stamps.map((content, index) =>
+    isValidElement(content) ? (content.key ?? index) : index,
+  );
+  const stampSignature = JSON.stringify(stampKeys);
   const resolvedColumns = Math.min(
     Math.max(1, stamps.length),
     Math.max(1, Math.floor(positiveNumber(columns, 2))),
   );
   const reducedMotion = useReducedMotion();
   const shouldAnimate = animateLayout && !reducedMotion;
+  const [tear, setTear] = useState<StampTear | null>(null);
+  const pendingTear = useRef<StampTear | null>(null);
+  useLayoutEffect(() => {
+    pendingTear.current = tear;
+    return () => {
+      pendingTear.current = null;
+    };
+  }, [tear]);
+
+  // A layout change cancels an unfinished pull, including callbacks retained
+  // by an exiting stamp. Restoring the sheet also releases a held tear.
+  if (
+    tear &&
+    (tear.phase === "pulling"
+      ? tear.source !== stampSignature
+      : stamps.length !== 1 || stampKeys[0] !== tear.key)
+  ) {
+    setTear(null);
+  }
+
   const [layout, setLayout] = useState({
     columns: resolvedColumns,
     count: stamps.length,
@@ -116,7 +160,11 @@ export function StampSheet({
 
   const layoutColumns = shouldAnimate ? layout.columns : resolvedColumns;
   const layoutCount = shouldAnimate ? layout.count : stamps.length;
-  const Stamp = animateLayout ? motion.div : "div";
+  const Stamp = onStampDetach
+    ? motion.button
+    : animateLayout
+      ? motion.div
+      : "div";
   const contentClasses = [styles.content, contentClassName]
     .filter(Boolean)
     .join(" ");
@@ -151,28 +199,114 @@ export function StampSheet({
       <div className={styles.sheet}>
         <AnimatePresence
           initial={false}
-          onExitComplete={() =>
-            setLayout({ columns: resolvedColumns, count: stamps.length })
-          }
+          onExitComplete={() => {
+            setLayout({ columns: resolvedColumns, count: stamps.length });
+            if (pendingTear.current?.phase === "released") {
+              pendingTear.current = null;
+              setTear(null);
+            }
+          }}
         >
           {stamps.map((content, index) => {
-            const position = sheetPosition(index, layoutColumns, layoutCount);
+            const key = stampKeys[index];
+            const isTearing = tear?.key === key;
+            const position = isTearing
+              ? tear
+              : sheetPosition(index, layoutColumns, layoutCount);
+            const canDetach = stamps.length > 1 && !tear;
+            const label = getStampLabel?.(index) ?? `Stamp ${index + 1}`;
             return (
               <Stamp
                 className={styles.stamp}
                 data-corner={position.corner}
                 data-joined={position.joined || undefined}
-                key={isValidElement(content) ? content.key : index}
-                {...(animateLayout && {
+                data-ripping={isTearing ? tear.phase : undefined}
+                key={key}
+                {...(onStampDetach && {
+                  type: "button",
+                  "aria-label": canDetach ? `Detach ${label}` : label,
+                  "aria-disabled": !canDetach,
+                  tabIndex: stamps.length > 1 ? 0 : -1,
+                  onClick: (event: React.MouseEvent<HTMLElement>) => {
+                    if (!canDetach || pendingTear.current) return;
+                    if (reducedMotion) {
+                      onStampDetach(index);
+                      return;
+                    }
+                    const direction = event.currentTarget.matches(":dir(rtl)")
+                      ? -1
+                      : 1;
+                    const sheet =
+                      event.currentTarget.parentElement?.parentElement;
+                    const horizontalSpace = sheet?.parentElement
+                      ? (sheet.parentElement.clientWidth - sheet.clientWidth) /
+                        2
+                      : 0;
+                    // Leave room for the paper's rotation inside narrow previews.
+                    const pullDistance = Math.min(
+                      30,
+                      Math.max(7, horizontalSpace),
+                    );
+                    const x = position.corner.endsWith("start") ? -1 : 1;
+                    const y = position.corner.startsWith("top") ? -1 : 1;
+                    const nextTear: StampTear = {
+                      key,
+                      source: stampSignature,
+                      index,
+                      ...position,
+                      x: x * direction * pullDistance,
+                      y:
+                        y *
+                        Math.min(26, event.currentTarget.clientHeight * 0.12),
+                      rotate: x * direction * 3,
+                      phase: "pulling",
+                    };
+                    pendingTear.current = nextTear;
+                    setTear(nextTear);
+                  },
+                })}
+                {...((animateLayout || onStampDetach) && {
                   layout: shouldAnimate,
                   initial: { opacity: 0, scale: shouldAnimate ? 0.6 : 1 },
-                  animate: { opacity: 1, scale: 1 },
+                  animate: isTearing ? "detached" : "rest",
+                  variants: {
+                    rest: { opacity: 1, scale: 1, x: 0, y: 0, rotate: 0 },
+                    detached: {
+                      opacity: 1,
+                      scale: 1,
+                      x: tear?.x ?? 0,
+                      y: tear?.y ?? 0,
+                      rotate: tear?.rotate ?? 0,
+                      transition: {
+                        type: "tween",
+                        duration: 0.22,
+                        ease: [0.77, 0, 0.175, 1],
+                      },
+                    },
+                  },
+                  onAnimationComplete: (definition: unknown) => {
+                    if (
+                      definition !== "detached" ||
+                      !tear ||
+                      tear.key !== key ||
+                      tear.phase !== "pulling" ||
+                      pendingTear.current !== tear
+                    )
+                      return;
+                    const released = { ...tear, phase: "released" as const };
+                    pendingTear.current = released;
+                    setTear(released);
+                    onStampDetach?.(tear.index);
+                  },
                   exit: {
                     opacity: 0,
                     scale: shouldAnimate ? 0.6 : 1,
                     transition: { duration: shouldAnimate ? 0.12 : 0 },
                   },
                   transition: {
+                    type: "spring",
+                    duration: shouldAnimate ? 0.3 : 0,
+                    bounce: 0.12,
                     layout: { type: "spring", duration: 0.3, bounce: 0.12 },
                     scale: {
                       type: "spring",

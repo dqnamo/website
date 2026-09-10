@@ -14,6 +14,14 @@ const layouts = [
 
 export function StampV2Showcase({ children }: { children: ReactNode }) {
   const [layout, setLayout] = useState<(typeof layouts)[number]>(layouts[2]);
+  const [selectedDesign, setSelectedDesign] = useState(stampDesigns[0]);
+  const otherDesigns = stampDesigns
+    .filter((design) => design.id !== selectedDesign.id)
+    .slice(0, layout.count - 1);
+  const visibleDesigns = stampDesigns.filter(
+    (design) =>
+      design.id === selectedDesign.id || otherDesigns.includes(design),
+  );
 
   return (
     <Tabs.Root
@@ -35,8 +43,13 @@ export function StampV2Showcase({ children }: { children: ReactNode }) {
                 : `${layout.columns} by ${layout.count / layout.columns} stamp sheet`
             }
             columns={layout.columns}
+            getStampLabel={(index) => `${visibleDesigns[index].city} stamp`}
+            onStampDetach={(index) => {
+              setSelectedDesign(visibleDesigns[index]);
+              setLayout(layouts[0]);
+            }}
           >
-            {stampDesigns.slice(0, layout.count).map((design) => (
+            {visibleDesigns.map((design) => (
               <StampArtwork design={design} key={design.id} />
             ))}
           </StampSheet>
