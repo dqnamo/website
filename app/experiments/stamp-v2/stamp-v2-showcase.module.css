@@ -2,10 +2,12 @@
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  min-height: 556px;
+  width: 100%;
+  min-height: 620px;
   place-items: center;
   overflow: hidden;
-  padding: 40px 24px;
+  padding: 40px 24px 96px;
+  border-radius: 13px;
   background: var(--color-grayscale-2);
 }
 
@@ -29,17 +31,10 @@
   justify-content: center;
 }
 
-.toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px 24px;
-  padding: 12px 16px;
-  border-top: 1px solid var(--color-grayscale-3);
-}
-
 .layouts {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
   display: flex;
   min-width: 0;
   gap: 2px;
@@ -71,31 +66,9 @@
   outline-offset: 2px;
 }
 
-.note {
-  color: var(--color-grayscale-10);
-  font-size: 12px;
-  line-height: 18px;
-}
-
-.hoverHint {
-  display: none;
-}
-
-@media (hover: hover) and (pointer: fine) and (
-    prefers-reduced-motion: no-preference
-  ) {
-  .hoverHint {
-    display: inline;
-  }
-
-  .staticHint {
-    display: none;
-  }
-}
-
 @media (max-width: 520px) {
   .stage {
-    min-height: 390px;
-    padding: 32px 16px;
+    min-height: 454px;
+    padding: 32px 16px 88px;
   }
 }
