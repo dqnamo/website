@@ -1,0 +1,133 @@
+.artwork {
+  --print-ink: #78422c;
+  --print-paper: #f4dfb6;
+  --sky: #ebbe7c;
+  --sun: #b64b2e;
+  --hill-back: #cc8045;
+  --hill-front: #91482e;
+
+  container-type: inline-size;
+  height: 100%;
+  background: var(--print-paper);
+  color: var(--print-ink);
+}
+
+.artwork[data-design="sea"] {
+  --print-ink: #2f5b64;
+  --print-paper: #deece6;
+  --sky: #b6d6d6;
+  --sun: #f8edc8;
+  --hill-back: #77a9b0;
+  --hill-front: #417b8b;
+}
+
+.artwork[data-design="dune"] {
+  --print-ink: #4d593c;
+  --print-paper: #e6e7cc;
+  --sky: #c7cba6;
+  --sun: #ece3b7;
+  --hill-back: #8f9b6a;
+  --hill-front: #606f4a;
+}
+
+.artwork[data-design="moon"] {
+  --print-ink: #e3dfdc;
+  --print-paper: #424f66;
+  --sky: #75819a;
+  --sun: #ede5cd;
+  --hill-back: #586b80;
+  --hill-front: #354a63;
+}
+
+.print {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  gap: 6cqi;
+  padding: 7cqi;
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--print-ink) 18%, transparent);
+}
+
+.masthead {
+  display: flex;
+  justify-content: space-between;
+  gap: 4cqi;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 4.5cqi;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.landscape {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 50% 50% 0 0;
+  background:
+    radial-gradient(circle at 52% 34%, var(--sun) 0 19%, transparent 19.5%),
+    var(--sky);
+}
+
+.landscape::before,
+.landscape::after {
+  position: absolute;
+  inset: 48% -40% -55% -30%;
+  border-radius: 50%;
+  background: var(--hill-back);
+  content: "";
+  transform: rotate(-27deg);
+}
+
+.landscape::after {
+  inset: 66% -50% -40% -20%;
+  background: var(--hill-front);
+  transform: rotate(18deg);
+}
+
+.artwork[data-design="sea"] .landscape::before {
+  inset-block-start: 61%;
+  transform: rotate(-12deg);
+}
+
+.artwork[data-design="moon"] .landscape {
+  background:
+    radial-gradient(circle at 62% 27%, var(--sky) 0 14%, transparent 14.5%),
+    radial-gradient(circle at 54% 31%, var(--sun) 0 17%, transparent 17.5%),
+    var(--sky);
+}
+
+.caption {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 4cqi;
+}
+
+.collection {
+  display: block;
+  margin-block-end: 2.5cqi;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 3.5cqi;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.045em;
+}
+
+.title {
+  display: block;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 12cqi;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.value {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 17cqi;
+  line-height: 0.85;
+  letter-spacing: -0.075em;
+}

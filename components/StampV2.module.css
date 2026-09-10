@@ -1,0 +1,69 @@
+.root {
+  width: calc(var(--stamp-v2-width) * var(--stamp-v2-columns));
+  max-width: 100%;
+  min-width: 0;
+  color: var(--stamp-v2-ink);
+  filter: drop-shadow(0 1px 1px rgb(31 28 20 / 14%))
+    drop-shadow(0 12px 18px rgb(31 28 20 / 12%));
+}
+
+.sheet {
+  --cell-width: calc(100% / var(--stamp-v2-columns));
+  --cell-height: calc(100% / var(--stamp-v2-rows));
+  --step-x: calc(var(--cell-width) / var(--stamp-v2-across));
+  --step-y: calc(var(--cell-height) / var(--stamp-v2-down));
+
+  display: grid;
+  grid-template-columns: repeat(var(--stamp-v2-columns), minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  gap: 0;
+
+  /* The top/bottom and left/right half-holes repeat at every cell boundary.
+     At an internal seam, two halves meet to make a full transparent hole.
+     Intersect removes every hole from the same paper surface. */
+  mask-image:
+    radial-gradient(
+      circle at 50% 0,
+      transparent var(--stamp-v2-hole),
+      #000 calc(var(--stamp-v2-hole) + 0.5px)
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      transparent var(--stamp-v2-hole),
+      #000 calc(var(--stamp-v2-hole) + 0.5px)
+    ),
+    radial-gradient(
+      circle at 0 50%,
+      transparent var(--stamp-v2-hole),
+      #000 calc(var(--stamp-v2-hole) + 0.5px)
+    ),
+    radial-gradient(
+      circle at 100% 50%,
+      transparent var(--stamp-v2-hole),
+      #000 calc(var(--stamp-v2-hole) + 0.5px)
+    );
+  mask-size:
+    var(--step-x) var(--cell-height),
+    var(--step-x) var(--cell-height),
+    var(--cell-width) var(--step-y),
+    var(--cell-width) var(--step-y);
+  mask-repeat: repeat;
+  mask-composite: intersect;
+}
+
+.stamp {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  aspect-ratio: var(--stamp-v2-ratio);
+  padding: var(--stamp-v2-padding);
+  overflow: hidden;
+  background: var(--stamp-v2-paper);
+}
+
+.content {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}

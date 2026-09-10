@@ -26,6 +26,7 @@ import {
   useState,
 } from "react";
 import { ScrambleTextShowcase } from "@/app/experiments/scramble-text/scramble-text-showcase";
+import { StampArtwork, stampDesigns } from "@/app/experiments/stamp-v2/stamp-artwork";
 import { experiments } from "@/components/experiment-catalog";
 import { IridescentFoil } from "@/components/IridescentFoil";
 import { LogoTraceLoader } from "@/components/LogoTraceLoader";
@@ -33,6 +34,7 @@ import { PlayingCard } from "@/components/PlayingCard";
 import { ReceiptPrinter } from "@/components/ReceiptPrinter";
 import { Signature } from "@/components/Signature";
 import { Stamp } from "@/components/Stamp";
+import { StampSheet } from "@/components/StampV2";
 import { tactileButtonColorTokens } from "@/components/TactileButton";
 import { Ticket } from "@/components/Ticket";
 import { cn } from "@/helpers/classname-helper";
@@ -659,6 +661,30 @@ export function ExperimentPreview({
           stubHeight={29}
           tilt={false}
         />
+      </div>
+    );
+  }
+
+  if (type === "stamp-v2") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "flex items-center justify-center bg-grayscale-2 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+        )}
+      >
+        <StampSheet
+          columns={2}
+          horizontalPerforations={8}
+          perforationRadius={0.9}
+          stampWidth={44}
+          verticalPerforations={10}
+        >
+          {stampDesigns.map((design) => (
+            <StampArtwork design={design} key={design.id} />
+          ))}
+        </StampSheet>
       </div>
     );
   }

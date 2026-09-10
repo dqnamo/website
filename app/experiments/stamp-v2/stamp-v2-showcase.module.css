@@ -1,0 +1,85 @@
+.stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 556px;
+  place-items: center;
+  overflow: hidden;
+  padding: 40px 24px;
+  background: var(--color-grayscale-2);
+}
+
+.stageGrid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--color-grayscale-4) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-grayscale-4) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(ellipse at center, #000, transparent 75%);
+  opacity: 0.45;
+}
+
+.specimen {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  justify-content: center;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--color-grayscale-3);
+}
+
+.layouts {
+  display: flex;
+  min-width: 0;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--color-grayscale-4);
+  border-radius: 9px;
+}
+
+.layoutOption {
+  cursor: pointer;
+}
+
+.layoutOption span {
+  display: block;
+  padding: 8px 12px;
+  border-radius: 5px;
+  color: var(--color-grayscale-10);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.layoutOption input:checked + span {
+  background: var(--color-grayscale-4);
+  color: var(--color-grayscale-12);
+}
+
+.layoutOption input:focus-visible + span {
+  outline: 2px solid var(--color-grayscale-9);
+  outline-offset: 2px;
+}
+
+.note {
+  color: var(--color-grayscale-10);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+@media (max-width: 520px) {
+  .stage {
+    min-height: 390px;
+    padding: 32px 16px;
+  }
+}

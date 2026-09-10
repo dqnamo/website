@@ -55,6 +55,13 @@ export const experiments = [
     preview: "ticket",
   },
   {
+    title: "Stamp v2",
+    href: "/experiments/stamp-v2",
+    description:
+      "CSS postage stamps with round perforations, as a single stamp or a connected sheet.",
+    preview: "stamp-v2",
+  },
+  {
     title: "Stamp",
     href: "/experiments/stamp",
     description:
