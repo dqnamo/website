@@ -3,10 +3,10 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   width: 100%;
-  min-height: 620px;
+  min-height: 556px;
   place-items: center;
   overflow: hidden;
-  padding: 40px 24px 96px;
+  padding: 40px 24px;
   border-radius: 13px;
   background: var(--color-grayscale-2);
 }
@@ -32,15 +32,9 @@
 }
 
 .layouts {
-  position: absolute;
-  bottom: 16px;
-  left: 16px;
   display: flex;
   min-width: 0;
   gap: 2px;
-  padding: 3px;
-  border: 1px solid var(--color-grayscale-4);
-  border-radius: 9px;
 }
 
 .layoutOption {
@@ -49,16 +43,18 @@
 
 .layoutOption span {
   display: block;
-  padding: 8px 12px;
-  border-radius: 5px;
+  padding: 4px 8px;
+  border-radius: 6px;
   color: var(--color-grayscale-10);
+  font-family: var(--font-jetbrains-mono), monospace;
   font-size: 12px;
+  font-weight: 600;
   line-height: 16px;
 }
 
 .layoutOption input:checked + span {
-  background: var(--color-grayscale-4);
-  color: var(--color-grayscale-12);
+  background: var(--color-grayscale-3);
+  color: var(--color-grayscale-11);
 }
 
 .layoutOption input:focus-visible + span {
@@ -68,7 +64,7 @@
 
 @media (max-width: 520px) {
   .stage {
-    min-height: 454px;
-    padding: 32px 16px 88px;
+    min-height: 390px;
+    padding: 32px 16px;
   }
 }

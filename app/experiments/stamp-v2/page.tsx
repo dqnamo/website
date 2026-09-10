@@ -83,10 +83,9 @@ export default async function StampV2Page() {
       slug="stamp-v2"
       title="Stamp v2"
     >
-      <StampV2Showcase />
-      <div className="w-full overflow-hidden rounded-[13px] border border-grayscale-3 bg-grayscale-1 small-shadow dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none">
+      <StampV2Showcase>
         <SourcePanel tabs={tabs} />
-      </div>
+      </StampV2Showcase>
     </ExperimentPage>
   );
 }
