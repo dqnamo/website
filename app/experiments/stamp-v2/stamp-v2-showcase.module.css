@@ -31,37 +31,6 @@
   justify-content: center;
 }
 
-.layouts {
-  display: flex;
-  min-width: 0;
-  gap: 2px;
-}
-
-.layoutOption {
-  cursor: pointer;
-}
-
-.layoutOption span {
-  display: block;
-  padding: 4px 8px;
-  border-radius: 6px;
-  color: var(--color-grayscale-10);
-  font-family: var(--font-jetbrains-mono), monospace;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 16px;
-}
-
-.layoutOption input:checked + span {
-  background: var(--color-grayscale-3);
-  color: var(--color-grayscale-11);
-}
-
-.layoutOption input:focus-visible + span {
-  outline: 2px solid var(--color-grayscale-9);
-  outline-offset: 2px;
-}
-
 @media (max-width: 520px) {
   .stage {
     min-height: 390px;

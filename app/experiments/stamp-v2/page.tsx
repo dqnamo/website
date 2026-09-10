@@ -84,7 +84,7 @@ export default async function StampV2Page() {
       title="Stamp v2"
     >
       <StampV2Showcase>
-        <SourcePanel tabs={tabs} />
+        <SourcePanel tabClassName="font-sans font-semibold" tabs={tabs} />
       </StampV2Showcase>
     </ExperimentPage>
   );
