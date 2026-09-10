@@ -12,7 +12,8 @@ export const metadata: Metadata = {
 
 const example = `import { StampSheet, StampV2 } from "@/components/StampV2";
 
-// Any React content fits inside the frame.
+// Use decorative artwork: the folded corner renders a second, inert copy.
+// Keep stateful controls outside, or set peelOnHover={false}.
 export function SingleStamp() {
   return (
     <StampV2 stampWidth={184}>

@@ -107,90 +107,78 @@
 @media (hover: hover) and (pointer: fine) and (
     prefers-reduced-motion: no-preference
   ) {
-  .root[data-peel="true"] .paper {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 100% 100%, 0 100%);
-    transition: clip-path 400ms cubic-bezier(0.23, 1, 0.32, 1);
+  /* The seam never moves. The clips meet with a subpixel overlap to avoid
+     an antialiased hairline when flat; the corner's artwork moves with it. */
+  .root[data-peel="true"] .surface > .paper {
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      100% calc(100% - var(--cut-y) + 0.75px),
+      calc(100% - var(--cut-x) + 0.75px) 100%,
+      0 100%
+    );
   }
 
   .root[data-peel="true"] .corner {
     position: absolute;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     display: block;
-    width: var(--cut-x);
-    aspect-ratio: 1;
     pointer-events: none;
-    filter: drop-shadow(2px 5px 4px rgb(31 28 20 / 28%));
-    opacity: 0;
-    transition: opacity 280ms cubic-bezier(0.23, 1, 0.32, 1);
+    filter: drop-shadow(0 0 0 rgb(31 28 20 / 0%));
+    transition: filter 400ms cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   .turn {
     width: 100%;
     height: 100%;
-    transform-origin: 50% 50%;
+    transform-style: preserve-3d;
+    transform-origin: calc(100% - var(--cut-x) / 2)
+      calc(100% - var(--cut-y) / 2);
+    transform: perspective(800px) rotate3d(1, -1, 0, 0deg);
     transition: transform 400ms cubic-bezier(0.23, 1, 0.32, 1);
   }
 
+  .front,
   .reverse {
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+  }
+
+  .front {
+    clip-path: polygon(
+      100% calc(100% - var(--cut-y)),
+      100% 100%,
+      calc(100% - var(--cut-x)) 100%
+    );
+  }
+
+  /* Mirror the back's clip before turning it over: both faces then occupy
+     exactly the same triangle and share the same perforation spacing. */
+  .reverse {
     background:
       linear-gradient(
-        135deg,
-        rgb(70 53 24 / 18%) 42%,
-        rgb(70 53 24 / 10%) 50%,
-        rgb(255 255 255 / 42%) 66%,
-        transparent 88%
-      ),
+        225deg,
+        rgb(70 53 24 / 18%),
+        rgb(255 255 255 / 42%) 65%,
+        transparent
+      )
+      bottom left / var(--cut-x) var(--cut-y) no-repeat,
       var(--stamp-v2-paper);
-    clip-path: polygon(100% 0, 100% 100%, 0 100%);
-
-    /* The back has the same hole spacing as the front. Align the repeating
-       masks to the outer corner, even when the fold ends between two holes. */
-    mask-image:
-      radial-gradient(
-        circle at 100% 50%,
-        transparent var(--stamp-v2-hole),
-        #000 calc(var(--stamp-v2-hole) + 0.5px)
-      ),
-      radial-gradient(
-        circle at 50% 100%,
-        transparent var(--stamp-v2-hole),
-        #000 calc(var(--stamp-v2-hole) + 0.5px)
-      );
-    mask-size:
-      100%
-      calc(
-        100% /
-        (var(--stamp-v2-down) * var(--corner-fraction) * var(--stamp-v2-ratio))
-      ),
-      calc(100% / (var(--stamp-v2-across) * var(--corner-fraction))) 100%;
-    mask-position: 100% 100%;
-    mask-repeat: repeat;
-    mask-composite: intersect;
+    clip-path: polygon(0 calc(100% - var(--cut-y)), var(--cut-x) 100%, 0 100%);
+    transform: rotateY(180deg);
   }
 
   .root[data-peel="true"] .stamp:hover {
     z-index: 2;
   }
 
-  .root[data-peel="true"] .stamp:hover .paper {
-    clip-path: polygon(
-      0 0,
-      100% 0,
-      100% calc(100% - var(--cut-y)),
-      calc(100% - var(--cut-x)) 100%,
-      0 100%
-    );
-  }
-
   .root[data-peel="true"] .stamp:hover .corner {
-    opacity: 1;
+    filter: drop-shadow(2px 5px 4px rgb(31 28 20 / 28%));
   }
 
-  /* Only the triangular corner rotates. Its diagonal hinge and the rest of
-     the paper stay in place; the free tip moves toward the viewer. */
+  /* One rotation carries both the printed face and the paper back.
+     The browser switches the visible face as it crosses the edge-on position. */
   .root[data-peel="true"] .stamp:hover .turn {
     transform: perspective(800px) rotate3d(1, -1, 0, 135deg);
   }

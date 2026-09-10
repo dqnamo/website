@@ -13,6 +13,7 @@ type StampStyle = CSSProperties &
   Record<`--stamp-v2-${string}`, string | number>;
 
 export type StampV2Props = Omit<ComponentPropsWithoutRef<"div">, "children"> & {
+  /** Decorative artwork. The peel renders a second, inert copy for its front. */
   children: ReactNode;
   /** Preferred width of each stamp. The whole sheet shrinks to fit its parent. */
   stampWidth?: CssLength;
@@ -77,6 +78,9 @@ export function StampSheet({
     stamps.length,
     Math.max(1, Math.floor(positiveNumber(columns, 2))),
   );
+  const contentClasses = [styles.content, contentClassName]
+    .filter(Boolean)
+    .join(" ");
   const rootStyle: StampStyle = {
     "--stamp-v2-columns": resolvedColumns,
     "--stamp-v2-width": cssLength(stampWidth),
@@ -112,19 +116,18 @@ export function StampSheet({
           >
             <div className={styles.surface}>
               <div className={styles.paper}>
-                <div
-                  className={[styles.content, contentClassName]
-                    .filter(Boolean)
-                    .join(" ")}
-                >
-                  {content}
-                </div>
+                <div className={contentClasses}>{content}</div>
               </div>
-              <div aria-hidden="true" className={styles.corner}>
-                <div className={styles.turn}>
-                  <div className={styles.reverse} />
+              {peelOnHover && (
+                <div aria-hidden="true" inert className={styles.corner}>
+                  <div className={styles.turn}>
+                    <div className={`${styles.paper} ${styles.front}`}>
+                      <div className={contentClasses}>{content}</div>
+                    </div>
+                    <div className={`${styles.paper} ${styles.reverse}`} />
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         ))}
