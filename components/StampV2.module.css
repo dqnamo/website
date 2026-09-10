@@ -183,4 +183,19 @@
   .root[data-tug="true"] .stamp:hover .tug > .paper::after {
     opacity: 1;
   }
+
+  /* A loose stamp lifts as one flat piece, with no seam to pull against. */
+  .root[data-tug="true"] .stamp:only-child .tug {
+    transform-origin: center;
+    transform: translateY(0) scale(1);
+  }
+
+  .root[data-tug="true"] .stamp:only-child:hover .tug {
+    transform: translateY(-4px) scale(1.035);
+    filter: drop-shadow(0 6px 9px rgb(31 28 20 / 14%));
+  }
+
+  .root[data-tug="true"] .stamp:only-child .tug > .paper::after {
+    content: none;
+  }
 }

@@ -41,6 +41,7 @@ function Artwork() {
 // Uses the JetBrains Mono and Barlow font variables from the root layout.
 // The stamp fits its content. One inset spaces the border and caption equally.
 // cqi units are relative to the stamp's width. Use aspectRatio for a fixed frame.
+// Single stamps lift on hover; connected stamps gently tug from the sheet.
 export function SingleStamp() {
   return (
     <StampV2 stampWidth={184} padding="7.5cqi">

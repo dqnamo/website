@@ -26,7 +26,7 @@ export type StampV2Props = Omit<ComponentPropsWithoutRef<"div">, "children"> & {
   horizontalPerforations?: number;
   verticalPerforations?: number;
   contentClassName?: string;
-  /** Gently pull from an outside corner, keeping the inner seam connected. */
+  /** Lift a single stamp, or gently tug connected stamps from an outside corner. */
   tugOnHover?: boolean;
 };
 
