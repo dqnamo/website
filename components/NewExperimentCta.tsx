@@ -27,8 +27,10 @@ import {
 } from "react";
 import { ScrambleTextShowcase } from "@/app/experiments/scramble-text/scramble-text-showcase";
 import { experiments } from "@/components/experiment-catalog";
+import { GoldenTicket } from "@/components/GoldenTicket";
 import { IridescentFoil } from "@/components/IridescentFoil";
 import { LogoTraceLoader } from "@/components/LogoTraceLoader";
+import { PaperBurn } from "@/components/PaperBurn";
 import { PlayingCard } from "@/components/PlayingCard";
 import { ReceiptPrinter } from "@/components/ReceiptPrinter";
 import { Signature } from "@/components/Signature";
@@ -81,6 +83,65 @@ const dynamicButtonPreviewStates = [
 ] as const;
 
 type HoldPreviewPhase = "holding" | "idle" | "undo";
+
+function PaperBurnPreview({ featured = false }: { featured?: boolean }) {
+  const [active, setActive] = useState(false);
+  const cycleTimerRef = useRef<number | null>(null);
+
+  const clearCycleTimer = useCallback(() => {
+    if (cycleTimerRef.current !== null) {
+      window.clearTimeout(cycleTimerRef.current);
+      cycleTimerRef.current = null;
+    }
+  }, []);
+
+  const queueBurn = useCallback(
+    (delay: number) => {
+      clearCycleTimer();
+      cycleTimerRef.current = window.setTimeout(() => setActive(true), delay);
+    },
+    [clearCycleTimer],
+  );
+
+  useEffect(() => {
+    queueBurn(700);
+    return clearCycleTimer;
+  }, [clearCycleTimer, queueBurn]);
+
+  const handleBurnComplete = useCallback(() => {
+    clearCycleTimer();
+    cycleTimerRef.current = window.setTimeout(() => {
+      setActive(false);
+      queueBurn(2300);
+    }, 420);
+  }, [clearCycleTimer, queueBurn]);
+
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        featured ? featuredPreviewSurfaceClassName : previewSurfaceClassName,
+        "flex items-center justify-center overflow-hidden bg-grayscale-2 px-5 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-3 dark:group-hover:bg-grayscale-4",
+      )}
+    >
+      <PaperBurn
+        active={active}
+        className={cn("w-44", featured && "w-56")}
+        duration={800}
+        onBurnComplete={handleBurnComplete}
+      >
+        <div className="-rotate-1 border border-[#d8cfbd] bg-[#f3eddf] px-5 py-4 text-[#352f29] shadow-[0_8px_24px_rgba(55,42,25,0.12)]">
+          <p className="font-mono font-semibold text-[6px] uppercase tracking-[0.18em] opacity-45">
+            Private note
+          </p>
+          <p className="mt-3 font-pirata text-xl leading-none">
+            Burn after reading.
+          </p>
+        </div>
+      </PaperBurn>
+    </div>
+  );
+}
 
 function TactileButtonPreview({ featured = false }: { featured?: boolean }) {
   return (
@@ -564,6 +625,10 @@ export function ExperimentPreview({
   featured?: boolean;
   type: (typeof experiments)[number]["preview"];
 }) {
+  if (type === "paper-burn") {
+    return <PaperBurnPreview featured={featured} />;
+  }
+
   if (type === "tactile-button") {
     return <TactileButtonPreview featured={featured} />;
   }
@@ -658,6 +723,24 @@ export function ExperimentPreview({
           }
           stubHeight={29}
           tilt={false}
+        />
+      </div>
+    );
+  }
+
+  if (type === "golden-ticket" || type === "waitlist-ticket") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "relative flex items-center justify-center overflow-hidden bg-[#160f08] px-4",
+        )}
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(199,135,30,0.22),transparent_58%)]" />
+        <GoldenTicket
+          aria-hidden="true"
+          className="w-full max-w-[14rem] transition-transform duration-300 group-hover:scale-[1.025]"
         />
       </div>
     );

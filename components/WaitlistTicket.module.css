@@ -1,0 +1,77 @@
+.root {
+  display: grid;
+  justify-items: center;
+  gap: clamp(1.5rem, 4cqw, 2rem);
+}
+
+.burn,
+.ticket {
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  min-height: 6.5rem;
+  text-align: center;
+  visibility: visible;
+  opacity: 1;
+  transition:
+    opacity 180ms ease,
+    visibility 0ms linear;
+}
+
+.actions[data-hidden="true"] {
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity 160ms ease,
+    visibility 0ms linear 160ms;
+}
+
+.copy {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.copy h2,
+.copy p {
+  margin: 0;
+}
+
+.copy h2 {
+  color: var(--color-grayscale-12);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.copy p {
+  max-width: 24rem;
+  color: var(--color-grayscale-10);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.button {
+  height: 2rem;
+  padding-inline: 0.75rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .actions,
+  .actions[data-hidden="true"] {
+    transition-duration: 100ms;
+  }
+}
