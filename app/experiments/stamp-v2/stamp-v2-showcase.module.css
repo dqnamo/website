@@ -1,0 +1,38 @@
+.stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  min-height: 556px;
+  place-items: center;
+  padding: 40px 24px;
+  border-radius: 13px;
+  background: var(--color-grayscale-2);
+}
+
+.stageGrid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--color-grayscale-4) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-grayscale-4) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(ellipse at center, #000, transparent 75%);
+  opacity: 0.45;
+}
+
+.specimen {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  justify-content: center;
+}
+
+@media (max-width: 520px) {
+  .stage {
+    min-height: 390px;
+    padding: 32px 16px;
+  }
+}
