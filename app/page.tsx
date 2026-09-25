@@ -10,6 +10,13 @@ import Button, { getButtonClassName } from "@/components/public/Button";
 const kitchenExperiments = [
   {
     description:
+      "An email form that shrinks as a numbered queue ticket slides out from behind it.",
+    href: "/experiments/waitlist-ticket",
+    preview: "waitlist-ticket",
+    title: "Waitlist Ticket",
+  },
+  {
+    description:
       "A composable playing card, plus a fanned hand you can thumb through and play.",
     href: "/experiments/playing-cards",
     preview: "playing-cards",
