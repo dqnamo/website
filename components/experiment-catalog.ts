@@ -1,5 +1,12 @@
 export const experiments = [
   {
+    title: "Filter Query Builder",
+    href: "/experiments/filter-query-builder",
+    description:
+      "A keyboard-first filter bar that previews each option on the list before you apply it.",
+    preview: "filter-query-builder",
+  },
+  {
     title: "Tactile Button",
     href: "/experiments/tactile-button",
     description:
