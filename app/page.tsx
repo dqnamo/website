@@ -1,11 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
+import { BookCallButton } from "@/components/BookCallButton";
 import { experimentCount } from "@/components/experiment-catalog";
 import { ListCard } from "@/components/ListCard";
 import { featuredListItems, listCount } from "@/components/list-catalog";
 import { ExperimentPreview } from "@/components/NewExperimentCta";
 import { PikaArrowRightIcon } from "@/components/PikaDockIcons";
-import Button, { getButtonClassName } from "@/components/public/Button";
+import { getButtonClassName } from "@/components/public/Button";
 
 const kitchenExperiments = [
   {
@@ -82,11 +83,9 @@ export default function HomePage() {
               </p>
             </div>
             <div className="relative z-20 p-1">
-              <Button
+              <BookCallButton
                 className="w-full justify-start border-b-2 text-left dark:border-grayscale-5 dark:bg-grayscale-4 dark:hover:border-grayscale-6 dark:hover:bg-grayscale-5"
-                href="https://cal.com/interface.london/20min"
-                rel="noopener noreferrer"
-                target="_blank"
+                location="homepage"
                 variant="secondary"
               >
                 Book a call
@@ -95,7 +94,7 @@ export default function HomePage() {
                   className="ml-auto"
                   size={14}
                 />
-              </Button>
+              </BookCallButton>
             </div>
           </div>
           <Link
