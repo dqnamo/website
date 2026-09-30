@@ -35,7 +35,11 @@ export function WorkWithMeCta({ className }: WorkWithMeCtaProps) {
               rel="noopener noreferrer"
               variant="primary"
               className="w-max justify-start border-b-2"
-              onClick={() => posthog.capture("work_with_me_cta_clicked")}
+              onClick={() =>
+                posthog.capture("work_with_me_cta_clicked", {
+                  location: "experiment_page",
+                })
+              }
             >
               Jump on a call
               <PikaPhoneIcon aria-hidden="true" size={14} />

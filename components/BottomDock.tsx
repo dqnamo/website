@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
+import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 import {
   PikaCalendarIcon,
@@ -140,6 +141,11 @@ export function BottomDock() {
             <DockTooltip label="Book a call">
               <a
                 href="https://cal.com/interface.london/20min"
+                onClick={() =>
+                  posthog.capture("work_with_me_cta_clicked", {
+                    location: "dock",
+                  })
+                }
                 rel="noopener noreferrer"
                 target="_blank"
               >
