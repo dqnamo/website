@@ -109,7 +109,7 @@ export function ListCard({
         <span
           className={getButtonClassName({
             className:
-              "w-full justify-start border-b-2 text-left dark:border-grayscale-5 dark:bg-grayscale-4 dark:hover:border-grayscale-6 dark:hover:bg-grayscale-5",
+              "w-full justify-start text-left dark:border-grayscale-5 dark:bg-grayscale-4 dark:hover:border-grayscale-6 dark:hover:bg-grayscale-5",
             variant: "secondary",
           })}
         >

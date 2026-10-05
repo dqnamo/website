@@ -36,7 +36,7 @@ export function WorkWithMeCta({
             <BookCallButton
               location={location}
               variant="primary"
-              className="w-max justify-start border-b-2"
+              className="w-max justify-start"
             >
               Jump on a call
               <PikaPhoneIcon aria-hidden="true" size={14} />
@@ -46,7 +46,7 @@ export function WorkWithMeCta({
               target="_blank"
               rel="noopener noreferrer"
               variant="secondary"
-              className="w-max justify-start border-b-2 text-left dark:border-grayscale-5 dark:bg-grayscale-4 dark:hover:border-grayscale-6 dark:hover:bg-grayscale-5"
+              className="w-max justify-start text-left dark:border-grayscale-5 dark:bg-grayscale-4 dark:hover:border-grayscale-6 dark:hover:bg-grayscale-5"
             >
               Learn more
               <PikaArrowRightIcon aria-hidden="true" size={14} />
