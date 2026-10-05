@@ -43,11 +43,6 @@ export default function HomePage() {
             </Link>
           </h1>
           <p className="font-medium text-grayscale-10 text-xs">JP</p>
-          <p className="mt-8 max-w-md text-pretty font-sans text-sm text-grayscale-11">
-            I run a digital studio in London. I like building aesthetically
-            pleasing software. I&apos;m interested in prosumer productivity and
-            developer tools.
-          </p>
         </header>
 
         <WorkWithMeCta className="mt-8" location="homepage" />
