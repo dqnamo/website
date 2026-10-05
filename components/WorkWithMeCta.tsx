@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import posthog from "posthog-js";
+import { BookCallButton } from "@/components/BookCallButton";
 import { PikaArrowRightIcon, PikaPhoneIcon } from "@/components/PikaDockIcons";
 import Button from "@/components/public/Button";
 import { GameOfLife } from "@/components/random/GameOfLife";
@@ -9,9 +9,13 @@ import { cn } from "@/helpers/classname-helper";
 
 type WorkWithMeCtaProps = {
   className?: string;
+  location?: string;
 };
 
-export function WorkWithMeCta({ className }: WorkWithMeCtaProps) {
+export function WorkWithMeCta({
+  className,
+  location = "experiment_page",
+}: WorkWithMeCtaProps) {
   return (
     <section
       className={cn(
@@ -29,21 +33,14 @@ export function WorkWithMeCta({ className }: WorkWithMeCtaProps) {
             fractional design engineering for startups.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
-            <Button
-              href="https://cal.com/interface.london/20min"
-              target="_blank"
-              rel="noopener noreferrer"
+            <BookCallButton
+              location={location}
               variant="primary"
               className="w-max justify-start border-b-2"
-              onClick={() =>
-                posthog.capture("work_with_me_cta_clicked", {
-                  location: "experiment_page",
-                })
-              }
             >
               Jump on a call
               <PikaPhoneIcon aria-hidden="true" size={14} />
-            </Button>
+            </BookCallButton>
             <Button
               href="https://interface.london"
               target="_blank"

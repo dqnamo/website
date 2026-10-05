@@ -1,12 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
-import { BookCallButton } from "@/components/BookCallButton";
 import { experimentCount } from "@/components/experiment-catalog";
 import { ListCard } from "@/components/ListCard";
 import { featuredListItems, listCount } from "@/components/list-catalog";
 import { ExperimentPreview } from "@/components/NewExperimentCta";
 import { PikaArrowRightIcon } from "@/components/PikaDockIcons";
-import { getButtonClassName } from "@/components/public/Button";
+import { WorkWithMeCta } from "@/components/WorkWithMeCta";
 
 const kitchenExperiments = [
   {
@@ -52,125 +50,43 @@ export default function HomePage() {
           </p>
         </header>
 
-        <div className="mt-8 grid grid-cols-1 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5 sm:grid-cols-2">
-          <div className="group relative flex min-h-64 flex-col rounded-[13px] border border-grayscale-3 bg-white p-1 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-5 dark:hover:bg-grayscale-4">
-            <a
-              aria-label="Visit The Interface Company of London"
-              className="absolute inset-0 z-10 rounded-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7"
-              href="https://interface.london"
+        <WorkWithMeCta className="mt-8" location="homepage" />
+
+        {/* <div className="flex min-h-64 flex-col rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 small-shadow dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none">
+          <div className="flex items-center justify-center rounded-lg bg-grayscale-2 p-16">
+            <Image
+              alt=""
+              className="size-10 object-contain dark:invert"
+              height={40}
+              src="/logos/hyperaide.svg"
+              width={40}
+            />
+          </div>
+          <div className="flex flex-1 flex-col p-3">
+            <h2 className="font-medium text-grayscale-12 text-sm">
+              Hyperaide
+            </h2>
+            <p className="mt-px text-grayscale-10 text-sm leading-5">
+              Single threaded personal assistant with infinite memory.
+            </p>
+          </div>
+          <div className="p-1">
+            <Button
+              className="w-full justify-start border-b-2 bg-white text-left dark:bg-white dark:text-black"
+              href="https://hyperaide.com"
               rel="noopener noreferrer"
               target="_blank"
+              variant="secondary"
             >
-              <span className="sr-only">
-                Visit The Interface Company of London
-              </span>
-            </a>
-            <div className="flex items-center justify-center rounded-lg bg-grayscale-2 p-16 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3">
-              <Image
-                alt=""
-                className="size-10 dark:invert"
-                height={40}
-                src="/logos/interface-logo-black.svg"
-                width={40}
+              Learn more
+              <PikaArrowRightIcon
+                aria-hidden="true"
+                className="ml-auto"
+                size={14}
               />
-            </div>
-            <div className="flex flex-1 flex-col p-3">
-              <h2 className="font-medium text-grayscale-12 text-sm">
-                The Interface Company of London
-              </h2>
-              <p className="mt-px text-pretty text-grayscale-10 text-sm leading-5">
-                Digital product design and engineering.
-              </p>
-            </div>
-            <div className="relative z-20 p-1">
-              <BookCallButton
-                className="w-full justify-start border-b-2 text-left dark:border-grayscale-5 dark:bg-grayscale-4 dark:hover:border-grayscale-6 dark:hover:bg-grayscale-5"
-                location="homepage"
-                variant="secondary"
-              >
-                Book a call
-                <PikaArrowRightIcon
-                  aria-hidden="true"
-                  className="ml-auto"
-                  size={14}
-                />
-              </BookCallButton>
-            </div>
+            </Button>
           </div>
-          <Link
-            className="group flex min-h-64 flex-col rounded-[13px] border border-grayscale-3 bg-white p-1 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-5 dark:hover:bg-grayscale-4"
-            href="/kitchen"
-          >
-            <div className="flex items-center justify-center rounded-lg bg-grayscale-2 p-16 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3">
-              <Image
-                alt=""
-                className="size-10 object-contain dark:invert"
-                height={40}
-                src="/logos/union.svg"
-                width={40}
-              />
-            </div>
-            <div className="flex flex-1 flex-col p-3">
-              <h2 className="font-medium text-grayscale-12 text-sm">
-                The Kitchen
-              </h2>
-              <p className="mt-px text-pretty text-grayscale-10 text-sm leading-5">
-                Playful components and focused interface experiments.
-              </p>
-            </div>
-            <div className="p-1">
-              <span
-                className={getButtonClassName({
-                  className:
-                    "w-full justify-start border-b-2 text-left dark:border-grayscale-5 dark:bg-grayscale-4 dark:hover:border-grayscale-6 dark:hover:bg-grayscale-5",
-                  variant: "secondary",
-                })}
-              >
-                View components
-                <PikaArrowRightIcon
-                  aria-hidden="true"
-                  className="ml-auto"
-                  size={14}
-                />
-              </span>
-            </div>
-          </Link>
-          {/* <div className="flex min-h-64 flex-col rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 small-shadow dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none">
-            <div className="flex items-center justify-center rounded-lg bg-grayscale-2 p-16">
-              <Image
-                alt=""
-                className="size-10 object-contain dark:invert"
-                height={40}
-                src="/logos/hyperaide.svg"
-                width={40}
-              />
-            </div>
-            <div className="flex flex-1 flex-col p-3">
-              <h2 className="font-medium text-grayscale-12 text-sm">
-                Hyperaide
-              </h2>
-              <p className="mt-px text-grayscale-10 text-sm leading-5">
-                Single threaded personal assistant with infinite memory.
-              </p>
-            </div>
-            <div className="p-1">
-              <Button
-                className="w-full justify-start border-b-2 bg-white text-left dark:bg-white dark:text-black"
-                href="https://hyperaide.com"
-                rel="noopener noreferrer"
-                target="_blank"
-                variant="secondary"
-              >
-                Learn more
-                <PikaArrowRightIcon
-                  aria-hidden="true"
-                  className="ml-auto"
-                  size={14}
-                />
-              </Button>
-            </div>
-          </div> */}
-        </div>
+        </div> */}
 
         {/* <section className="mt-16">
           <div className="p-3">
