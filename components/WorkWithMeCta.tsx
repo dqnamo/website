@@ -23,7 +23,7 @@ export function WorkWithMeCta({
         className,
       )}
     >
-      <div className="flex w-full flex-col items-center justify-center gap-1.5 rounded-[13px] border border-grayscale-3 bg-grayscale-1 small-shadow dark:border-transparent dark:bg-grayscale-2 dark:shadow-none">
+      <div className="flex w-full flex-col items-center justify-center gap-1.5 rounded-[13px] border border-grayscale-4 border-b-2 bg-white dark:bg-grayscale-3">
         <div className="flex flex-col gap-1.5 p-8">
           <p className="text-balance text-grayscale-12 text-sm">
             Want to work with me?
@@ -59,7 +59,7 @@ export function WorkWithMeCta({
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Visit The Interface Company of London"
-        className="group relative flex min-h-[12rem] w-full items-center justify-center overflow-hidden rounded-[13px] border border-grayscale-3 bg-grayscale-1 small-shadow transition-colors hover:border-grayscale-4 focus-visible:outline-2 focus-visible:outline-grayscale-12 focus-visible:outline-offset-2 dark:border-grayscale-4 dark:bg-grayscale-3 dark:hover:border-grayscale-5"
+        className="group relative flex min-h-[12rem] w-full items-center justify-center overflow-hidden rounded-[13px] border border-grayscale-4 border-b-2 bg-white transition-colors hover:border-grayscale-5 focus-visible:outline-2 focus-visible:outline-grayscale-12 focus-visible:outline-offset-2 dark:bg-grayscale-3"
       >
         <GameOfLife
           aria-hidden
