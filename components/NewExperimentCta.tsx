@@ -47,7 +47,7 @@ const featuredPreviewSurfaceClassName =
 const playingCardPreviewClassName =
   "shadow-[0_2px_8px_rgba(0,0,0,0.035),0_14px_30px_rgba(0,0,0,0.055)]";
 const experimentCardClassName =
-  "group flex min-h-64 flex-col overflow-hidden rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-6 dark:hover:bg-grayscale-4";
+  "group flex min-h-64 flex-col overflow-hidden rounded-[13px] border border-grayscale-4 border-b-2 bg-white p-1 transition-colors hover:border-grayscale-5 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 dark:bg-grayscale-3 dark:hover:bg-grayscale-4";
 const [featuredExperiment, ...secondaryExperiments] = experiments;
 const scrollPreviewItems = [
   ["🇿🇦", "South Africa"],

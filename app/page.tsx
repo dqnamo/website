@@ -152,7 +152,7 @@ export default function HomePage() {
           <div className="mt-3 grid grid-cols-1 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5 sm:grid-cols-2 lg:grid-cols-3">
             {kitchenExperiments.map((experiment) => (
               <Link
-                className="group flex min-h-64 flex-col overflow-hidden rounded-[13px] border border-grayscale-3 bg-white p-1 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-5 dark:hover:bg-grayscale-4"
+                className="group flex min-h-64 flex-col overflow-hidden rounded-[13px] border border-grayscale-4 border-b-2 bg-white p-1 transition-colors hover:border-grayscale-5 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 dark:bg-grayscale-3 dark:hover:bg-grayscale-4"
                 href={experiment.href}
                 key={experiment.href}
               >
@@ -168,7 +168,7 @@ export default function HomePage() {
               </Link>
             ))}
             <Link
-              className="group flex items-center gap-3 rounded-[13px] border border-grayscale-3 bg-white p-2 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 sm:col-span-2 lg:col-span-3 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-5 dark:hover:bg-grayscale-4"
+              className="group flex items-center gap-3 rounded-[13px] border border-grayscale-4 border-b-2 bg-white p-2 transition-colors hover:border-grayscale-5 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 sm:col-span-2 lg:col-span-3 dark:bg-grayscale-3 dark:hover:bg-grayscale-4"
               href="/kitchen"
             >
               <div className="flex h-6 min-w-6 shrink-0 items-center justify-center rounded-md border border-transparent bg-grayscale-12 px-1 font-medium text-[11px] text-grayscale-1 leading-none transition-colors dark:border-grayscale-5 dark:bg-grayscale-4 dark:text-grayscale-12 dark:group-hover:border-grayscale-6 dark:group-hover:bg-grayscale-5">
@@ -197,10 +197,10 @@ export default function HomePage() {
           </div>
           <div className="mt-3 grid grid-cols-1 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5 sm:grid-cols-2 lg:grid-cols-3">
             {featuredListItems.map((item) => (
-              <ListCard homepage item={item} key={item.href} />
+              <ListCard item={item} key={item.href} />
             ))}
             <Link
-              className="group flex items-center gap-3 rounded-[13px] border border-grayscale-3 bg-white p-2 small-shadow transition-colors hover:border-grayscale-4 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 sm:col-span-2 lg:col-span-3 dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none dark:hover:border-grayscale-5 dark:hover:bg-grayscale-4"
+              className="group flex items-center gap-3 rounded-[13px] border border-grayscale-4 border-b-2 bg-white p-2 transition-colors hover:border-grayscale-5 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 sm:col-span-2 lg:col-span-3 dark:bg-grayscale-3 dark:hover:bg-grayscale-4"
               href="/list"
             >
               <div className="flex h-6 min-w-6 shrink-0 items-center justify-center rounded-md border border-transparent bg-grayscale-12 px-1 font-medium text-[11px] text-grayscale-1 leading-none transition-colors dark:border-grayscale-5 dark:bg-grayscale-4 dark:text-grayscale-12 dark:group-hover:border-grayscale-6 dark:group-hover:bg-grayscale-5">
