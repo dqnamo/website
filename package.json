@@ -25,7 +25,8 @@
     "posthog-js": "^1.391.2",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "react-parallax-tilt": "^1.7.333"
+    "react-parallax-tilt": "^1.7.333",
+    "three": "^0.185.1"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.15",
@@ -33,6 +34,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/three": "^0.185.4",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "shiki": "^4.0.2",

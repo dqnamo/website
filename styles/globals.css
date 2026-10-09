@@ -26,6 +26,36 @@ html[data-recording] nextjs-portal {
   padding-bottom: calc(5rem + env(safe-area-inset-bottom));
 }
 
+/* A lab in full screen covers the page: the page stays still behind it, and the dock steps aside. */
+html:has([data-lab-fullscreen]) {
+  overflow: hidden;
+}
+
+html:has([data-lab-fullscreen]) [data-bottom-dock] {
+  display: none;
+}
+
+/* The lab's mosaic and panel grow from their cards into full screen, and shrink back. */
+::view-transition-group(lab-pane),
+::view-transition-group(lab-panel) {
+  animation-duration: 450ms;
+  animation-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+::view-transition-image-pair(lab-pane) {
+  overflow: hidden;
+}
+
+/* Both views of the mosaic are scaled to the pane's height and centred, so the mosaic in each
+   stays the same size as one fades into the other, whatever shape the pane passes through. */
+::view-transition-old(lab-pane),
+::view-transition-new(lab-pane) {
+  block-size: 100%;
+  inline-size: auto;
+  inset-inline-start: 50%;
+  translate: -50% 0;
+}
+
 .small-shadow {
   box-shadow:
     2px 2px 4px rgba(0, 0, 0, 0.02),
