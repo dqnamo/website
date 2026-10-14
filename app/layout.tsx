@@ -1,13 +1,26 @@
 import type { Metadata } from "next";
-import { Barlow, JetBrains_Mono, Manrope, Pirata_One } from "next/font/google";
+import {
+  Barlow,
+  Inter,
+  JetBrains_Mono,
+  Manrope,
+  Pirata_One,
+} from "next/font/google";
 import "../styles/globals.css";
 import { BottomDock } from "@/components/BottomDock";
 import { RecordingMode } from "@/components/RecordingMode";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800"],
+});
+
 const manrope = Manrope({
   variable: "--font-manrope",
   subsets: ["latin"],
+  weight: ["600"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -53,7 +66,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${manrope.variable} ${jetbrainsMono.variable} ${pirataOne.variable} ${barlow.variable} h-full antialiased`}
+      className={`${inter.variable} ${manrope.variable} ${jetbrainsMono.variable} ${pirataOne.variable} ${barlow.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full bg-grayscale-1 text-grayscale-12">

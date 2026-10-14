@@ -53,7 +53,7 @@ export default function HomePage() {
             />
           </div>
           <div className="flex flex-1 flex-col p-3">
-            <h2 className="font-semibold text-grayscale-12 text-sm">
+            <h2 className="font-medium text-grayscale-12 text-sm">
               Hyperaide
             </h2>
             <p className="mt-px text-grayscale-10 text-sm leading-5">
@@ -80,7 +80,7 @@ export default function HomePage() {
 
         {/* <section className="mt-16">
           <div className="p-3">
-            <h2 className="font-semibold text-grayscale-12 text-sm">
+            <h2 className="font-medium text-grayscale-12 text-sm">
               Pro bono publico
             </h2>
             <p className="mt-px text-grayscale-10 text-sm leading-5">
@@ -105,7 +105,7 @@ export default function HomePage() {
                 />
               </div>
               <div className="flex flex-col justify-end p-3">
-                <h3 className="font-semibold text-grayscale-12 text-sm">
+                <h3 className="font-medium text-grayscale-12 text-sm">
                   Saintdex
                 </h3>
                 <p className="mt-px text-grayscale-10 text-sm leading-5">
@@ -118,7 +118,7 @@ export default function HomePage() {
             <div className="grid min-h-64 grid-cols-2 rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 small-shadow dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none">
               <div className="rounded-lg bg-grayscale-2" />
               <div className="flex flex-col justify-end p-3">
-                <h3 className="font-semibold text-grayscale-12 text-sm">
+                <h3 className="font-medium text-grayscale-12 text-sm">
                   Polaris
                 </h3>
                 <p className="mt-px text-grayscale-10 text-sm leading-5">
@@ -131,7 +131,7 @@ export default function HomePage() {
 
         <section className="mt-16">
           <div className="p-3">
-            <h2 className="font-semibold text-grayscale-12 text-sm">
+            <h2 className="font-medium text-grayscale-12 text-sm">
               What&apos;s cooking in the kitchen
             </h2>
             <p className="mt-px text-pretty text-grayscale-10 text-sm leading-5">
@@ -148,7 +148,7 @@ export default function HomePage() {
               >
                 <ExperimentPreview type={experiment.preview} />
                 <div className="mt-auto flex flex-col px-2 pt-4 pb-2">
-                  <h3 className="font-semibold text-grayscale-12 text-sm">
+                  <h3 className="font-medium text-grayscale-12 text-sm">
                     {experiment.title}
                   </h3>
                   <p className="mt-2 text-pretty text-grayscale-10 text-xs leading-5">
@@ -164,7 +164,7 @@ export default function HomePage() {
               <div className="flex h-6 min-w-6 shrink-0 items-center justify-center rounded-md border border-transparent bg-grayscale-12 px-1 font-medium text-[11px] text-grayscale-1 leading-none transition-colors dark:border-grayscale-5 dark:bg-grayscale-4 dark:text-grayscale-12 dark:group-hover:border-grayscale-6 dark:group-hover:bg-grayscale-5">
                 {experimentCount}
               </div>
-              <h3 className="min-w-0 font-semibold text-grayscale-12 text-sm">
+              <h3 className="min-w-0 font-medium text-grayscale-12 text-sm">
                 View all components
               </h3>
               <PikaArrowRightIcon
@@ -178,7 +178,7 @@ export default function HomePage() {
 
         <section className="mt-16">
           <div className="p-3">
-            <h2 className="font-semibold text-grayscale-12 text-sm">
+            <h2 className="font-medium text-grayscale-12 text-sm">
               Products and tools I recommend
             </h2>
             <p className="mt-px text-pretty text-grayscale-10 text-sm leading-5">
@@ -196,7 +196,7 @@ export default function HomePage() {
               <div className="flex h-6 min-w-6 shrink-0 items-center justify-center rounded-md border border-transparent bg-grayscale-12 px-1 font-medium text-[11px] text-grayscale-1 leading-none transition-colors dark:border-grayscale-5 dark:bg-grayscale-4 dark:text-grayscale-12 dark:group-hover:border-grayscale-6 dark:group-hover:bg-grayscale-5">
                 {listCount}
               </div>
-              <h3 className="min-w-0 font-semibold text-grayscale-12 text-sm">
+              <h3 className="min-w-0 font-medium text-grayscale-12 text-sm">
                 View the full list
               </h3>
               <PikaArrowRightIcon
@@ -210,7 +210,7 @@ export default function HomePage() {
 
         {/* <section className="mt-16">
           <div className="p-3">
-            <h2 className="font-semibold text-grayscale-12 text-sm">
+            <h2 className="font-medium text-grayscale-12 text-sm">
               Other projects
             </h2>
           </div>
@@ -228,7 +228,7 @@ export default function HomePage() {
                   weight="bold"
                 />
               </div>
-              <h3 className="mt-3 font-semibold text-grayscale-12 text-sm">
+              <h3 className="mt-3 font-medium text-grayscale-12 text-sm">
                 Chord
               </h3>
               <p className="mt-px max-w-sm text-pretty text-grayscale-10 text-xs leading-5">
@@ -246,7 +246,7 @@ export default function HomePage() {
               <div className="flex size-8 items-center justify-center rounded-lg border border-grayscale-3 bg-white small-shadow dark:border-grayscale-6 dark:bg-grayscale-5">
                 <span className="font-semibold text-grass-9 text-sm">G</span>
               </div>
-              <h3 className="mt-3 font-semibold text-grayscale-12 text-sm">
+              <h3 className="mt-3 font-medium text-grayscale-12 text-sm">
                 Growdoro
               </h3>
               <p className="mt-px max-w-sm text-pretty text-grayscale-10 text-xs leading-5">
