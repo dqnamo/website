@@ -332,6 +332,91 @@ function MagneticDropZonePreview({ featured = false }: { featured?: boolean }) {
   );
 }
 
+const invitePreviewChips = [
+  { email: "sofia@acme.co", initials: "SA", palette: "bg-pink-4 text-pink-11" },
+  { email: "liam@acme.co", initials: "L", palette: "bg-jade-4 text-jade-11" },
+] as const;
+
+const invitePreviewTeam = [
+  { initials: "AT", palette: "bg-blue-4 text-blue-11" },
+  { initials: "JP", palette: "bg-violet-4 text-violet-11" },
+  { initials: "LH", palette: "bg-amber-4 text-amber-11" },
+] as const;
+
+function InviteFieldPreview({ featured = false }: { featured?: boolean }) {
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        featured ? featuredPreviewSurfaceClassName : previewSurfaceClassName,
+        "flex items-center justify-center bg-grayscale-2 p-4 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+      )}
+    >
+      <div className="flex w-full max-w-64 flex-col gap-2 rounded-xl border border-grayscale-4 bg-grayscale-1 p-2 shadow-sm dark:border-grayscale-5 dark:bg-grayscale-3">
+        <div className="flex h-8 items-center gap-1 overflow-hidden rounded-lg border border-grayscale-4 bg-grayscale-1 px-1 dark:border-grayscale-6 dark:bg-grayscale-2">
+          {invitePreviewChips.map((chip, index) => (
+            <span
+              className={cn(
+                "flex h-6 shrink-0 origin-bottom-left items-center gap-1 rounded-full bg-grayscale-3 pr-1.5 pl-0.5 shadow-[inset_0_0_0_1px_var(--color-grayscale-5)] transition-[transform,opacity] duration-500 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] group-hover:translate-y-8 group-hover:scale-[0.3] group-hover:opacity-0 motion-reduce:transform-none dark:bg-grayscale-5 dark:shadow-[inset_0_0_0_1px_var(--color-grayscale-6)]",
+                index === 1 && "group-hover:delay-75",
+              )}
+              key={chip.email}
+            >
+              <span
+                className={cn(
+                  "flex size-5 items-center justify-center rounded-full font-semibold text-[8px]",
+                  chip.palette,
+                )}
+              >
+                {chip.initials}
+              </span>
+              <span className="text-[9px] text-grayscale-12">{chip.email}</span>
+            </span>
+          ))}
+          <span className="h-3.5 w-px bg-grayscale-9 opacity-60" />
+        </div>
+
+        <div className="flex items-center justify-between px-0.5">
+          <div className="flex items-center">
+            {invitePreviewChips.map((chip, index) => (
+              <span
+                className={cn(
+                  "flex h-6 max-w-0 scale-50 items-center justify-center overflow-hidden rounded-full font-semibold text-[8px] opacity-0 ring-2 ring-grayscale-1 transition-[max-width,margin,transform,opacity] duration-500 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] group-hover:mr-[-6px] group-hover:max-w-6 group-hover:scale-100 group-hover:opacity-100 dark:ring-grayscale-3",
+                  index === 0
+                    ? "group-hover:delay-150"
+                    : "group-hover:delay-200",
+                  chip.palette,
+                )}
+                key={chip.email}
+              >
+                <span className="w-6 text-center">{chip.initials}</span>
+              </span>
+            ))}
+            {invitePreviewTeam.map((member, index) => (
+              <span
+                className={cn(
+                  "flex size-6 items-center justify-center rounded-full font-semibold text-[8px] ring-2 ring-grayscale-1 dark:ring-grayscale-3",
+                  index > 0 && "-ml-1.5",
+                  member.palette,
+                )}
+                key={member.initials}
+              >
+                {member.initials}
+              </span>
+            ))}
+            <span className="-ml-1.5 flex size-6 items-center justify-center rounded-full bg-grayscale-3 font-medium text-[8px] text-grayscale-11 ring-2 ring-grayscale-1 dark:bg-grayscale-5 dark:ring-grayscale-3">
+              +3
+            </span>
+          </div>
+          <span className="font-medium text-[10px] text-grayscale-11 tabular-nums">
+            8 <span className="text-grayscale-9">/</span> 10 seats
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function HoldToConfirmPreview({ featured = false }: { featured?: boolean }) {
   const shouldReduceMotion = useReducedMotion();
   const [phase, setPhase] = useState<HoldPreviewPhase>("idle");
@@ -578,6 +663,10 @@ export function ExperimentPreview({
 
   if (type === "magnetic-drop-zone") {
     return <MagneticDropZonePreview featured={featured} />;
+  }
+
+  if (type === "invite-field") {
+    return <InviteFieldPreview featured={featured} />;
   }
 
   if (type === "dynamic-button") {
