@@ -1,0 +1,303 @@
+.ticket {
+  --gold-tilt-x: 0deg;
+  --gold-tilt-y: 0deg;
+  --gold-foil-x: 50%;
+  --gold-foil-y: 50%;
+  --gold-shine-angle: 118deg;
+  --gold-shine-opacity: 0.56;
+  --gold-stub: 75%;
+  --gold-notch: clamp(7px, 1.8cqw, 13px);
+  --gold-tooth-depth: clamp(3px, 0.9cqw, 6px);
+
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
+  aspect-ratio: 2.08 / 1;
+  overflow: hidden;
+  container-type: inline-size;
+  isolation: isolate;
+  color: #3b2405;
+  background:
+    radial-gradient(
+      ellipse at 50% 42%,
+      rgb(246 207 91 / 58%) 0%,
+      transparent 60%
+    ),
+    linear-gradient(
+      135deg,
+      #75600d 0%,
+      #a98114 24%,
+      #cc981f 48%,
+      #987513 74%,
+      #67540c 100%
+    );
+  box-shadow:
+    inset 0 1px 0 rgb(255 224 119 / 46%),
+    inset 0 -1px 0 rgb(255 224 119 / 46%),
+    inset 0 -18px 40px rgb(92 49 3 / 12%);
+  filter: drop-shadow(1px 0 0 rgb(69 39 0 / 72%))
+    drop-shadow(-1px 0 0 rgb(69 39 0 / 72%))
+    drop-shadow(0 1px 0 rgb(69 39 0 / 72%))
+    drop-shadow(0 -1px 0 rgb(69 39 0 / 72%))
+    drop-shadow(0 2px 2px rgb(35 20 0 / 18%))
+    drop-shadow(0 20px 28px rgb(35 20 0 / 25%));
+  transform: perspective(820px) rotateX(var(--gold-tilt-x))
+    rotateY(var(--gold-tilt-y));
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.filterDefinitions {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.foil,
+.sheen,
+.shine,
+.clearcoat,
+.texture {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.foil,
+.sheen,
+.shine {
+  inset: -42%;
+}
+
+.foil {
+  z-index: 1;
+  background: linear-gradient(
+    118deg,
+    #66540a 0%,
+    #93720f 16%,
+    #d4a72e 31%,
+    #f0d77a 43%,
+    #bd7c0d 56%,
+    #71590a 70%,
+    #d0a02a 85%,
+    #77600b 100%
+  );
+  background-repeat: no-repeat;
+  background-position: var(--gold-foil-x) var(--gold-foil-y);
+  background-size: 220% 170%;
+  mix-blend-mode: overlay;
+  opacity: 0.7;
+  will-change: background-position;
+}
+
+.sheen {
+  z-index: 2;
+  background: linear-gradient(
+    calc(var(--gold-shine-angle) + 10deg),
+    transparent 16%,
+    rgb(73 36 0 / 18%) 31%,
+    rgb(240 177 48 / 24%) 43%,
+    rgb(255 222 119 / 30%) 50%,
+    rgb(100 54 3 / 20%) 63%,
+    transparent 84%
+  );
+  background-repeat: no-repeat;
+  background-position: var(--gold-foil-x) var(--gold-foil-y);
+  background-size: 170% 150%;
+  mix-blend-mode: overlay;
+  opacity: 0.68;
+  will-change: background-position;
+}
+
+.shine {
+  z-index: 4;
+  background: linear-gradient(
+    var(--gold-shine-angle),
+    transparent 18%,
+    rgb(255 202 67 / 7%) 32%,
+    rgb(255 226 137 / 34%) 42%,
+    rgb(255 242 190 / 58%) 50%,
+    rgb(255 211 87 / 28%) 58%,
+    rgb(134 76 4 / 8%) 69%,
+    transparent 82%
+  );
+  background-repeat: no-repeat;
+  background-position: var(--gold-foil-x) var(--gold-foil-y);
+  background-size: 190% 155%;
+  filter: blur(8px);
+  mix-blend-mode: screen;
+  opacity: var(--gold-shine-opacity);
+  will-change: background-position, opacity;
+}
+
+.clearcoat {
+  z-index: 6;
+  inset: -42%;
+  background: linear-gradient(
+    var(--gold-shine-angle),
+    transparent 20%,
+    rgb(255 225 137 / 4%) 34%,
+    rgb(255 244 205 / 24%) 48%,
+    rgb(255 232 163 / 16%) 54%,
+    rgb(232 183 70 / 6%) 66%,
+    transparent 82%
+  );
+  background-repeat: no-repeat;
+  background-position: var(--gold-foil-x) var(--gold-foil-y);
+  background-size: 190% 155%;
+  filter: blur(7px);
+  mix-blend-mode: screen;
+  opacity: 0.55;
+  will-change: background-position;
+}
+
+.texture {
+  z-index: 3;
+  background: url("/textures/plastic-noise.svg");
+  background-size: 88px 88px;
+  filter: contrast(160%);
+  mix-blend-mode: multiply;
+  opacity: 0.25;
+}
+
+.invitation,
+.stub {
+  position: relative;
+  z-index: 5;
+  min-width: 0;
+}
+
+.invitation {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  padding: clamp(1.2rem, 4.5cqw, 2.75rem) clamp(1.25rem, 5.4cqw, 3.25rem);
+}
+
+.logo {
+  width: clamp(1.25rem, 4.8cqw, 2.4rem);
+  height: auto;
+  justify-self: center;
+}
+
+.stubLabel,
+.code {
+  font-family: var(--font-jetbrains-mono), monospace;
+  text-transform: uppercase;
+}
+
+.leadIn,
+.tagline {
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(0.5rem, 2cqw, 0.875rem);
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.copy {
+  display: grid;
+  width: max-content;
+  max-width: 100%;
+  align-self: center;
+  justify-self: center;
+}
+
+.leadIn {
+  margin-bottom: clamp(0.2rem, 0.7cqw, 0.4rem);
+  margin-left: 0.4em;
+}
+
+.eventName {
+  width: max-content;
+  max-width: 100%;
+  margin: 0;
+  color: #2c1d07;
+  font-family: var(--font-alfa-slab-one), serif;
+  font-size: clamp(1.65rem, 12.5cqw, 4.8rem);
+  font-weight: 400;
+  line-height: 0.78;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transform: rotate(-2deg);
+  transform-origin: center;
+}
+
+.tagline {
+  max-width: clamp(8rem, 28cqw, 14rem);
+  margin-top: clamp(0.35rem, 1.2cqw, 0.7rem);
+  margin-right: 0.3em;
+  justify-self: end;
+  line-height: 1.35;
+  text-align: right;
+}
+
+.stub {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(1.25rem, 4.5cqw, 2.75rem) clamp(0.7rem, 2.8cqw, 1.45rem);
+  text-align: center;
+}
+
+.stub::before {
+  position: absolute;
+  top: var(--gold-notch);
+  bottom: var(--gold-notch);
+  left: 0;
+  border-left: 1px dashed rgb(66 36 0 / 42%);
+  content: "";
+  filter: drop-shadow(1px 0 rgb(255 244 160 / 48%));
+}
+
+.stubLabel {
+  font-weight: 750;
+  letter-spacing: 0.16em;
+}
+
+.stubAccess {
+  display: grid;
+  gap: clamp(0.1rem, 0.45cqw, 0.25rem);
+  font-family: var(--font-jetbrains-mono), monospace;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.stubAccess span {
+  font-weight: 650;
+  letter-spacing: 0.16em;
+  opacity: 0.58;
+}
+
+.stubAccess strong {
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.stubLabel,
+.stubAccess span,
+.stubAccess strong {
+  font-size: clamp(0.45rem, 1.7cqw, 0.75rem);
+}
+
+.code {
+  font-size: clamp(0.4rem, 1.56cqw, 0.625rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  opacity: 0.58;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticket {
+    transform: none;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .ticket {
+    transform: none;
+  }
+}
