@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { Wordmark } from "@/components/Wordmark";
 import { WorkWithMeCta } from "@/components/WorkWithMeCta";
 import { cn } from "@/helpers/classname-helper";
 
@@ -25,10 +26,8 @@ export function ExperimentLayout({
     <main className="mx-auto max-w-4xl">
       <div className="p-8 pb-16">
         <header className="px-3">
-          <p className="font-pirata font-bold text-4xl" data-recording-hide="">
-            <Link className="text-grayscale-12" href="/">
-              dqnamo&apos;s
-            </Link>
+          <p data-recording-hide="">
+            <Wordmark />
           </p>
           <p
             className="font-medium font-sans text-sm text-grayscale-10"

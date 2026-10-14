@@ -833,7 +833,7 @@ function ExperimentCard({
 
       <div className="mt-auto flex flex-col px-2 pt-4 pb-2">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="font-medium text-grayscale-12 text-sm">
+          <h3 className="font-semibold text-grayscale-12 text-sm">
             {experiment.title}
           </h3>
           <ArrowRightIcon
@@ -886,7 +886,7 @@ export function NewExperimentCta({ className }: NewExperimentCtaProps) {
           <div className="mt-auto flex flex-col px-2 pt-4 pb-2">
             <div className="flex items-start justify-between gap-3">
               <div className="flex min-w-0 flex-col">
-                <h3 className="font-medium text-grayscale-12 text-sm">
+                <h3 className="font-semibold text-grayscale-12 text-sm">
                   Scramble Text
                 </h3>
               </div>

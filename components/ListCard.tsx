@@ -74,7 +74,9 @@ export function ListCard({ item }: { item: ListItem }) {
         <ListLogoMark logo={item.logo} size="preview" />
       </div>
       <div className="flex flex-1 flex-col px-2 pt-3 pb-2">
-        <h3 className="font-medium text-grayscale-12 text-sm">{item.title}</h3>
+        <h3 className="font-semibold text-grayscale-12 text-sm">
+          {item.title}
+        </h3>
         <p className="mt-2 text-pretty text-grayscale-10 text-xs leading-5">
           {item.description}
         </p>

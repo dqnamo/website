@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { ListGrid } from "@/components/ListCard";
 import { listItems } from "@/components/list-catalog";
+import { Wordmark } from "@/components/Wordmark";
 
 export const metadata: Metadata = {
   title: "List | dqnamo",
@@ -13,10 +13,8 @@ export default function ListPage() {
     <main className="mx-auto max-w-4xl">
       <div className="p-8">
         <header className="px-3">
-          <h1 className="font-pirata font-bold text-4xl">
-            <Link className="text-grayscale-12" href="/">
-              dqnamo&apos;s
-            </Link>
+          <h1>
+            <Wordmark />
           </h1>
           <p className="font-medium font-sans text-sm text-grayscale-10">
             List
