@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { NewExperimentCta } from "@/components/NewExperimentCta";
+import { Wordmark } from "@/components/Wordmark";
 
 export const metadata: Metadata = {
   title: "The Kitchen | dqnamo",
@@ -12,10 +12,8 @@ export default function KitchenPage() {
     <main className="mx-auto max-w-4xl">
       <div className="p-8">
         <header className="px-3">
-          <h1 className="font-pirata font-bold text-4xl" data-recording-hide="">
-            <Link className="text-grayscale-12" href="/">
-              dqnamo&apos;s
-            </Link>
+          <h1 data-recording-hide="">
+            <Wordmark />
           </h1>
           <p
             className="font-medium font-sans text-sm text-grayscale-10"
