@@ -25,12 +25,12 @@ export function WorkWithMeCta({
     >
       <div className="flex w-full flex-col items-center justify-center gap-1.5 rounded-[13px] border border-grayscale-4 border-b-2 bg-white dark:bg-grayscale-3">
         <div className="flex flex-col gap-1.5 p-8">
-          <p className="text-balance text-grayscale-12 text-sm">
-            Want to work with me?
-          </p>
+          <h2 className="text-balance font-medium text-grayscale-12 text-sm">
+            Let&apos;s build something
+          </h2>
           <p className="text-pretty text-grayscale-10 text-sm">
-            I run a lil design engineering studio in London where we do
-            fractional design engineering for startups.
+            I run a lil design engineering studio in London. Startups hire us on
+            a fractional basis to design and build their product.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             <BookCallButton
@@ -38,7 +38,7 @@ export function WorkWithMeCta({
               variant="primary"
               className="w-max justify-start"
             >
-              Jump on a call
+              Talk about your project
               <PikaPhoneIcon aria-hidden="true" size={14} />
             </BookCallButton>
             <Button

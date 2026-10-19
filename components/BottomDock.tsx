@@ -139,7 +139,7 @@ export function BottomDock() {
                 <PikaGithubIcon />
               </a>
             </DockTooltip>
-            <DockTooltip label="Book a call">
+            <DockTooltip label="Book a project call">
               <a
                 href="https://cal.com/interface.london/20min"
                 onClick={() =>
