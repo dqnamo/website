@@ -1,0 +1,128 @@
+/*
+ * Registered so the scroll-driven animations can interpolate them, and so they
+ * drop back to 0px (no fade) whenever the scroll timeline is inactive, which
+ * is the case when the content fits without scrolling.
+ */
+@property --scroll-fade-start {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --scroll-fade-end {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@keyframes start-fade {
+  from {
+    --scroll-fade-start: 0px;
+  }
+
+  to {
+    --scroll-fade-start: var(--scroll-fade-size);
+  }
+}
+
+@keyframes end-fade {
+  from {
+    --scroll-fade-end: var(--scroll-fade-size);
+  }
+
+  to {
+    --scroll-fade-end: 0px;
+  }
+}
+
+.root {
+  --scroll-fade-size: 64px;
+  --scroll-fade-scrollbar: 0px;
+  --scroll-fade-direction: to bottom;
+
+  /*
+   * Opaque in the middle, easing out to transparent at each edge. The stops
+   * follow a smoothstep curve so the fade has no visible line where it meets
+   * the solid content.
+   */
+  --scroll-fade-mask: linear-gradient(
+    var(--scroll-fade-direction),
+    transparent,
+    rgb(0 0 0 / 0.1) calc(var(--scroll-fade-start) * 0.2),
+    rgb(0 0 0 / 0.35) calc(var(--scroll-fade-start) * 0.4),
+    rgb(0 0 0 / 0.65) calc(var(--scroll-fade-start) * 0.6),
+    rgb(0 0 0 / 0.9) calc(var(--scroll-fade-start) * 0.8),
+    #000 var(--scroll-fade-start),
+    #000 calc(100% - var(--scroll-fade-end)),
+    rgb(0 0 0 / 0.9) calc(100% - var(--scroll-fade-end) * 0.8),
+    rgb(0 0 0 / 0.65) calc(100% - var(--scroll-fade-end) * 0.6),
+    rgb(0 0 0 / 0.35) calc(100% - var(--scroll-fade-end) * 0.4),
+    rgb(0 0 0 / 0.1) calc(100% - var(--scroll-fade-end) * 0.2),
+    transparent
+  );
+
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  /* Keyboard focus and scrollIntoView stop short of the faded edges. */
+  scroll-padding-block: var(--scroll-fade-size);
+
+  /*
+   * The mask covers the whole box, borders included, so put borders on a
+   * wrapper. A second, solid layer keeps a classic scrollbar out of the fade;
+   * ScrollFade.tsx measures it into --scroll-fade-scrollbar.
+   */
+  mask-image: var(--scroll-fade-mask), linear-gradient(#000 0 0);
+  mask-position: left, right;
+  mask-repeat: no-repeat;
+  mask-size:
+    calc(100% - var(--scroll-fade-scrollbar)) 100%,
+    var(--scroll-fade-scrollbar) 100%;
+}
+
+.root:dir(rtl) {
+  mask-position: right, left;
+}
+
+.root[data-axis="x"] {
+  --scroll-fade-direction: to right;
+
+  overflow: auto hidden;
+  scroll-padding-block: 0;
+  scroll-padding-inline: var(--scroll-fade-size);
+  mask-position: top, bottom;
+  mask-size:
+    100% calc(100% - var(--scroll-fade-scrollbar)),
+    100% var(--scroll-fade-scrollbar);
+}
+
+.root[data-axis="x"]:dir(rtl) {
+  --scroll-fade-direction: to left;
+}
+
+/*
+ * Each edge fades in over the first --scroll-fade-size of scroll away from it,
+ * so content resting against an edge stays sharp. Browsers without scroll
+ * timelines get the same values from a scroll listener in ScrollFade.tsx.
+ */
+@supports (animation-timeline: scroll()) {
+  .root {
+    animation-name: start-fade, end-fade;
+    animation-duration: auto;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll(self y);
+    animation-range:
+      0 var(--scroll-fade-size),
+      calc(100% - var(--scroll-fade-size)) 100%;
+  }
+
+  .root[data-axis="x"] {
+    animation-timeline: scroll(self x);
+  }
+}
+
+.root[data-fits] {
+  animation: none;
+  mask-image: none;
+}
