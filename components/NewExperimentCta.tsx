@@ -25,6 +25,10 @@ import {
   useRef,
   useState,
 } from "react";
+import {
+  PriorityIcon,
+  StatusIcon,
+} from "@/app/experiments/filter-query-builder/issue-icons";
 import { ScrambleTextShowcase } from "@/app/experiments/scramble-text/scramble-text-showcase";
 import { experiments } from "@/components/experiment-catalog";
 import { IridescentFoil } from "@/components/IridescentFoil";
@@ -252,6 +256,108 @@ function DynamicButtonPreview({ featured = false }: { featured?: boolean }) {
           <span>{state.label}</span>
         </span>
       </motion.div>
+    </div>
+  );
+}
+
+const filterPreviewValues = [
+  { dimmed: [1, 3], label: "High", priority: "high" },
+  { dimmed: [0, 2, 3], label: "Urgent", priority: "urgent" },
+  { dimmed: [0, 1, 2], label: "Medium", priority: "medium" },
+] as const;
+
+const filterPreviewRows = [
+  { priority: "high", status: "in_progress", width: "w-24" },
+  { priority: "urgent", status: "todo", width: "w-32" },
+  { priority: "high", status: "in_review", width: "w-20" },
+  { priority: "medium", status: "todo", width: "w-28" },
+] as const;
+
+function FilterQueryBuilderPreview({
+  featured = false,
+}: {
+  featured?: boolean;
+}) {
+  const shouldReduceMotion = useReducedMotion();
+  const [index, setIndex] = useState(0);
+  const value = filterPreviewValues[index];
+
+  useEffect(() => {
+    if (shouldReduceMotion) {
+      return;
+    }
+
+    const interval = window.setInterval(() => {
+      setIndex((current) => (current + 1) % filterPreviewValues.length);
+    }, 1500);
+
+    return () => window.clearInterval(interval);
+  }, [shouldReduceMotion]);
+
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        featured ? featuredPreviewSurfaceClassName : previewSurfaceClassName,
+        "flex items-center justify-center bg-grayscale-2 p-3 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+      )}
+    >
+      <div className="flex w-full max-w-72 flex-col gap-2">
+        <div className="flex items-center gap-1.5 text-[10px]">
+          <span className="flex h-6 items-center gap-1 rounded-md border border-grayscale-4 bg-grayscale-1 px-1.5 text-grayscale-11 dark:border-grayscale-5 dark:bg-grayscale-3">
+            <StatusIcon className="size-3" status="in_progress" />
+            <span className="font-medium text-grayscale-12">In Progress</span>
+          </span>
+          <span className="flex h-6 items-center gap-1 rounded-md border border-grayscale-7 border-dashed bg-grayscale-2/70 px-1.5 text-grayscale-10 dark:bg-grayscale-3/50">
+            <span>Priority</span>
+            <span className="text-grayscale-9">is</span>
+            <motion.span
+              animate={{ width: "auto" }}
+              className="relative flex items-center overflow-hidden"
+              transition={
+                shouldReduceMotion
+                  ? { duration: 0 }
+                  : { bounce: 0, duration: 0.32, type: "spring" }
+              }
+            >
+              <AnimatePresence initial={false} mode="popLayout">
+                <motion.span
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-center gap-1 whitespace-nowrap font-medium"
+                  exit={{ opacity: 0, y: shouldReduceMotion ? 0 : -6 }}
+                  initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 6 }}
+                  key={value.label}
+                  transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
+                >
+                  <PriorityIcon className="size-3" priority={value.priority} />
+                  {value.label}
+                </motion.span>
+              </AnimatePresence>
+            </motion.span>
+          </span>
+        </div>
+        <div className="overflow-hidden rounded-lg border border-grayscale-3 bg-grayscale-1 dark:border-grayscale-5 dark:bg-grayscale-3">
+          {filterPreviewRows.map((row, rowIndex) => (
+            <div
+              className={cn(
+                "flex h-5 items-center gap-2 border-grayscale-3 px-2 transition-opacity duration-300 not-last:border-b dark:border-grayscale-5",
+                (value.dimmed as readonly number[]).includes(rowIndex) &&
+                  "opacity-30",
+              )}
+              key={row.width}
+            >
+              <PriorityIcon className="size-2.5" priority={row.priority} />
+              <StatusIcon className="size-2.5" status={row.status} />
+              <span
+                className={cn(
+                  "h-1.5 rounded-full bg-grayscale-5 dark:bg-grayscale-6",
+                  row.width,
+                )}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
@@ -566,6 +672,10 @@ export function ExperimentPreview({
 }) {
   if (type === "tactile-button") {
     return <TactileButtonPreview featured={featured} />;
+  }
+
+  if (type === "filter-query-builder") {
+    return <FilterQueryBuilderPreview featured={featured} />;
   }
 
   if (type === "receipt-printer") {
