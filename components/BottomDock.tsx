@@ -334,7 +334,7 @@ export function BottomDock() {
             </DockTooltip>
             <DockTooltip label="Twitter">
               <a
-                href="https://x.com/dqnamo"
+                href="https://x.com/justifiedpixel"
                 rel="noopener noreferrer"
                 target="_blank"
               >
