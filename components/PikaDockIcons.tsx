@@ -133,26 +133,22 @@ export function PikaEnvelopeIcon(props: PikaIconProps) {
   );
 }
 
-export function PikaMoonIcon({
+// A crescent with two sparkles, laid out like Phosphor's MoonStars and drawn on Pika's grid and
+// stroke. Filling it fills the crescent; the sparkles are strokes either way.
+export function PikaMoonStarsIcon({
   filled = false,
   ...props
 }: SelectablePikaIconProps) {
   return (
     <PikaIcon {...props}>
-      {filled ? (
-        <path
-          d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10v-.038a1 1 0 0 0-1.846-.53 5.5 5.5 0 1 1-7.586-7.586A1 1 0 0 0 12.038 2z"
-          fill="currentColor"
-        />
-      ) : (
-        <path
-          d="M21 11.966A6.5 6.5 0 1 1 12.035 3H12a9 9 0 1 0 9 9z"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-        />
-      )}
+      <path
+        d="M19.75 14.828A9 9 0 0 1 9.172 4.25a8.25 8.25 0 1 0 10.578 10.578ZM17.5 9H21m-1.75-1.75v3.5M13.5 4.5H16m-1.25-1.25v2.5"
+        fill={filled ? "currentColor" : "none"}
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      />
     </PikaIcon>
   );
 }

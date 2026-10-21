@@ -10,7 +10,7 @@ import {
   PikaEnvelopeIcon,
   PikaGithubIcon,
   PikaHomeIcon,
-  PikaMoonIcon,
+  PikaMoonStarsIcon,
   PikaXIcon,
 } from "@/components/PikaDockIcons";
 import { Tooltip } from "@/components/public/Tooltip";
@@ -283,7 +283,7 @@ function ThemeButton() {
         onClick={() => setTheme(isDark ? "light" : "dark")}
         style={EDGE_STYLE}
       >
-        <PikaMoonIcon filled={isDark} />
+        <PikaMoonStarsIcon filled={isDark} />
       </Tooltip.Trigger>
       <Tooltip.Portal>
         <Tooltip.Positioner sideOffset={8}>
