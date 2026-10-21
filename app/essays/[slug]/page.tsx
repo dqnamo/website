@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Wordmark } from "@/components/Wordmark";
-import { WorkWithMeCta } from "@/components/WorkWithMeCta";
-import { EssayList } from "../_components/EssayList";
 import { formatEssayDate } from "../_lib/essays";
 import { essays, getEssay } from "../_posts";
 
@@ -38,7 +36,6 @@ export default async function EssayPage({
   }
 
   const { Body } = essay;
-  const otherEssays = essays.filter(({ slug }) => slug !== essay.slug);
 
   return (
     <main className="mx-auto max-w-4xl">
@@ -78,20 +75,13 @@ export default async function EssayPage({
             <div className="mt-10 text-grayscale-11 text-sm leading-6 [&>:first-child]:mt-0">
               <Body />
             </div>
+
+            {/* Signs off the essay with the wordmark's square. */}
+            <span
+              aria-hidden="true"
+              className="mt-10 ml-auto block size-2 bg-grayscale-12"
+            />
           </article>
-
-          {otherEssays.length > 0 && (
-            <section className="mt-20">
-              <h2 className="p-3 font-medium text-grayscale-12 text-sm">
-                More essays
-              </h2>
-              <div className="mt-3">
-                <EssayList essays={otherEssays} />
-              </div>
-            </section>
-          )}
-
-          <WorkWithMeCta className="mt-16" location="essay" />
         </div>
       </div>
     </main>
