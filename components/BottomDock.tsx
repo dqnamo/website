@@ -10,7 +10,7 @@ import {
   PikaEnvelopeIcon,
   PikaGithubIcon,
   PikaHomeIcon,
-  PikaMoonIcon,
+  PikaMoonStarsIcon,
   PikaXIcon,
 } from "@/components/PikaDockIcons";
 import { Tooltip } from "@/components/public/Tooltip";
@@ -21,18 +21,18 @@ const dockItemClassName =
 
 const iconItemClassName = cn(dockItemClassName, "w-8 px-0");
 
-// The dock is a tab rising from a black line along the bottom edge, with the nav card inside it as
-// a smaller tab of the same shape. Both tabs' sides lean out as they fall and round over at the
-// top; the dock's flare into the line, and the card's run straight on through it to the edge. The
-// sides are fixed "wings" drawn here, and a plain body stretches between them, so both tabs follow
-// the nav's width without measuring.
+// The dock is a tab rising from the bottom edge of the screen, with the nav card inside it as a
+// smaller tab of the same shape. Both tabs' sides lean out as they fall and round over at the top;
+// the dock's flare out into the edge, and the card's run straight down to it. The sides are fixed
+// "wings" drawn here, and a plain body stretches between them, so both tabs follow the nav's width
+// without measuring.
 const BUTTON_SIZE = 32;
 const BUTTON_RADIUS = 6;
 // Inside the card's border, around the buttons.
 const CARD_PADDING = 5;
 const NAV_HEIGHT = BUTTON_SIZE + CARD_PADDING * 2;
 const DOCK_TOP = 6;
-// The line is as tall as the dock's padding around the card.
+// The card carries on below the buttons by as much as the gap above it.
 const DOCK_BOTTOM = DOCK_TOP;
 const DOCK_HEIGHT = DOCK_TOP + NAV_HEIGHT + DOCK_BOTTOM;
 // The gap between the card's sides and the dock's, matching the gap above the card.
@@ -47,17 +47,16 @@ type Tab = {
   // Where the tab's left side would meet its top edge without rounding, from the nav's left.
   cornerX: number;
   top: number;
-  // From the top edge down to where the side meets the line or the edge, then on below that.
+  // From the top edge down to the bottom edge of the screen.
   rise: number;
-  depth: number;
   radius: number;
   flare: number;
 };
 
-// Lays out a tab's left wing, whose own origin is where the flare meets the line. The edge can be
+// Lays out a tab's left wing, whose own origin is where the flare meets the edge. The edge can be
 // traced `inset` inside the shape, to draw a border that stays within it: the corners keep their
 // centres and the radii shrink or grow to suit.
-function tabWing({ cornerX, top, rise, depth, radius, flare }: Tab) {
+function tabWing({ cornerX, top, rise, radius, flare }: Tab) {
   const corner = (flare + leanX * (rise - flare)) / leanY;
   const centreX = corner + (radius * (1 - leanX)) / leanY;
   // One extra pixel runs under the body so no seam shows where they meet.
@@ -78,8 +77,8 @@ function tabWing({ cornerX, top, rise, depth, radius, flare }: Tab) {
   return {
     border: edge(0.5),
     bodyInset: n(cornerX - corner + centreX),
-    fill: `${edge(0)} V ${rise + depth} H 0 Z`,
-    height: rise + depth,
+    fill: `${edge(0)} V ${rise} H 0 Z`,
+    height: rise,
     left: n(cornerX - corner),
     top,
     width: n(width),
@@ -88,12 +87,11 @@ function tabWing({ cornerX, top, rise, depth, radius, flare }: Tab) {
 
 const CARD_RADIUS = 18;
 
-// No flare: the card's sides carry on through the line to the bottom edge.
+// No flare: the card's sides run straight down to the bottom edge.
 const CARD = tabWing({
   cornerX: 0,
   top: DOCK_TOP,
   rise: NAV_HEIGHT + DOCK_BOTTOM,
-  depth: 0,
   radius: CARD_RADIUS,
   flare: 0,
 });
@@ -103,8 +101,7 @@ const CARD = tabWing({
 const DOCK = tabWing({
   cornerX: -DOCK_SIDE / leanY + (DOCK_TOP * leanX) / leanY,
   top: 0,
-  rise: DOCK_TOP + NAV_HEIGHT,
-  depth: DOCK_BOTTOM,
+  rise: DOCK_HEIGHT,
   radius: CARD_RADIUS + DOCK_SIDE,
   flare: 14,
 });
@@ -286,7 +283,7 @@ function ThemeButton() {
         onClick={() => setTheme(isDark ? "light" : "dark")}
         style={EDGE_STYLE}
       >
-        <PikaMoonIcon filled={isDark} />
+        <PikaMoonStarsIcon filled={isDark} />
       </Tooltip.Trigger>
       <Tooltip.Portal>
         <Tooltip.Positioner sideOffset={8}>
@@ -314,10 +311,6 @@ export function BottomDock() {
       data-recording-hide=""
       style={{ height: DOCK_HEIGHT }}
     >
-      <div
-        className="pointer-events-auto absolute inset-x-0 bottom-0 bg-[var(--dock-outer)]"
-        style={{ height: DOCK_BOTTOM }}
-      />
       <Tooltip.Provider>
         <div className="relative" style={{ paddingTop: DOCK_TOP }}>
           <TabShape className="text-[var(--dock-outer)]" wing={DOCK} />
@@ -341,7 +334,7 @@ export function BottomDock() {
             </DockTooltip>
             <DockTooltip label="Twitter">
               <a
-                href="https://x.com/dqnamo"
+                href="https://x.com/justifiedpixel"
                 rel="noopener noreferrer"
                 target="_blank"
               >
