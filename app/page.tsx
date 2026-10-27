@@ -38,6 +38,13 @@ export default function HomePage() {
           <h1>
             <Wordmark />
           </h1>
+          <p className="mt-4 max-w-md text-pretty text-grayscale-10 text-sm leading-5">
+            My name is John Paul. Most people call me JP.
+            <br />
+            Born in India, raised in Ireland and living in London.
+            <br />
+            Doing aesthetically pleasing engineering.
+          </p>
         </header>
 
         <WorkWithMeCta className="mt-8" location="homepage" />
