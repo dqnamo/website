@@ -1,0 +1,175 @@
+/* Underground map. Everything is scoped to the app's root so none of it leaks into the rest of the site. */
+
+.underground-map {
+  /* Strong custom curves — the built-in ones lack punch */
+  --um-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --um-ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  overscroll-behavior: none;
+}
+
+/* The canvas and its floating controls follow the map's Paper/Night theme rather than the site's.
+   `.light-theme`/`.dark-theme` reset Radix's gray scale here; the site's grayscale tokens are
+   re-pointed at it so they pick that up instead of the page's. */
+.underground-map .um-map-scope {
+  --color-grayscale-1: var(--gray-1);
+  --color-grayscale-2: var(--gray-2);
+  --color-grayscale-3: var(--gray-3);
+  --color-grayscale-4: var(--gray-4);
+  --color-grayscale-5: var(--gray-5);
+  --color-grayscale-6: var(--gray-6);
+  --color-grayscale-7: var(--gray-7);
+  --color-grayscale-8: var(--gray-8);
+  --color-grayscale-9: var(--gray-9);
+  --color-grayscale-10: var(--gray-10);
+  --color-grayscale-11: var(--gray-11);
+  --color-grayscale-12: var(--gray-12);
+}
+
+/* In dark mode the sidebar's cards sit a couple of steps lighter than the page, as on the homepage.
+   Inside them the grey scale is lifted by the same two steps, so their controls stand off the card
+   just as they would off the page. */
+.dark .underground-map .um-card > * {
+  --color-grayscale-1: var(--gray-3);
+  --color-grayscale-2: var(--gray-4);
+  --color-grayscale-3: var(--gray-5);
+  --color-grayscale-4: var(--gray-6);
+  --color-grayscale-5: var(--gray-7);
+  --color-grayscale-6: var(--gray-8);
+}
+
+/* ───────────── Pressables ───────────── */
+
+.underground-map .press {
+  transition: transform 160ms var(--um-ease-out);
+}
+.underground-map .press:active {
+  transform: scale(0.97);
+}
+
+/* ───────────── Map canvas ───────────── */
+
+.underground-map .station-hit,
+.underground-map .seg-hit {
+  vector-effect: non-scaling-stroke;
+  transition: stroke 120ms ease;
+}
+.underground-map .station-hit {
+  stroke-width: 2px;
+}
+
+.underground-map .canvas {
+  cursor: default;
+}
+.underground-map .canvas[data-tool="draw"] {
+  cursor: crosshair;
+}
+.underground-map .canvas[data-tool="draw"] .station-hit,
+.underground-map .canvas[data-tool="erase"] .station-hit,
+.underground-map .canvas[data-tool="erase"] .seg-hit,
+.underground-map .canvas[data-tool="move"] .seg-hit {
+  cursor: pointer;
+}
+.underground-map .canvas[data-tool="draw"] .seg-hit {
+  cursor: copy;
+}
+.underground-map .canvas[data-tool="move"] .station-hit {
+  cursor: grab;
+}
+.underground-map .canvas .map-label {
+  cursor: move;
+}
+.underground-map .canvas[data-tool="erase"] .map-label {
+  cursor: pointer;
+}
+.underground-map .canvas[data-cursor="grab"],
+.underground-map .canvas[data-cursor="grab"] * {
+  /* biome-ignore lint/complexity/noImportantStyles: a pan in progress beats every hover cursor under it */
+  cursor: grab !important;
+}
+.underground-map .canvas[data-cursor="grabbing"],
+.underground-map .canvas[data-cursor="grabbing"] * {
+  /* biome-ignore lint/complexity/noImportantStyles: a pan in progress beats every hover cursor under it */
+  cursor: grabbing !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .underground-map .canvas[data-tool="draw"] .station-hit:hover,
+  .underground-map .canvas[data-tool="move"] .station-hit:hover {
+    stroke: rgb(59 130 246 / 0.55);
+  }
+  .underground-map .canvas[data-tool="move"] .seg-hit:hover {
+    stroke: rgb(59 130 246 / 0.14);
+  }
+  .underground-map .canvas[data-tool="erase"] .station-hit:hover {
+    stroke: rgb(239 68 68 / 0.8);
+    fill: rgb(239 68 68 / 0.12);
+  }
+  .underground-map .canvas[data-tool="erase"] .seg-hit:hover {
+    stroke: rgb(239 68 68 / 0.28);
+  }
+}
+
+/* Elements on the map pop in when created. Never from scale(0). */
+.underground-map .pop {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    transform 260ms var(--um-ease-out),
+    opacity 200ms var(--um-ease-out);
+}
+@starting-style {
+  .underground-map .pop {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+}
+
+.underground-map .fade-in {
+  transition: opacity 220ms var(--um-ease-out);
+}
+@starting-style {
+  .underground-map .fade-in {
+    opacity: 0;
+  }
+}
+
+/* Example-map intro: lines draw themselves in, sweeping west → east. */
+@keyframes um-draw-line {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.underground-map .draw-in {
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+  animation: um-draw-line 700ms var(--um-ease-in-out) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .underground-map .pop {
+    transition: opacity 160ms ease;
+  }
+  @starting-style {
+    .underground-map .pop {
+      transform: none;
+      opacity: 0;
+    }
+  }
+  .underground-map .draw-in {
+    animation: none;
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ───────────── Sidebar bits ───────────── */
+
+.underground-map .scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-grayscale-4) transparent;
+}
+
+.underground-map kbd {
+  font-family: var(--font-mono);
+}
