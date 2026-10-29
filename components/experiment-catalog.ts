@@ -1,5 +1,12 @@
 export const experiments = [
   {
+    title: "Waitlist Ticket",
+    href: "/experiments/waitlist-ticket",
+    description:
+      "An email form that shrinks as a numbered queue ticket slides out from behind it.",
+    preview: "waitlist-ticket",
+  },
+  {
     title: "Tactile Button",
     href: "/experiments/tactile-button",
     description:

@@ -2,6 +2,7 @@
 
 import {
   ArrowCounterClockwiseIcon,
+  ArrowFatDownIcon,
   ArrowRightIcon,
   CheckCircleIcon,
   CheckIcon,
@@ -21,6 +22,7 @@ import posthog from "posthog-js";
 import {
   useCallback,
   useEffect,
+  useId,
   useLayoutEffect,
   useRef,
   useState,
@@ -30,6 +32,10 @@ import { experiments } from "@/components/experiment-catalog";
 import { IridescentFoil } from "@/components/IridescentFoil";
 import { LogoTraceLoader } from "@/components/LogoTraceLoader";
 import { PlayingCard } from "@/components/PlayingCard";
+import {
+  QueueTicketClip,
+  QueueTicketNextTab,
+} from "@/components/QueueTicketClip";
 import { ReceiptPrinter } from "@/components/ReceiptPrinter";
 import { Signature } from "@/components/Signature";
 import { Stamp } from "@/components/Stamp";
@@ -557,6 +563,66 @@ function CassettePlayerPreview({ featured = false }: { featured?: boolean }) {
   );
 }
 
+function WaitlistTicketPreview({ featured = false }: { featured?: boolean }) {
+  const ticketClipId = useId().replaceAll(":", "");
+
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        featured ? featuredPreviewSurfaceClassName : previewSurfaceClassName,
+        "relative flex items-start justify-center overflow-hidden bg-grayscale-2 pt-2 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+      )}
+    >
+      <QueueTicketClip id={ticketClipId} />
+      <div className="relative flex w-40 flex-col items-center">
+        <div
+          className={cn(
+            "relative z-20 flex items-center justify-center gap-1.5 rounded-lg border border-black bg-black text-white small-shadow",
+            featured ? "h-8 w-32" : "h-7 w-28",
+          )}
+        >
+          <span className="size-2 rounded-full bg-green-9" />
+          <span className="font-medium text-[9px]">You&apos;re in</span>
+        </div>
+        <div
+          className={cn(
+            "relative z-10 -mt-2 w-24",
+            featured ? "h-[7.6rem]" : "h-[5.8rem]",
+          )}
+        >
+          <div
+            className={cn(
+              "relative isolate mx-auto text-center text-[#211f18] drop-shadow-[0_5px_8px_rgba(0,0,0,0.14)] transition-transform duration-300 group-hover:translate-y-1 motion-reduce:transition-none",
+              featured ? "h-[7.6rem] w-[77px]" : "h-[5.8rem] w-[59px]",
+            )}
+          >
+            <QueueTicketNextTab />
+            <div
+              className="relative z-10 h-full w-full bg-white bg-[url('/textures/receipt-paper.svg')] bg-cover bg-blend-soft-light"
+              style={{ clipPath: `url(#${ticketClipId})` }}
+            >
+              <strong
+                className={cn(
+                  "absolute inset-x-0 top-[43%] font-number font-semibold leading-none tracking-[-0.05em] tabular-nums",
+                  featured ? "text-[26px]" : "text-[20px]",
+                )}
+              >
+                0248
+              </strong>
+              <ArrowFatDownIcon
+                className="absolute bottom-[8%] left-1/2 -translate-x-1/2"
+                size={featured ? 19 : 14}
+                weight="fill"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function ExperimentPreview({
   featured = false,
   type,
@@ -564,6 +630,10 @@ export function ExperimentPreview({
   featured?: boolean;
   type: (typeof experiments)[number]["preview"];
 }) {
+  if (type === "waitlist-ticket") {
+    return <WaitlistTicketPreview featured={featured} />;
+  }
+
   if (type === "tactile-button") {
     return <TactileButtonPreview featured={featured} />;
   }
