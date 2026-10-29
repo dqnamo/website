@@ -27,7 +27,7 @@ export function ExperimentLayout({
       <div className="p-8 pb-16">
         <header className="px-3">
           <p data-recording-hide="">
-            <Wordmark />
+            <Wordmark possessive />
           </p>
           <p
             className="font-medium font-sans text-sm text-grayscale-10"

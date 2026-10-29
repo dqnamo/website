@@ -14,7 +14,7 @@ export default function ListPage() {
       <div className="p-8">
         <header className="px-3">
           <h1>
-            <Wordmark />
+            <Wordmark possessive />
           </h1>
           <p className="font-medium font-sans text-sm text-grayscale-10">
             List

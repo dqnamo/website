@@ -38,6 +38,7 @@ export default function HomePage() {
           <h1>
             <Wordmark />
           </h1>
+          <p className="font-medium text-grayscale-10 text-xs">JP</p>
         </header>
 
         <WorkWithMeCta className="mt-8" location="homepage" />

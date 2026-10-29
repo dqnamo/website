@@ -13,7 +13,7 @@ export default function KitchenPage() {
       <div className="p-8">
         <header className="px-3">
           <h1 data-recording-hide="">
-            <Wordmark />
+            <Wordmark possessive />
           </h1>
           <p
             className="font-medium font-sans text-sm text-grayscale-10"
