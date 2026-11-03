@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Barlow, Inter, JetBrains_Mono, Pirata_One } from "next/font/google";
+import Script from "next/script";
 import "../styles/globals.css";
 import { BottomDock } from "@/components/BottomDock";
 import { RecordingMode } from "@/components/RecordingMode";
@@ -63,6 +64,10 @@ export default function RootLayout({
           <div className="root">{children}</div>
           <BottomDock />
         </ThemeProvider>
+        <Script
+          src="https://seerstack.com/s.js"
+          data-key="pk_28b403a1edd72fcf10a272bc7eed491c"
+        />
       </body>
     </html>
   );
