@@ -9,6 +9,7 @@ import {
   FileArrowUpIcon,
   FileZipIcon,
   FloppyDiskIcon,
+  LockSimpleIcon,
   PaperPlaneTiltIcon,
   PlayIcon,
   SpeakerHighIcon,
@@ -332,6 +333,111 @@ function MagneticDropZonePreview({ featured = false }: { featured?: boolean }) {
   );
 }
 
+function PricingConfiguratorPreview({
+  featured = false,
+}: {
+  featured?: boolean;
+}) {
+  const swapClassName =
+    "col-start-1 row-start-1 transition-[transform,opacity,filter] duration-300 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none";
+
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        featured ? featuredPreviewSurfaceClassName : previewSurfaceClassName,
+        "flex items-center justify-center bg-grayscale-2 p-3 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+      )}
+    >
+      <div className="w-full max-w-60 rounded-xl border border-grayscale-3 bg-white p-3 dark:border-grayscale-5 dark:bg-grayscale-3">
+        <div className="flex items-end justify-between gap-3">
+          <span className="inline-grid overflow-hidden font-medium text-[11px] text-grayscale-12 leading-4">
+            <span
+              className={cn(
+                swapClassName,
+                "group-hover:-translate-y-2 group-hover:opacity-0 group-hover:blur-[2px] group-focus-visible:-translate-y-2 group-focus-visible:opacity-0 group-focus-visible:blur-[2px]",
+              )}
+            >
+              Pro
+            </span>
+            <span
+              className={cn(
+                swapClassName,
+                "translate-y-2 opacity-0 blur-[2px] group-hover:translate-y-0 group-hover:opacity-100 group-hover:blur-none group-focus-visible:translate-y-0 group-focus-visible:opacity-100 group-focus-visible:blur-none",
+              )}
+            >
+              Business
+            </span>
+          </span>
+          <span className="flex items-baseline gap-0.5">
+            <span className="inline-grid overflow-hidden font-semibold text-grayscale-12 text-lg tabular-nums leading-6 tracking-[-0.03em]">
+              <span
+                className={cn(
+                  swapClassName,
+                  "text-right group-hover:-translate-y-full group-focus-visible:-translate-y-full",
+                )}
+              >
+                $240
+              </span>
+              <span
+                className={cn(
+                  swapClassName,
+                  "translate-y-full text-right group-hover:translate-y-0 group-focus-visible:translate-y-0",
+                )}
+              >
+                $1,050
+              </span>
+            </span>
+            <span className="font-medium text-[10px] text-grayscale-10">
+              /mo
+            </span>
+          </span>
+        </div>
+
+        <div className="relative mt-3 h-3">
+          <div className="absolute inset-x-0 top-1/2 flex h-1 -translate-y-1/2 gap-0.5">
+            {[0, 1, 2, 3].map((segment) => (
+              <span
+                className="flex-1 rounded-full bg-grayscale-4 dark:bg-grayscale-6"
+                key={segment}
+              />
+            ))}
+          </div>
+          <div className="absolute inset-x-0 top-1/2 flex h-1 -translate-y-1/2 gap-0.5 [clip-path:inset(0_67.5%_0_0)] transition-[clip-path] duration-500 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] group-hover:[clip-path:inset(0_48.5%_0_0)] group-focus-visible:[clip-path:inset(0_48.5%_0_0)] motion-reduce:transition-none">
+            {[0, 1, 2, 3].map((segment) => (
+              <span
+                className="flex-1 rounded-full bg-grayscale-12"
+                key={segment}
+              />
+            ))}
+          </div>
+          <span className="absolute top-1/2 left-[32.5%] size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border border-grayscale-5 bg-white shadow-sm transition-[left] duration-500 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] group-hover:left-[51.5%] group-focus-visible:left-[51.5%] motion-reduce:transition-none dark:border-grayscale-11 dark:bg-grayscale-12" />
+        </div>
+
+        <div className="mt-3 flex flex-col gap-1.5 text-[10px] leading-3">
+          <span className="flex items-center gap-1.5 text-grayscale-12">
+            <span className="grid size-3 place-items-center rounded-full bg-grayscale-12 text-grayscale-1">
+              <CheckIcon size={7} weight="bold" />
+            </span>
+            Guest access
+          </span>
+          <span className="flex items-center gap-1.5 text-grayscale-9 transition-colors duration-300 group-hover:text-grayscale-12 group-focus-visible:text-grayscale-12">
+            <span className="relative grid size-3 place-items-center">
+              <span className="absolute inset-0 grid place-items-center rounded-full border border-grayscale-6 border-dashed text-grayscale-8 transition-opacity duration-150 group-hover:opacity-0 group-focus-visible:opacity-0">
+                <LockSimpleIcon size={6} weight="bold" />
+              </span>
+              <span className="absolute inset-0 grid scale-50 place-items-center rounded-full bg-grayscale-12 text-grayscale-1 opacity-0 transition-[transform,opacity] delay-150 duration-300 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-100 group-hover:opacity-100 group-focus-visible:scale-100 group-focus-visible:opacity-100 motion-reduce:transition-none">
+                <CheckIcon size={7} weight="bold" />
+              </span>
+            </span>
+            SAML single sign-on
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function HoldToConfirmPreview({ featured = false }: { featured?: boolean }) {
   const shouldReduceMotion = useReducedMotion();
   const [phase, setPhase] = useState<HoldPreviewPhase>("idle");
@@ -570,6 +676,10 @@ export function ExperimentPreview({
 
   if (type === "receipt-printer") {
     return <ReceiptPrinterPreview featured={featured} />;
+  }
+
+  if (type === "pricing-configurator") {
+    return <PricingConfiguratorPreview featured={featured} />;
   }
 
   if (type === "hold-to-confirm") {
