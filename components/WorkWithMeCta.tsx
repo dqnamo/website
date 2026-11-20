@@ -2,8 +2,7 @@
 
 import Image from "next/image";
 import { BookCallButton } from "@/components/BookCallButton";
-import { PikaArrowRightIcon, PikaPhoneIcon } from "@/components/PikaDockIcons";
-import Button from "@/components/public/Button";
+import { PikaArrowRightIcon } from "@/components/PikaDockIcons";
 import { GameOfLife } from "@/components/random/GameOfLife";
 import { cn } from "@/helpers/classname-helper";
 
@@ -38,19 +37,9 @@ export function WorkWithMeCta({
               variant="primary"
               className="w-max justify-start"
             >
-              Talk about your project
-              <PikaPhoneIcon aria-hidden="true" size={14} />
-            </BookCallButton>
-            <Button
-              href="https://interface.london"
-              target="_blank"
-              rel="noopener noreferrer"
-              variant="secondary"
-              className="w-max justify-start text-left dark:border-grayscale-5 dark:bg-grayscale-4 dark:hover:border-grayscale-6 dark:hover:bg-grayscale-5"
-            >
               Learn more
               <PikaArrowRightIcon aria-hidden="true" size={14} />
-            </Button>
+            </BookCallButton>
           </div>
         </div>
       </div>
