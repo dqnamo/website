@@ -353,9 +353,9 @@ export function BottomDock() {
                 <PikaGithubIcon />
               </a>
             </DockTooltip>
-            <DockTooltip label="Book a project call">
+            <DockTooltip label="Start a project">
               <a
-                href="https://cal.com/interface.london/20min"
+                href="https://interface.london"
                 onClick={() =>
                   posthog.capture("work_with_me_cta_clicked", {
                     location: "dock",

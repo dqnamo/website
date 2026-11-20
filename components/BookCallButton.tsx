@@ -15,7 +15,7 @@ export function BookCallButton({ location, ...props }: BookCallButtonProps) {
   return (
     <Button
       {...props}
-      href="https://cal.com/interface.london/20min"
+      href="https://interface.london"
       rel="noopener noreferrer"
       target="_blank"
       onClick={() => posthog.capture("work_with_me_cta_clicked", { location })}
