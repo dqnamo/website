@@ -55,6 +55,13 @@ export const experiments = [
     preview: "ticket",
   },
   {
+    title: "Guarded Switch",
+    href: "/experiments/guarded-switch",
+    description:
+      "A toggle under a flip-up safety guard that knocks it back off when shut.",
+    preview: "guarded-switch",
+  },
+  {
     title: "Stamp",
     href: "/experiments/stamp",
     description:
