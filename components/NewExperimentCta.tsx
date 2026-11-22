@@ -557,6 +557,31 @@ function CassettePlayerPreview({ featured = false }: { featured?: boolean }) {
   );
 }
 
+function GuardedSwitchPreview() {
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        previewSurfaceClassName,
+        "flex items-center justify-center bg-grayscale-2 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+      )}
+    >
+      <div className="relative h-[104px] w-[68px] rounded-[10px] border border-grayscale-6 bg-[linear-gradient(170deg,var(--color-grayscale-3),var(--color-grayscale-5))] shadow-[inset_0_1px_0_rgb(255_255_255_/_50%),0_1px_0_var(--color-grayscale-7),0_10px_20px_-12px_rgb(0_0_0_/_45%)] dark:border-grayscale-5 dark:shadow-[inset_0_1px_0_rgb(255_255_255_/_7%),0_1px_0_var(--color-grayscale-1),0_10px_20px_-10px_rgb(0_0_0_/_80%)]">
+        <div className="absolute top-[30px] left-[16px] h-[44px] w-[36px] rounded-[5px] bg-grayscale-4 shadow-[inset_0_2px_4px_rgb(0_0_0_/_28%)] dark:bg-grayscale-2 dark:shadow-[inset_0_2px_4px_rgb(0_0_0_/_60%)]">
+          <span className="absolute top-[16px] left-[12px] size-[12px] rounded-full bg-[linear-gradient(150deg,#f1f2f4,#a9adb4_45%,#6c7179)]" />
+          <span className="absolute top-[22px] left-[16px] h-[14px] w-[4px] origin-top rounded-full bg-[linear-gradient(90deg,#4d5157,#f3f4f6_40%,#3f4248)] transition-transform delay-0 duration-200 group-hover:-scale-y-100 group-hover:delay-500 motion-reduce:transition-none" />
+          <span className="absolute top-[32px] left-[13px] size-[10px] rounded-full bg-[radial-gradient(circle_at_34%_30%,#fff,#d4d7dc_26%,#7b8089_70%,#3c3f45)] transition-transform delay-0 duration-200 group-hover:-translate-y-[28px] group-hover:delay-500 motion-reduce:transition-none" />
+        </div>
+        <div className="absolute top-[27px] left-[14px] h-[48px] w-[40px] origin-top rounded-[6px] bg-[linear-gradient(165deg,#f0533f,#d4321f_45%,#a9231a)] shadow-[inset_0_1px_0_rgb(255_255_255_/_45%),inset_0_0_0_1.5px_rgb(120_20_12_/_35%),2px_3px_4px_rgb(0_0_0_/_25%)] transition-transform duration-500 ease-[cubic-bezier(0.34,1.4,0.64,1)] [transform:perspective(160px)_rotateX(0deg)] group-hover:[transform:perspective(160px)_rotateX(112deg)] motion-reduce:transition-none">
+          <span className="absolute inset-x-[12px] bottom-[6px] h-[2px] rounded-full bg-[#8c1c14]" />
+        </div>
+        <span className="absolute top-[23px] left-[12px] h-[6px] w-[44px] rounded-full bg-[linear-gradient(180deg,#eceef1,#9ea3ab_55%,#5b6067)]" />
+        <span className="absolute bottom-[10px] left-[29px] size-[9px] rounded-full bg-[radial-gradient(circle_at_40%_35%,#9a7a3c,#5c4413_60%,#3d2c0a)] transition-[background-color,box-shadow] delay-0 duration-150 group-hover:bg-[radial-gradient(circle_at_40%_35%,#fff6d6,#ffc23a_45%,#e48a00)] group-hover:shadow-[0_0_10px_3px_rgb(255_184_40_/_60%)] group-hover:delay-[650ms]" />
+      </div>
+    </div>
+  );
+}
+
 export function ExperimentPreview({
   featured = false,
   type,
@@ -661,6 +686,10 @@ export function ExperimentPreview({
         />
       </div>
     );
+  }
+
+  if (type === "guarded-switch") {
+    return <GuardedSwitchPreview />;
   }
 
   if (type === "stamp") {
