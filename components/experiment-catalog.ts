@@ -1,5 +1,12 @@
 export const experiments = [
   {
+    title: "Split-Flap Display",
+    href: "/experiments/split-flap",
+    description:
+      "A departures board whose drums turn forwards leaf by leaf, then clack onto each letter.",
+    preview: "split-flap",
+  },
+  {
     title: "Tactile Button",
     href: "/experiments/tactile-button",
     description:
