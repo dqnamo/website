@@ -26,6 +26,7 @@ import {
   useState,
 } from "react";
 import { ScrambleTextShowcase } from "@/app/experiments/scramble-text/scramble-text-showcase";
+import { DetentKnobFace } from "@/components/DetentKnob";
 import { experiments } from "@/components/experiment-catalog";
 import { IridescentFoil } from "@/components/IridescentFoil";
 import { LogoTraceLoader } from "@/components/LogoTraceLoader";
@@ -658,6 +659,25 @@ export function ExperimentPreview({
           }
           stubHeight={29}
           tilt={false}
+        />
+      </div>
+    );
+  }
+
+  if (type === "detent-knob") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "flex items-center justify-center bg-grayscale-2 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+        )}
+      >
+        <DetentKnobFace
+          count={10}
+          litIndex={4}
+          size={58}
+          turnClassName="-rotate-27 transition-transform duration-500 [transition-timing-function:steps(3,end)] group-hover:rotate-54 motion-reduce:transition-none"
         />
       </div>
     );

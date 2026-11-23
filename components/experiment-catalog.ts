@@ -93,6 +93,13 @@ export const experiments = [
       "A layered CSS foil treatment that reacts to scroll and pointer.",
     preview: "foil",
   },
+  {
+    title: "Detent Knob",
+    href: "/experiments/detent-knob",
+    description:
+      "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",
+    preview: "detent-knob",
+  },
 ] as const;
 
 // Scramble Text has a custom card in the grid rather than an ExperimentPreview.
