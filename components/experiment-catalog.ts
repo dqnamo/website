@@ -93,6 +93,13 @@ export const experiments = [
       "A layered CSS foil treatment that reacts to scroll and pointer.",
     preview: "foil",
   },
+  {
+    title: "Tape Measure",
+    href: "/experiments/tape-measure",
+    description:
+      "A pocket tape you pull out by the hook, lock with your thumb, and let snap back home.",
+    preview: "tape-measure",
+  },
 ] as const;
 
 // Scramble Text has a custom card in the grid rather than an ExperimentPreview.
