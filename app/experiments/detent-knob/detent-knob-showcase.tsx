@@ -57,7 +57,7 @@ export function DetentKnobShowcase() {
             label="Bass"
             max={6}
             min={-6}
-            size={56}
+            size={60}
             sound={sound}
           />
           <DetentKnob
@@ -66,7 +66,7 @@ export function DetentKnobShowcase() {
             max={10}
             min={0}
             onValueChange={setVolume}
-            size={116}
+            size={128}
             sound={sound}
             value={volume}
           />
@@ -77,7 +77,7 @@ export function DetentKnobShowcase() {
             label="Treble"
             max={6}
             min={-6}
-            size={56}
+            size={60}
             sound={sound}
           />
         </div>

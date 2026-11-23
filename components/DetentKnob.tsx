@@ -27,11 +27,7 @@ const END_STOP_GIVE = 7;
 const END_STOP_SLACK = 36;
 const SETTLE_SPRING = { damping: 26, stiffness: 520, type: "spring" } as const;
 
-type KnobCustomProperty =
-  | "--knob-collar"
-  | "--knob-collar-edge"
-  | "--knob-collar-highlight"
-  | "--knob-lit";
+type KnobCustomProperty = "--knob-lit";
 
 type KnobStyle = CSSProperties & Partial<Record<KnobCustomProperty, string>>;
 
@@ -50,7 +46,7 @@ export type DetentKnobProps = {
    * bipolar controls such as tone or balance.
    */
   bipolar?: boolean;
-  /** Knob diameter in pixels. The collar and LED ring add half again. */
+  /** Knob diameter in pixels. The LED bezel adds 30% around it. */
   size?: number;
   /** Play a short synthesised click on every detent. */
   sound?: boolean;
@@ -150,12 +146,10 @@ function buzz(duration: number) {
 /* Visual pieces                                                               */
 /* -------------------------------------------------------------------------- */
 
-/** The collar follows the theme. The knob and bezel are black in both. */
-const knobThemeClassName =
-  "[--knob-collar-edge:#dfe3e1] [--knob-collar-highlight:#ffffff] [--knob-collar:#f1f3f2] [--knob-lit:#ff9a2e] dark:[--knob-collar-edge:#1f1f22] dark:[--knob-collar-highlight:#4a4a4f] dark:[--knob-collar:#2e2e32]";
+/** The knob and its bezel are black in both themes. */
+const knobThemeClassName = "[--knob-lit:#ff9a2e]";
 
-/** Collar, then bezel, then knob, as multiples of the knob's diameter. */
-const COLLAR_SCALE = 1.5;
+/** The bezel's diameter as a multiple of the knob's. */
 const BEZEL_SCALE = 1.3;
 
 function detentAngle(index: number, count: number) {
@@ -168,8 +162,8 @@ function ledsPerDetent(count: number, arcLength: number, ledSize: number) {
   return Math.max(1, Math.round(fits / count));
 }
 
-/** The pale collar and the dark bezel ring of LEDs set into it. */
-function KnobCollar({
+/** The black bezel ring with the LEDs set into it. */
+function KnobBezel({
   bipolar,
   count,
   litIndex,
@@ -180,7 +174,6 @@ function KnobCollar({
   litIndex: number;
   size: number;
 }) {
-  const collar = size * COLLAR_SCALE;
   const bezel = size * BEZEL_SCALE;
   const ledRadius = (size + bezel) / 4;
   const ledSize = Math.max(2.5, size * 0.032);
@@ -198,52 +191,39 @@ function KnobCollar({
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
+      className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full dark:outline dark:outline-1 dark:outline-white/[0.07]"
       style={{
         background:
-          "radial-gradient(circle at 50% 28%, var(--knob-collar-highlight), var(--knob-collar) 45%, var(--knob-collar-edge) 100%)",
+          "radial-gradient(circle at 50% 50%, #0b0b0c 0 70%, #1d1d20 100%)",
         boxShadow:
-          "inset 0 1px 0 var(--knob-collar-highlight), inset 0 -2px 3px rgb(0 0 0 / 8%), 0 1px 2px rgb(0 0 0 / 10%), 0 10px 24px rgb(0 0 0 / 10%), 0 24px 60px rgb(0 0 0 / 8%)",
-        height: collar,
-        width: collar,
+          "inset 0 2px 4px rgb(0 0 0 / 70%), inset 0 1px 0 rgb(255 255 255 / 10%), 0 0 0 1px rgb(0 0 0 / 30%), 0 2px 4px rgb(0 0 0 / 18%), 0 12px 28px rgb(0 0 0 / 16%), 0 28px 60px rgb(0 0 0 / 10%)",
+        height: bezel,
+        width: bezel,
       }}
     >
-      {/* A recessed black ring that the LEDs sit in. */}
-      <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle at 50% 50%, #0b0b0c 0 70%, #1d1d20 100%)",
-          boxShadow:
-            "inset 0 2px 4px rgb(0 0 0 / 70%), 0 1px 0 var(--knob-collar-highlight), 0 -1px 0 rgb(0 0 0 / 12%)",
-          height: bezel,
-          width: bezel,
-        }}
-      >
-        {Array.from({ length: ledCount }, (_, led) => {
-          const position = led / perDetent;
-          const angle = (detentAngle(position, count) * Math.PI) / 180;
-          const lit = isLit(position);
+      {Array.from({ length: ledCount }, (_, led) => {
+        const position = led / perDetent;
+        const angle = (detentAngle(position, count) * Math.PI) / 180;
+        const lit = isLit(position);
 
-          return (
-            <span
-              className={cn(
-                "absolute rounded-full transition-[background-color,box-shadow] duration-150 motion-reduce:transition-none",
-                lit
-                  ? "bg-[#ffc27a] shadow-[0_0_2px_1px_var(--knob-lit),0_0_7px_1px_rgb(255_138_31_/_55%)]"
-                  : "bg-[#2a2a2e] shadow-[inset_0_1px_1px_rgb(0_0_0_/_80%),0_0.5px_0_rgb(255_255_255_/_8%)]",
-              )}
-              key={position}
-              style={{
-                height: ledSize,
-                left: bezel / 2 + Math.sin(angle) * ledRadius - ledSize / 2,
-                top: bezel / 2 - Math.cos(angle) * ledRadius - ledSize / 2,
-                width: ledSize,
-              }}
-            />
-          );
-        })}
-      </div>
+        return (
+          <span
+            className={cn(
+              "absolute rounded-full transition-[background-color,box-shadow] duration-150 motion-reduce:transition-none",
+              lit
+                ? "bg-[#ffc27a] shadow-[0_0_2px_1px_var(--knob-lit),0_0_7px_1px_rgb(255_138_31_/_55%)]"
+                : "bg-[#2a2a2e] shadow-[inset_0_1px_1px_rgb(0_0_0_/_80%),0_0.5px_0_rgb(255_255_255_/_8%)]",
+            )}
+            key={position}
+            style={{
+              height: ledSize,
+              left: bezel / 2 + Math.sin(angle) * ledRadius - ledSize / 2,
+              top: bezel / 2 - Math.cos(angle) * ledRadius - ledSize / 2,
+              width: ledSize,
+            }}
+          />
+        );
+      })}
     </div>
   );
 }
@@ -347,12 +327,12 @@ export function DetentKnobFace({
         className,
       )}
       style={{
-        height: size * COLLAR_SCALE,
-        width: size * COLLAR_SCALE,
+        height: size * BEZEL_SCALE,
+        width: size * BEZEL_SCALE,
         ...style,
       }}
     >
-      <KnobCollar
+      <KnobBezel
         bipolar={false}
         count={count}
         litIndex={litIndex}
@@ -669,7 +649,7 @@ export function DetentKnob({
   }, []);
 
   const valueText = formatValue(value);
-  const collarSize = size * COLLAR_SCALE;
+  const bezelSize = size * BEZEL_SCALE;
 
   return (
     <div
@@ -679,7 +659,7 @@ export function DetentKnob({
         className,
       )}
     >
-      {/* The whole collar is the slider, so there is plenty to grab. */}
+      {/* The whole bezel is the slider, so there is plenty to grab. */}
       <div
         aria-labelledby={labelId}
         aria-valuemax={max}
@@ -695,10 +675,10 @@ export function DetentKnob({
         onPointerUp={endDrag}
         ref={surfaceRef}
         role="slider"
-        style={{ height: collarSize, width: collarSize }}
+        style={{ height: bezelSize, width: bezelSize }}
         tabIndex={0}
       >
-        <KnobCollar
+        <KnobBezel
           bipolar={bipolar}
           count={count}
           litIndex={index}
