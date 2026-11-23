@@ -1,5 +1,6 @@
 "use client";
 
+import NumberFlow, { type Format } from "@number-flow/react";
 import {
   animate,
   motion,
@@ -51,7 +52,10 @@ export type DetentKnobProps = {
   size?: number;
   /** Play a short synthesised click on every detent. */
   sound?: boolean;
-  formatValue?: (value: number) => string;
+  /** Number format for the readout and the accessible value, e.g. a sign. */
+  format?: Format;
+  /** Text after the number, e.g. " dB". */
+  suffix?: string;
   className?: string;
 };
 
@@ -440,7 +444,8 @@ export function DetentKnob({
   bipolar = false,
   className,
   defaultValue,
-  formatValue = String,
+  format,
+  suffix = "",
   label,
   max = 10,
   min = 0,
@@ -733,7 +738,7 @@ export function DetentKnob({
     return () => surface.removeEventListener("wheel", handleWheel);
   }, []);
 
-  const valueText = formatValue(value);
+  const valueText = `${new Intl.NumberFormat("en-US", format).format(value)}${suffix}`;
   const bezelSize = size * BEZEL_SCALE;
 
   return (
@@ -779,7 +784,7 @@ export function DetentKnob({
 
       <div className="flex flex-col items-center gap-0.5">
         <span
-          className="font-medium font-sans text-[11px] text-grayscale-10 uppercase tracking-[0.2em]"
+          className="font-medium font-mono text-[9px] text-grayscale-10 uppercase tracking-[0.06em]"
           id={labelId}
         >
           {label}
@@ -788,7 +793,12 @@ export function DetentKnob({
           aria-hidden="true"
           className="font-medium font-mono text-grayscale-12 text-xs tabular-nums"
         >
-          {valueText}
+          <NumberFlow
+            format={format}
+            locales="en-US"
+            suffix={suffix}
+            value={value}
+          />
         </output>
       </div>
     </div>

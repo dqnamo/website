@@ -14,13 +14,8 @@ const stageGridStyle = {
   maskImage: "radial-gradient(circle at center, black, transparent 76%)",
 };
 
-function formatDecibels(value: number) {
-  if (value === 0) {
-    return "0 dB";
-  }
-
-  return `${value > 0 ? "+" : "−"}${Math.abs(value)} dB`;
-}
+/** Show a sign on cuts and boosts, but not on a flat zero. */
+const decibelFormat = { signDisplay: "exceptZero" } as const;
 
 export function DetentKnobShowcase() {
   const [sound, setSound] = useState(true);
@@ -53,7 +48,8 @@ export function DetentKnobShowcase() {
           <DetentKnob
             bipolar
             defaultValue={-3}
-            formatValue={formatDecibels}
+            format={decibelFormat}
+            suffix=" dB"
             label="Bass"
             max={6}
             min={-6}
@@ -73,7 +69,8 @@ export function DetentKnobShowcase() {
           <DetentKnob
             bipolar
             defaultValue={2}
-            formatValue={formatDecibels}
+            format={decibelFormat}
+            suffix=" dB"
             label="Treble"
             max={6}
             min={-6}
