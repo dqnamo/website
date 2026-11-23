@@ -3,7 +3,10 @@ import { Barlow, Inter, JetBrains_Mono, Pirata_One } from "next/font/google";
 import Script from "next/script";
 import "../styles/globals.css";
 import { BottomDock } from "@/components/BottomDock";
-import { RecordingMode } from "@/components/RecordingMode";
+import {
+  RecordingMode,
+  restoreRecordingModeScript,
+} from "@/components/RecordingMode";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
 const inter = Inter({
@@ -58,6 +61,10 @@ export default function RootLayout({
       className={`${inter.variable} ${jetbrainsMono.variable} ${pirataOne.variable} ${barlow.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        {/* Blocking on purpose: restore recording mode before first paint. */}
+        <script>{restoreRecordingModeScript}</script>
+      </head>
       <body className="min-h-full bg-grayscale-1 text-grayscale-12">
         <ThemeProvider>
           <RecordingMode />
