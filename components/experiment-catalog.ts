@@ -100,6 +100,13 @@ export const experiments = [
       "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",
     preview: "detent-knob",
   },
+  {
+    title: "Click Pen",
+    href: "/experiments/click-pen",
+    description:
+      "A retractable pen that latches its nib out on one click and lets it go on the next.",
+    preview: "click-pen",
+  },
 ] as const;
 
 // Scramble Text has a custom card in the grid rather than an ExperimentPreview.

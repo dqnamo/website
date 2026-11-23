@@ -26,6 +26,7 @@ import {
   useState,
 } from "react";
 import { ScrambleTextShowcase } from "@/app/experiments/scramble-text/scramble-text-showcase";
+import { ClickPenDrawing } from "@/components/ClickPen";
 import { DetentKnobFace } from "@/components/DetentKnob";
 import { experiments } from "@/components/experiment-catalog";
 import { IridescentFoil } from "@/components/IridescentFoil";
@@ -678,6 +679,23 @@ export function ExperimentPreview({
           litIndex={4}
           size={58}
           turnClassName="-rotate-27 transition-transform duration-500 [transition-timing-function:steps(3,end)] group-hover:rotate-54 motion-reduce:transition-none"
+        />
+      </div>
+    );
+  }
+
+  if (type === "click-pen") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "flex items-center justify-center bg-grayscale-2 text-grayscale-12 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+        )}
+      >
+        <ClickPenDrawing
+          className="w-[190px] -rotate-12 [--pen-depth:0] group-hover:[--pen-depth:16]"
+          partClassName="transition-transform duration-300 ease-[cubic-bezier(0.3,1.5,0.5,1)] motion-reduce:transition-none"
         />
       </div>
     );
