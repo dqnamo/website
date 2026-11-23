@@ -4,10 +4,25 @@ import { SourcePanel } from "@/app/experiments/_components/SourcePanel";
 import { buildSourceTabs, readSourceFile } from "@/app/experiments/_lib/source";
 import { DetentKnobShowcase } from "./detent-knob-showcase";
 
+const title = "Detent Knob | dqnamo";
+const description =
+  "A hi-fi volume knob that hangs on to each notch, then clicks into the next.";
+
 export const metadata: Metadata = {
-  title: "Detent Knob | dqnamo",
-  description:
-    "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    siteName: "dqnamo",
+    type: "website",
+    url: "/experiments/detent-knob",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+  },
 };
 
 export default async function DetentKnobPage() {
