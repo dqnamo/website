@@ -34,6 +34,7 @@ import { ReceiptPrinter } from "@/components/ReceiptPrinter";
 import { Signature } from "@/components/Signature";
 import { Stamp } from "@/components/Stamp";
 import { tactileButtonColorTokens } from "@/components/TactileButton";
+import { TapeMeasurePreview } from "@/components/TapeMeasure";
 import { Ticket } from "@/components/Ticket";
 import { cn } from "@/helpers/classname-helper";
 
@@ -659,6 +660,20 @@ export function ExperimentPreview({
           stubHeight={29}
           tilt={false}
         />
+      </div>
+    );
+  }
+
+  if (type === "tape-measure") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "flex items-center justify-center bg-grayscale-2 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+        )}
+      >
+        <TapeMeasurePreview />
       </div>
     );
   }
