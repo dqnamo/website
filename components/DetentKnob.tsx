@@ -5,6 +5,7 @@ import {
   motion,
   useMotionValue,
   useReducedMotion,
+  type Variants,
 } from "motion/react";
 import {
   type ComponentProps,
@@ -152,6 +153,63 @@ const knobThemeClassName = "[--knob-lit:#ff9a2e]";
 /** The bezel's diameter as a multiple of the knob's. */
 const BEZEL_SCALE = 1.3;
 
+type Tone = "cool" | "neutral" | "warm";
+
+/** Boost glows amber, cut glows ice blue, and dead centre glows white. */
+const TONES: Record<Tone, { core: string; glow: string; pointer: string }> = {
+  cool: { core: "#bfe6ff", glow: "56 164 255", pointer: "#8fd0ff" },
+  neutral: { core: "#fff7ec", glow: "255 236 214", pointer: "#fff3e2" },
+  warm: { core: "#ffc27a", glow: "255 138 31", pointer: "#ffa646" },
+};
+
+function toneAt(position: number, centreIndex: number, bipolar: boolean): Tone {
+  if (!bipolar) {
+    return "warm";
+  }
+
+  if (Math.abs(position - centreIndex) < 1e-6) {
+    return "neutral";
+  }
+
+  return position < centreIndex ? "cool" : "warm";
+}
+
+/** Seconds between neighbouring LEDs as a change ripples along the ring. */
+const LED_STAGGER = 0.022;
+
+/**
+ * LEDs pop on with a little overshoot, and fade out slowly with a shrinking
+ * afterglow, like a filament cooling. The one at the value glows hottest.
+ */
+const ledVariants: Variants = {
+  head: (delay: number) => ({
+    filter: "brightness(1.35)",
+    opacity: 1,
+    scale: 1.3,
+    transition: {
+      delay,
+      opacity: { delay, duration: 0.1 },
+      scale: { damping: 14, delay, stiffness: 700, type: "spring" },
+    },
+  }),
+  off: (delay: number) => ({
+    filter: "brightness(1)",
+    opacity: 0,
+    scale: 0.55,
+    transition: { delay, duration: 0.55, ease: [0.2, 0.7, 0.3, 1] },
+  }),
+  on: (delay: number) => ({
+    filter: "brightness(1)",
+    opacity: 1,
+    scale: 1,
+    transition: {
+      delay,
+      opacity: { delay, duration: 0.1 },
+      scale: { damping: 16, delay, stiffness: 700, type: "spring" },
+    },
+  }),
+};
+
 function detentAngle(index: number, count: number) {
   return count === 0 ? 0 : -HALF_SWEEP + (index / count) * HALF_SWEEP * 2;
 }
@@ -174,6 +232,7 @@ function KnobBezel({
   litIndex: number;
   size: number;
 }) {
+  const shouldReduceMotion = useReducedMotion();
   const bezel = size * BEZEL_SCALE;
   const ledRadius = (size + bezel) / 4;
   const ledSize = Math.max(2.5, size * 0.032);
@@ -181,6 +240,15 @@ function KnobBezel({
   const perDetent = ledsPerDetent(count, arcLength, ledSize);
   const ledCount = count * perDetent + 1;
   const centreIndex = count / 2;
+  const origin = bipolar ? centreIndex : 0;
+
+  // Remember where the last change started, so it can ripple out from there.
+  // On mount it starts at the origin, which sweeps the ring on like a power-up.
+  const [trail, setTrail] = useState({ from: origin, to: litIndex });
+
+  if (trail.to !== litIndex) {
+    setTrail({ from: trail.to, to: litIndex });
+  }
 
   const isLit = (position: number) =>
     bipolar
@@ -205,15 +273,18 @@ function KnobBezel({
         const position = led / perDetent;
         const angle = (detentAngle(position, count) * Math.PI) / 180;
         const lit = isLit(position);
+        const isHead = lit && position === litIndex && litIndex !== origin;
+        const tone = TONES[toneAt(position, centreIndex, bipolar)];
+        const delay = shouldReduceMotion
+          ? 0
+          : Math.min(
+              0.45,
+              Math.abs(position - trail.from) * perDetent * LED_STAGGER,
+            );
 
         return (
           <span
-            className={cn(
-              "absolute rounded-full transition-[background-color,box-shadow] duration-150 motion-reduce:transition-none",
-              lit
-                ? "bg-[#ffc27a] shadow-[0_0_2px_1px_var(--knob-lit),0_0_7px_1px_rgb(255_138_31_/_55%)]"
-                : "bg-[#2a2a2e] shadow-[inset_0_1px_1px_rgb(0_0_0_/_80%),0_0.5px_0_rgb(255_255_255_/_8%)]",
-            )}
+            className="absolute rounded-full bg-[#2a2a2e] shadow-[inset_0_1px_1px_rgb(0_0_0_/_80%),0_0.5px_0_rgb(255_255_255_/_8%)]"
             key={position}
             style={{
               height: ledSize,
@@ -221,7 +292,19 @@ function KnobBezel({
               top: bezel / 2 - Math.cos(angle) * ledRadius - ledSize / 2,
               width: ledSize,
             }}
-          />
+          >
+            <motion.span
+              animate={isHead ? "head" : lit ? "on" : "off"}
+              className="absolute inset-0 rounded-full"
+              custom={delay}
+              initial="off"
+              style={{
+                backgroundColor: tone.core,
+                boxShadow: `0 0 2px 1px rgb(${tone.glow} / 90%), 0 0 7px 1px rgb(${tone.glow} / 55%)`,
+              }}
+              variants={ledVariants}
+            />
+          </span>
         );
       })}
     </div>
@@ -233,13 +316,17 @@ function KnobBody({
   pressed = false,
   rotation,
   size,
+  tone = "warm",
   turnClassName,
 }: {
   pressed?: boolean;
   rotation?: ComponentProps<typeof motion.div>["style"];
   size: number;
+  tone?: Tone;
   turnClassName?: string;
 }) {
+  const colors = TONES[tone];
+
   return (
     <div
       className={cn(
@@ -281,12 +368,10 @@ function KnobBody({
         style={rotation}
       >
         <div
-          className="absolute left-1/2 rounded-full"
+          className="absolute left-1/2 rounded-full transition-[background-color,box-shadow] duration-300 motion-reduce:transition-none"
           style={{
-            background:
-              "linear-gradient(180deg, #ffd9a0, #ff9a2e 55%, #f07a12)",
-            boxShadow:
-              "0 0 3px 1px rgb(255 138 31 / 70%), 0 0 10px 2px rgb(255 138 31 / 35%)",
+            backgroundColor: colors.pointer,
+            boxShadow: `inset 0 1px 0 rgb(255 255 255 / 55%), 0 0 3px 1px rgb(${colors.glow} / 70%), 0 0 10px 2px rgb(${colors.glow} / 35%)`,
             height: size * 0.13,
             top: size * 0.17,
             transform: "translateX(-50%)",
@@ -684,7 +769,12 @@ export function DetentKnob({
           litIndex={index}
           size={size}
         />
-        <KnobBody pressed={pressed} rotation={{ rotate: angle }} size={size} />
+        <KnobBody
+          pressed={pressed}
+          rotation={{ rotate: angle }}
+          size={size}
+          tone={toneAt(index, count / 2, bipolar)}
+        />
       </div>
 
       <div className="flex flex-col items-center gap-0.5">

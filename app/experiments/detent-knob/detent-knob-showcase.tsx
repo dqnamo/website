@@ -52,7 +52,7 @@ export function DetentKnobShowcase() {
         <div className="relative z-[1] grid grid-cols-[auto_auto_auto] items-end justify-items-center gap-x-10 max-[520px]:grid-cols-2 max-[520px]:gap-x-2 max-[520px]:gap-y-4">
           <DetentKnob
             bipolar
-            defaultValue={0}
+            defaultValue={-3}
             formatValue={formatDecibels}
             label="Bass"
             max={6}
