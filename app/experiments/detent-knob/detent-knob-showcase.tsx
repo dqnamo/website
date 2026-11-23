@@ -22,14 +22,6 @@ function formatDecibels(value: number) {
   return `${value > 0 ? "+" : "−"}${Math.abs(value)} dB`;
 }
 
-function formatToneNumeral(value: number) {
-  if (value === 0) {
-    return "0";
-  }
-
-  return value > 0 ? `+${value}` : `−${Math.abs(value)}`;
-}
-
 export function DetentKnobShowcase() {
   const [sound, setSound] = useState(true);
   const [volume, setVolume] = useState(4);
@@ -61,13 +53,11 @@ export function DetentKnobShowcase() {
           <DetentKnob
             bipolar
             defaultValue={0}
-            formatNumeral={formatToneNumeral}
             formatValue={formatDecibels}
             label="Bass"
             max={6}
             min={-6}
-            numeralEvery={6}
-            size={60}
+            size={56}
             sound={sound}
           />
           <DetentKnob
@@ -76,20 +66,18 @@ export function DetentKnobShowcase() {
             max={10}
             min={0}
             onValueChange={setVolume}
-            size={128}
+            size={116}
             sound={sound}
             value={volume}
           />
           <DetentKnob
             bipolar
             defaultValue={2}
-            formatNumeral={formatToneNumeral}
             formatValue={formatDecibels}
             label="Treble"
             max={6}
             min={-6}
-            numeralEvery={6}
-            size={60}
+            size={56}
             sound={sound}
           />
         </div>

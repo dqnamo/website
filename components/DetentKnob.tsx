@@ -28,12 +28,9 @@ const END_STOP_SLACK = 36;
 const SETTLE_SPRING = { damping: 26, stiffness: 520, type: "spring" } as const;
 
 type KnobCustomProperty =
-  | "--knob-face"
-  | "--knob-face-edge"
-  | "--knob-indicator"
-  | "--knob-ridge-dark"
-  | "--knob-ridge-light"
-  | "--knob-size"
+  | "--knob-collar"
+  | "--knob-collar-edge"
+  | "--knob-collar-highlight"
   | "--knob-lit";
 
 type KnobStyle = CSSProperties & Partial<Record<KnobCustomProperty, string>>;
@@ -49,19 +46,15 @@ export type DetentKnobProps = {
   defaultValue?: number;
   onValueChange?: (value: number) => void;
   /**
-   * Light the scale from the centre instead of from the minimum. Useful for
-   * bipolar controls such as tone or balance, which also get a centre notch.
+   * Light the LEDs from the centre instead of from the minimum. Useful for
+   * bipolar controls such as tone or balance.
    */
   bipolar?: boolean;
-  /** Knob diameter in pixels. The scale is drawn around it. */
+  /** Knob diameter in pixels. The collar and LED ring add half again. */
   size?: number;
-  /** Label every nth detent with its value. Set to 0 to hide numerals. */
-  numeralEvery?: number;
   /** Play a short synthesised click on every detent. */
   sound?: boolean;
   formatValue?: (value: number) => string;
-  /** Format the numerals printed on the scale. Defaults to `formatValue`. */
-  formatNumeral?: (value: number) => string;
   className?: string;
 };
 
@@ -157,10 +150,105 @@ function buzz(duration: number) {
 /* Visual pieces                                                               */
 /* -------------------------------------------------------------------------- */
 
+/** The collar follows the theme. The knob and bezel are black in both. */
 const knobThemeClassName =
-  "[--knob-face:#dcdcdf] [--knob-face-edge:#b9b9be] [--knob-indicator:#2b2b2e] [--knob-lit:#ff8a1f] [--knob-ridge-dark:#9d9da3] [--knob-ridge-light:#f4f4f6] dark:[--knob-face:#2c2c30] dark:[--knob-face-edge:#1b1b1e] dark:[--knob-indicator:#f1f1f3] dark:[--knob-ridge-dark:#141416] dark:[--knob-ridge-light:#47474d]";
+  "[--knob-collar-edge:#dfe3e1] [--knob-collar-highlight:#ffffff] [--knob-collar:#f1f3f2] [--knob-lit:#ff9a2e] dark:[--knob-collar-edge:#1f1f22] dark:[--knob-collar-highlight:#4a4a4f] dark:[--knob-collar:#2e2e32]";
 
-/** The knurled rim, the spun-metal cap and the engraved line. */
+/** Collar, then bezel, then knob, as multiples of the knob's diameter. */
+const COLLAR_SCALE = 1.5;
+const BEZEL_SCALE = 1.3;
+
+function detentAngle(index: number, count: number) {
+  return count === 0 ? 0 : -HALF_SWEEP + (index / count) * HALF_SWEEP * 2;
+}
+
+/** Up to two dozen LEDs, spaced so that small knobs don't crowd them. */
+function ledsPerDetent(count: number, arcLength: number, ledSize: number) {
+  const fits = Math.min(24, arcLength / (ledSize * 3.2));
+  return Math.max(1, Math.round(fits / count));
+}
+
+/** The pale collar and the dark bezel ring of LEDs set into it. */
+function KnobCollar({
+  bipolar,
+  count,
+  litIndex,
+  size,
+}: {
+  bipolar: boolean;
+  count: number;
+  litIndex: number;
+  size: number;
+}) {
+  const collar = size * COLLAR_SCALE;
+  const bezel = size * BEZEL_SCALE;
+  const ledRadius = (size + bezel) / 4;
+  const ledSize = Math.max(2.5, size * 0.032);
+  const arcLength = ledRadius * ((HALF_SWEEP * 2 * Math.PI) / 180);
+  const perDetent = ledsPerDetent(count, arcLength, ledSize);
+  const ledCount = count * perDetent + 1;
+  const centreIndex = count / 2;
+
+  const isLit = (position: number) =>
+    bipolar
+      ? (position >= centreIndex && position <= litIndex) ||
+        (position <= centreIndex && position >= litIndex)
+      : position <= litIndex;
+
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
+      style={{
+        background:
+          "radial-gradient(circle at 50% 28%, var(--knob-collar-highlight), var(--knob-collar) 45%, var(--knob-collar-edge) 100%)",
+        boxShadow:
+          "inset 0 1px 0 var(--knob-collar-highlight), inset 0 -2px 3px rgb(0 0 0 / 8%), 0 1px 2px rgb(0 0 0 / 10%), 0 10px 24px rgb(0 0 0 / 10%), 0 24px 60px rgb(0 0 0 / 8%)",
+        height: collar,
+        width: collar,
+      }}
+    >
+      {/* A recessed black ring that the LEDs sit in. */}
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle at 50% 50%, #0b0b0c 0 70%, #1d1d20 100%)",
+          boxShadow:
+            "inset 0 2px 4px rgb(0 0 0 / 70%), 0 1px 0 var(--knob-collar-highlight), 0 -1px 0 rgb(0 0 0 / 12%)",
+          height: bezel,
+          width: bezel,
+        }}
+      >
+        {Array.from({ length: ledCount }, (_, led) => {
+          const position = led / perDetent;
+          const angle = (detentAngle(position, count) * Math.PI) / 180;
+          const lit = isLit(position);
+
+          return (
+            <span
+              className={cn(
+                "absolute rounded-full transition-[background-color,box-shadow] duration-150 motion-reduce:transition-none",
+                lit
+                  ? "bg-[#ffc27a] shadow-[0_0_2px_1px_var(--knob-lit),0_0_7px_1px_rgb(255_138_31_/_55%)]"
+                  : "bg-[#2a2a2e] shadow-[inset_0_1px_1px_rgb(0_0_0_/_80%),0_0.5px_0_rgb(255_255_255_/_8%)]",
+              )}
+              key={position}
+              style={{
+                height: ledSize,
+                left: bezel / 2 + Math.sin(angle) * ledRadius - ledSize / 2,
+                top: bezel / 2 - Math.cos(angle) * ledRadius - ledSize / 2,
+                width: ledSize,
+              }}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/** The matte black knob: a skirt, a raised cap and a glowing pointer slit. */
 function KnobBody({
   pressed = false,
   rotation,
@@ -172,165 +260,61 @@ function KnobBody({
   size: number;
   turnClassName?: string;
 }) {
-  const ridgeCount = Math.max(24, Math.round(size * 0.42));
-  const ridgeDegrees = 360 / ridgeCount;
-
   return (
     <div
       className={cn(
         "relative rounded-full transition-[transform,box-shadow] duration-150 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none",
         pressed
-          ? "scale-[0.985] shadow-[0_1px_1px_rgb(0_0_0_/_22%),0_3px_6px_rgb(0_0_0_/_14%)]"
-          : "shadow-[0_1px_1px_rgb(0_0_0_/_18%),0_6px_10px_rgb(0_0_0_/_14%),0_16px_28px_rgb(0_0_0_/_12%)] dark:shadow-[0_1px_1px_rgb(0_0_0_/_50%),0_6px_10px_rgb(0_0_0_/_40%),0_16px_28px_rgb(0_0_0_/_36%)]",
+          ? "scale-[0.985] shadow-[0_1px_2px_rgb(0_0_0_/_70%),0_2px_4px_rgb(0_0_0_/_45%)]"
+          : "shadow-[0_2px_3px_rgb(0_0_0_/_60%),0_6px_12px_rgb(0_0_0_/_45%)]",
       )}
-      style={{ height: size, width: size }}
+      style={{
+        background: "linear-gradient(180deg, #3a3a3e, #19191b 55%, #0e0e10)",
+        height: size,
+        width: size,
+      }}
     >
-      {/* Everything that is cut into the metal turns with the knob. */}
-      <motion.div
-        className={cn("absolute inset-0 rounded-full", turnClassName)}
-        style={rotation}
-      >
-        <div
-          className="absolute inset-0 rounded-full"
-          style={{
-            background: `repeating-conic-gradient(from 0deg, var(--knob-ridge-light) 0deg ${ridgeDegrees * 0.45}deg, var(--knob-ridge-dark) ${ridgeDegrees * 0.55}deg ${ridgeDegrees}deg)`,
-          }}
-        />
-        <div
-          className="absolute rounded-full"
-          style={{
-            background:
-              "repeating-radial-gradient(circle at 50% 50%, rgb(255 255 255 / 7%) 0 0.5px, rgb(0 0 0 / 5%) 1px 1.5px), radial-gradient(circle at 50% 50%, var(--knob-face) 0 62%, var(--knob-face-edge) 100%)",
-            boxShadow:
-              "0 0 0 1px rgb(0 0 0 / 14%), 0 1px 2px rgb(0 0 0 / 22%), inset 0 1px 0 rgb(255 255 255 / 28%)",
-            inset: size * 0.085,
-          }}
-        />
-        <div
-          className="absolute left-1/2 rounded-full bg-[var(--knob-indicator)]"
-          style={{
-            boxShadow:
-              "inset 0 1px 1px rgb(0 0 0 / 35%), 0 1px 0 rgb(255 255 255 / 30%)",
-            height: size * 0.2,
-            top: size * 0.13,
-            transform: "translateX(-50%)",
-            width: Math.max(2.5, size * 0.03),
-          }}
-        />
-      </motion.div>
-
-      {/* The light does not turn, so the sheen stays put while ridges pass under it. */}
+      {/* The light does not turn, so the shading sits outside the turning layer. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 rounded-full mix-blend-soft-light"
+        className="absolute rounded-full"
         style={{
           background:
-            "conic-gradient(from 200deg, rgb(255 255 255 / 0%), rgb(255 255 255 / 85%) 40deg, rgb(255 255 255 / 0%) 80deg, rgb(0 0 0 / 30%) 140deg, rgb(255 255 255 / 0%) 200deg, rgb(255 255 255 / 70%) 230deg, rgb(255 255 255 / 0%) 270deg, rgb(0 0 0 / 30%) 320deg, rgb(255 255 255 / 0%) 360deg)",
+            "radial-gradient(circle at 50% 18%, #39393d, #232326 48%, #18181a 100%)",
+          boxShadow:
+            "0 0 0 1px rgb(0 0 0 / 55%), 0 2px 4px rgb(0 0 0 / 55%), inset 0 1px 0 rgb(255 255 255 / 9%), inset 0 -1px 2px rgb(0 0 0 / 40%)",
+          inset: size * 0.09,
         }}
       />
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 rounded-full"
         style={{
-          background:
-            "linear-gradient(180deg, rgb(255 255 255 / 26%), transparent 38%, transparent 62%, rgb(0 0 0 / 18%))",
           boxShadow:
-            "inset 0 1px 0 rgb(255 255 255 / 40%), inset 0 -1px 1px rgb(0 0 0 / 25%)",
+            "inset 0 1px 0 rgb(255 255 255 / 16%), inset 0 -1px 1px rgb(0 0 0 / 60%)",
         }}
       />
+
+      {/* The knob is smooth all the way round, so only the pointer turns. */}
+      <motion.div
+        className={cn("absolute inset-0 rounded-full", turnClassName)}
+        style={rotation}
+      >
+        <div
+          className="absolute left-1/2 rounded-full"
+          style={{
+            background:
+              "linear-gradient(180deg, #ffd9a0, #ff9a2e 55%, #f07a12)",
+            boxShadow:
+              "0 0 3px 1px rgb(255 138 31 / 70%), 0 0 10px 2px rgb(255 138 31 / 35%)",
+            height: size * 0.13,
+            top: size * 0.17,
+            transform: "translateX(-50%)",
+            width: Math.max(2.5, size * 0.034),
+          }}
+        />
+      </motion.div>
     </div>
-  );
-}
-
-function detentAngle(index: number, count: number) {
-  return count === 0 ? 0 : -HALF_SWEEP + (index / count) * HALF_SWEEP * 2;
-}
-
-/** Ticks and numerals printed on the panel around the knob. */
-function KnobScale({
-  bipolar,
-  count,
-  formatNumeral,
-  litIndex,
-  numeralEvery,
-  size,
-}: {
-  bipolar: boolean;
-  count: number;
-  formatNumeral: (index: number) => string;
-  litIndex: number;
-  numeralEvery: number;
-  size: number;
-}) {
-  const radius = size / 2;
-  const tickInner = radius + 7;
-  const numeralRadius = radius + (size > 90 ? 27 : 21);
-  const box = (numeralEvery > 0 ? numeralRadius + 9 : tickInner + 10) * 2;
-  const centre = box / 2;
-  const centreIndex = count / 2;
-  const ticks = Array.from({ length: count + 1 }, (_, index) => index);
-
-  const isLit = (index: number) =>
-    bipolar
-      ? (index >= centreIndex && index <= litIndex) ||
-        (index <= centreIndex && index >= litIndex)
-      : index <= litIndex;
-
-  return (
-    <svg
-      aria-hidden="true"
-      className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-visible"
-      height={box}
-      viewBox={`0 0 ${box} ${box}`}
-      width={box}
-    >
-      {ticks.map((index) => {
-        const angle = (detentAngle(index, count) * Math.PI) / 180;
-        const major =
-          numeralEvery > 0
-            ? index % numeralEvery === 0
-            : index === 0 || index === count;
-        const centreMark = bipolar && index === centreIndex;
-        const length = centreMark ? 9 : major ? 7 : 4;
-        const sin = Math.sin(angle);
-        const cos = -Math.cos(angle);
-        const lit = isLit(index);
-
-        return (
-          <g key={index}>
-            <line
-              className={cn(
-                "transition-[stroke,filter] duration-150 motion-reduce:transition-none",
-                lit
-                  ? "stroke-[var(--knob-lit)] [filter:drop-shadow(0_0_3px_var(--knob-lit))]"
-                  : "stroke-grayscale-6 dark:stroke-grayscale-7",
-              )}
-              strokeLinecap="round"
-              strokeWidth={major || centreMark ? 2 : 1.5}
-              x1={centre + sin * tickInner}
-              x2={centre + sin * (tickInner + length)}
-              y1={centre + cos * tickInner}
-              y2={centre + cos * (tickInner + length)}
-            />
-            {numeralEvery > 0 && index % numeralEvery === 0 ? (
-              <text
-                className={cn(
-                  "font-medium font-mono transition-colors duration-150 motion-reduce:transition-none",
-                  lit ? "fill-grayscale-12" : "fill-grayscale-9",
-                )}
-                dominantBaseline="central"
-                fontSize={size > 90 ? 10 : 8}
-                textAnchor="middle"
-                x={centre + sin * numeralRadius}
-                y={centre + cos * numeralRadius}
-              >
-                {formatNumeral(index)}
-              </text>
-            ) : null}
-          </g>
-        );
-      })}
-    </svg>
   );
 }
 
@@ -357,15 +341,21 @@ export function DetentKnobFace({
   return (
     <div
       aria-hidden="true"
-      className={cn("relative", knobThemeClassName, className)}
-      style={style}
+      className={cn(
+        "relative grid place-items-center",
+        knobThemeClassName,
+        className,
+      )}
+      style={{
+        height: size * COLLAR_SCALE,
+        width: size * COLLAR_SCALE,
+        ...style,
+      }}
     >
-      <KnobScale
+      <KnobCollar
         bipolar={false}
         count={count}
-        formatNumeral={String}
         litIndex={litIndex}
-        numeralEvery={0}
         size={size}
       />
       <KnobBody
@@ -385,12 +375,10 @@ export function DetentKnob({
   bipolar = false,
   className,
   defaultValue,
-  formatNumeral: formatScaleNumeral,
   formatValue = String,
   label,
   max = 10,
   min = 0,
-  numeralEvery = 1,
   onValueChange,
   size = 120,
   sound = true,
@@ -680,67 +668,48 @@ export function DetentKnob({
     return () => surface.removeEventListener("wheel", handleWheel);
   }, []);
 
-  const formatNumeral = useCallback(
-    (tickIndex: number) =>
-      (formatScaleNumeral ?? formatValue)(min + tickIndex * step),
-    [formatScaleNumeral, formatValue, min, step],
-  );
   const valueText = formatValue(value);
-  const boxSize = size + (numeralEvery > 0 ? (size > 90 ? 72 : 60) : 34);
+  const collarSize = size * COLLAR_SCALE;
 
   return (
     <div
       className={cn(
-        "flex flex-col items-center gap-3",
+        "flex flex-col items-center gap-4",
         knobThemeClassName,
         className,
       )}
     >
+      {/* The whole collar is the slider, so there is plenty to grab. */}
       <div
-        className="relative grid place-items-center"
-        style={{ height: boxSize, width: boxSize }}
+        aria-labelledby={labelId}
+        aria-valuemax={max}
+        aria-valuemin={min}
+        aria-valuenow={value}
+        aria-valuetext={valueText}
+        className="relative grid cursor-grab touch-none select-none place-items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[var(--knob-lit)] focus-visible:ring-offset-4 focus-visible:ring-offset-grayscale-1 active:cursor-grabbing dark:focus-visible:ring-offset-grayscale-2"
+        onKeyDown={handleKeyDown}
+        onLostPointerCapture={endDrag}
+        onPointerCancel={endDrag}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={endDrag}
+        ref={surfaceRef}
+        role="slider"
+        style={{ height: collarSize, width: collarSize }}
+        tabIndex={0}
       >
-        <KnobScale
+        <KnobCollar
           bipolar={bipolar}
           count={count}
-          formatNumeral={formatNumeral}
           litIndex={index}
-          numeralEvery={numeralEvery}
           size={size}
         />
-        <div
-          aria-labelledby={labelId}
-          aria-orientation="vertical"
-          aria-valuemax={max}
-          aria-valuemin={min}
-          aria-valuenow={value}
-          aria-valuetext={valueText}
-          className="relative cursor-grab touch-none select-none rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[var(--knob-lit)] focus-visible:ring-offset-4 focus-visible:ring-offset-grayscale-1 active:cursor-grabbing dark:focus-visible:ring-offset-grayscale-2"
-          onKeyDown={handleKeyDown}
-          onLostPointerCapture={endDrag}
-          onPointerCancel={endDrag}
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={endDrag}
-          ref={surfaceRef}
-          role="slider"
-          tabIndex={0}
-        >
-          <KnobBody
-            pressed={pressed}
-            rotation={{ rotate: angle }}
-            size={size}
-          />
-        </div>
+        <KnobBody pressed={pressed} rotation={{ rotate: angle }} size={size} />
       </div>
 
-      {/* The scale is open at the bottom, so tuck the caption up into the gap. */}
-      <div
-        className="flex flex-col items-center gap-0.5"
-        style={{ marginTop: -Math.round(boxSize * 0.1) }}
-      >
+      <div className="flex flex-col items-center gap-0.5">
         <span
-          className="font-medium font-mono text-[10px] text-grayscale-10 uppercase tracking-[0.14em]"
+          className="font-medium font-sans text-[11px] text-grayscale-10 uppercase tracking-[0.2em]"
           id={labelId}
         >
           {label}

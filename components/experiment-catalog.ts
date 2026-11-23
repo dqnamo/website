@@ -97,7 +97,7 @@ export const experiments = [
     title: "Detent Knob",
     href: "/experiments/detent-knob",
     description:
-      "A knurled hi-fi knob that hangs on to each notch, then clicks into the next.",
+      "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",
     preview: "detent-knob",
   },
 ] as const;

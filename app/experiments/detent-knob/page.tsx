@@ -7,7 +7,7 @@ import { DetentKnobShowcase } from "./detent-knob-showcase";
 export const metadata: Metadata = {
   title: "Detent Knob | dqnamo",
   description:
-    "A knurled hi-fi knob that hangs on to each notch, then clicks into the next.",
+    "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",
 };
 
 export default async function DetentKnobPage() {
@@ -30,7 +30,7 @@ export default async function DetentKnobPage() {
 
   return (
     <ExperimentPage
-      description="A knurled hi-fi knob that hangs on to each notch, then clicks into the next. Drag it round, scroll it, or use the arrow keys."
+      description="A hi-fi volume knob that hangs on to each notch, then clicks into the next. Drag it round, scroll it, or use the arrow keys."
       slug="detent-knob"
       title="Detent Knob"
     >
