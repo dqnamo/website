@@ -100,6 +100,13 @@ export const experiments = [
       "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",
     preview: "detent-knob",
   },
+  {
+    title: "Rotary Dial",
+    href: "/experiments/rotary-dial",
+    description:
+      "A code input you dial in. Pull a hole round to the stop and it counts the digit home in clicks.",
+    preview: "rotary-dial",
+  },
 ] as const;
 
 // Scramble Text has a custom card in the grid rather than an ExperimentPreview.
