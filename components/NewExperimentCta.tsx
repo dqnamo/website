@@ -27,6 +27,7 @@ import {
 } from "react";
 import { ScrambleTextShowcase } from "@/app/experiments/scramble-text/scramble-text-showcase";
 import { DetentKnobFace } from "@/components/DetentKnob";
+import { EnvelopeFace } from "@/components/Envelope";
 import { experiments } from "@/components/experiment-catalog";
 import { IridescentFoil } from "@/components/IridescentFoil";
 import { LogoTraceLoader } from "@/components/LogoTraceLoader";
@@ -679,6 +680,31 @@ export function ExperimentPreview({
           size={58}
           turnClassName="-rotate-27 transition-transform duration-500 [transition-timing-function:steps(3,end)] group-hover:rotate-54 motion-reduce:transition-none"
         />
+      </div>
+    );
+  }
+
+  if (type === "envelope") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "flex items-end justify-center bg-grayscale-2 pb-3 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+        )}
+      >
+        <EnvelopeFace
+          className="w-[104px]"
+          flapClassName="[transform:perspective(420px)_rotateX(0deg)] [transition:transform_420ms_cubic-bezier(0.34,1.3,0.64,1)_220ms,z-index_0s_400ms] group-hover:[transform:perspective(420px)_rotateX(180deg)] group-hover:z-[1] group-hover:[transition:transform_480ms_cubic-bezier(0.34,1.3,0.64,1),z-index_0s_190ms] motion-reduce:transition-none"
+          letterClassName="transition-transform duration-300 ease-out group-hover:-translate-y-[62%] group-hover:delay-300 group-hover:duration-500 group-hover:[transition-timing-function:cubic-bezier(0.34,1.4,0.64,1)] motion-reduce:transition-none"
+        >
+          <div className="flex flex-col gap-[3cqw] px-[9cqw] pt-[9cqw]">
+            <span className="h-[4cqw] w-[38%] rounded-full bg-[#2b2620]/70" />
+            <span className="h-[2.6cqw] w-full rounded-full bg-[#2b2620]/25" />
+            <span className="h-[2.6cqw] w-[84%] rounded-full bg-[#2b2620]/25" />
+            <span className="h-[2.6cqw] w-[56%] rounded-full bg-[#2b2620]/25" />
+          </div>
+        </EnvelopeFace>
       </div>
     );
   }
