@@ -100,6 +100,13 @@ export const experiments = [
       "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",
     preview: "detent-knob",
   },
+  {
+    title: "Tally Counter",
+    href: "/experiments/tally-counter",
+    description:
+      "A steel hand counter whose wheels roll over with every press and race home to zero.",
+    preview: "tally-counter",
+  },
 ] as const;
 
 // Scramble Text has a custom card in the grid rather than an ExperimentPreview.
