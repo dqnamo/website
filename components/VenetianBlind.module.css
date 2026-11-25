@@ -1,0 +1,37 @@
+/* Clouds drift slowly past the window. */
+.cloud {
+  animation: drift 38s ease-in-out infinite alternate;
+}
+
+/* Stars twinkle, each on its own beat. */
+.star {
+  animation: twinkle 3.2s ease-in-out infinite;
+}
+
+@keyframes drift {
+  from {
+    translate: -18% 0;
+  }
+
+  to {
+    translate: 22% 0;
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.9;
+  }
+
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cloud,
+  .star {
+    animation: none;
+  }
+}

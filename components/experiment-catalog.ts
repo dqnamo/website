@@ -100,6 +100,13 @@ export const experiments = [
       "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",
     preview: "detent-knob",
   },
+  {
+    title: "Venetian Blind",
+    href: "/experiments/venetian-blind",
+    description:
+      "A blind whose slats follow the wand down their ladder tapes, then clap shut.",
+    preview: "venetian-blind",
+  },
 ] as const;
 
 // Scramble Text has a custom card in the grid rather than an ExperimentPreview.

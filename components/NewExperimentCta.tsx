@@ -36,6 +36,7 @@ import { Signature } from "@/components/Signature";
 import { Stamp } from "@/components/Stamp";
 import { tactileButtonColorTokens } from "@/components/TactileButton";
 import { Ticket } from "@/components/Ticket";
+import { VenetianBlindFace } from "@/components/VenetianBlind";
 import { cn } from "@/helpers/classname-helper";
 
 type NewExperimentCtaProps = {
@@ -679,6 +680,20 @@ export function ExperimentPreview({
           size={58}
           turnClassName="-rotate-27 transition-transform duration-500 [transition-timing-function:steps(3,end)] group-hover:rotate-54 motion-reduce:transition-none"
         />
+      </div>
+    );
+  }
+
+  if (type === "venetian-blind") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "flex items-center justify-center bg-grayscale-2 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+        )}
+      >
+        <VenetianBlindFace angle={24} height={92} hoverAngle={90} width={88} />
       </div>
     );
   }
