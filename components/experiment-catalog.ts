@@ -100,6 +100,13 @@ export const experiments = [
       "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",
     preview: "detent-knob",
   },
+  {
+    title: "Matchbox",
+    href: "/experiments/matchbox",
+    description:
+      "A box of safety matches that only catch if you strike them hard and fast enough.",
+    preview: "matchbox",
+  },
 ] as const;
 
 // Scramble Text has a custom card in the grid rather than an ExperimentPreview.
