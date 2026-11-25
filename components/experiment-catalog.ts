@@ -100,6 +100,13 @@ export const experiments = [
       "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",
     preview: "detent-knob",
   },
+  {
+    title: "Hole Punch",
+    href: "/experiments/hole-punch",
+    description:
+      "A two-hole punch that pushes back until the paper gives, then drops its chads in the tray.",
+    preview: "hole-punch",
+  },
 ] as const;
 
 // Scramble Text has a custom card in the grid rather than an ExperimentPreview.
