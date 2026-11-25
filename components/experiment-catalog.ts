@@ -100,6 +100,13 @@ export const experiments = [
       "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",
     preview: "detent-knob",
   },
+  {
+    title: "Aperture",
+    href: "/experiments/aperture",
+    description:
+      "A camera lens whose iris blades close as you turn the ring, and whose bokeh closes with them.",
+    preview: "aperture",
+  },
 ] as const;
 
 // Scramble Text has a custom card in the grid rather than an ExperimentPreview.

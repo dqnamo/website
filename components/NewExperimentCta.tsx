@@ -26,6 +26,7 @@ import {
   useState,
 } from "react";
 import { ScrambleTextShowcase } from "@/app/experiments/scramble-text/scramble-text-showcase";
+import { ApertureFace } from "@/components/Aperture";
 import { DetentKnobFace } from "@/components/DetentKnob";
 import { experiments } from "@/components/experiment-catalog";
 import { IridescentFoil } from "@/components/IridescentFoil";
@@ -558,6 +559,48 @@ function CassettePlayerPreview({ featured = false }: { featured?: boolean }) {
   );
 }
 
+/** Stops the lens down while the card it sits in is hovered. */
+function AperturePreview() {
+  const surfaceRef = useRef<HTMLDivElement>(null);
+  const [hovered, setHovered] = useState(false);
+
+  useEffect(() => {
+    const card = surfaceRef.current?.closest(".group");
+
+    if (!card) {
+      return;
+    }
+
+    const enter = () => setHovered(true);
+    const leave = () => setHovered(false);
+
+    card.addEventListener("pointerenter", enter);
+    card.addEventListener("pointerleave", leave);
+    card.addEventListener("focusin", enter);
+    card.addEventListener("focusout", leave);
+
+    return () => {
+      card.removeEventListener("pointerenter", enter);
+      card.removeEventListener("pointerleave", leave);
+      card.removeEventListener("focusin", enter);
+      card.removeEventListener("focusout", leave);
+    };
+  }, []);
+
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        previewSurfaceClassName,
+        "flex items-center justify-center bg-grayscale-2 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+      )}
+      ref={surfaceRef}
+    >
+      <ApertureFace size={96} stopIndex={hovered ? 6 : 1} />
+    </div>
+  );
+}
+
 export function ExperimentPreview({
   featured = false,
   type,
@@ -662,6 +705,10 @@ export function ExperimentPreview({
         />
       </div>
     );
+  }
+
+  if (type === "aperture") {
+    return <AperturePreview />;
   }
 
   if (type === "detent-knob") {
