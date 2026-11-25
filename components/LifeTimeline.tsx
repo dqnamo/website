@@ -1,13 +1,16 @@
 "use client";
 
+import { PlayIcon } from "@phosphor-icons/react";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import Image from "next/image";
 import { type ReactNode, useState } from "react";
+import { MentionText } from "@/components/PersonMention";
 import { cn } from "@/helpers/classname-helper";
 import type {
   TimelineAvatar,
   TimelineEntry,
   TimelineImage,
+  TimelineVideo,
   TimelineYear,
 } from "@/lib/life-timeline";
 
@@ -299,10 +302,11 @@ function TimelineItem({
         ) : null}
         {entry.description ? (
           <p className="mt-1 text-pretty text-grayscale-11 text-sm leading-5 max-sm:pr-12">
-            {entry.description}
+            <MentionText text={entry.description} />
           </p>
         ) : null}
         {entry.gallery ? <Gallery images={entry.gallery} side={side} /> : null}
+        {entry.video ? <Video side={side} video={entry.video} /> : null}
         {entry.content ? (
           <div
             className={cn(
@@ -395,6 +399,62 @@ function Gallery({
           />
         </div>
       ))}
+    </div>
+  );
+}
+
+/**
+ * A YouTube clip in the same tray as a gallery. Only the thumbnail loads at
+ * first; the player (privacy-enhanced, no cookies until it's played) swaps in
+ * when it's clicked.
+ */
+function Video({
+  video,
+  side,
+}: {
+  video: TimelineVideo;
+  side: "left" | "right";
+}) {
+  const [playing, setPlaying] = useState(false);
+
+  return (
+    <div
+      className={cn(
+        "mt-3 max-w-sm rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5 text-left",
+        side === "left" && "sm:ml-auto",
+      )}
+    >
+      <div className="rounded-[13px] border border-grayscale-4 border-b-2 bg-white p-1 dark:bg-grayscale-3">
+        <div className="relative aspect-video overflow-hidden rounded-[9px] bg-black">
+          {playing ? (
+            <iframe
+              allow="autoplay; encrypted-media; picture-in-picture"
+              allowFullScreen
+              className="absolute inset-0 size-full"
+              src={`https://www.youtube-nocookie.com/embed/${video.youtubeId}?autoplay=1&rel=0`}
+              title={video.title}
+            />
+          ) : (
+            <button
+              aria-label={`Play ${video.title}`}
+              className="group/play absolute inset-0 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7"
+              onClick={() => setPlaying(true)}
+              type="button"
+            >
+              <Image
+                alt=""
+                className="object-cover"
+                fill
+                sizes="(min-width: 640px) 372px, 84vw"
+                src={video.thumbnail}
+              />
+              <span className="relative flex size-11 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm transition-transform duration-200 group-hover/play:scale-110">
+                <PlayIcon className="translate-x-px" size={18} weight="fill" />
+              </span>
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

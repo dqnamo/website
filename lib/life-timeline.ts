@@ -15,6 +15,8 @@ export interface TimelineEntry {
   count?: number;
   /** A few pictures under the description, laid out as a small masonry grid. */
   gallery?: TimelineImage[];
+  /** A YouTube clip, played in place when its thumbnail is clicked. */
+  video?: TimelineVideo;
   /** A round picture above the title, like a company's logo. */
   avatar?: TimelineAvatar;
   /** Something richer than text, shown under the title (like a card). */
@@ -34,6 +36,14 @@ export interface TimelineImage {
   alt: string;
   width: number;
   height: number;
+}
+
+export interface TimelineVideo {
+  youtubeId: string;
+  /** The video's own title, read out to screen readers. */
+  title: string;
+  /** A 16:9 still under /public, so nothing loads from YouTube until it's played. */
+  thumbnail: string;
 }
 
 export interface TimelineAvatar {
@@ -167,20 +177,6 @@ const galleries: Record<string, TimelineImage[]> = {
       height: 893,
     },
   ],
-  Superlayer: [
-    {
-      src: "/timeline/superlayer/logo-wide.webp",
-      alt: "The Superlayer logo",
-      width: 1200,
-      height: 552,
-    },
-    {
-      src: "/timeline/superlayer/hero.webp",
-      alt: "Superlayer: the instant backend for all your ideas",
-      width: 1200,
-      height: 552,
-    },
-  ],
   "London Underground map builder": [
     {
       src: "/timeline/underground-map/london-paper.webp",
@@ -215,6 +211,173 @@ const galleries: Record<string, TimelineImage[]> = {
       height: 640,
     },
   ],
+  "Open source Bear alternative": [
+    screenshot(
+      "/timeline/koala/notes.webp",
+      "Koala's notes, with tags down the side",
+    ),
+    screenshot(
+      "/timeline/koala/sign-in.webp",
+      "Koala's sign-in page, next to a koala in a tree",
+    ),
+  ],
+  Zedball: [
+    {
+      src: "/timeline/zedball/match.webp",
+      alt: "Intergalactic Football: the club dashboard, with the latest result, league standings and upcoming fixtures",
+      width: 1200,
+      height: 675,
+    },
+    {
+      src: "/timeline/zedball/stats.webp",
+      alt: "Intergalactic Football: a live match, with ball possession plotted on a hexagon",
+      width: 1200,
+      height: 794,
+    },
+    {
+      src: "/timeline/zedball/leagues.webp",
+      alt: "Intergalactic Football: a division's fixtures and table",
+      width: 1200,
+      height: 901,
+    },
+    screenshot(
+      "/timeline/zedball/website.webp",
+      "The Zedball website: building virtual worlds of sport",
+    ),
+  ],
+  Growdoro: [
+    {
+      src: "/timeline/growdoro/morning-glory.webp",
+      alt: "A morning glory growing on a block of grass",
+      width: 500,
+      height: 464,
+    },
+    {
+      src: "/timeline/growdoro/bird-of-paradise.webp",
+      alt: "A bird of paradise growing on a block of grass",
+      width: 341,
+      height: 500,
+    },
+    {
+      src: "/timeline/growdoro/carnation.webp",
+      alt: "Carnations growing on a block of grass",
+      width: 407,
+      height: 500,
+    },
+    {
+      src: "/timeline/growdoro/ghost-orchid.webp",
+      alt: "A ghost orchid growing on a block of grass",
+      width: 426,
+      height: 500,
+    },
+  ],
+  "Launched Growdoro v2": [
+    {
+      src: "/timeline/growdoro/garden-day.webp",
+      alt: "A voxel garden of daisies, foxgloves and ferns on Growdoro v2",
+      width: 800,
+      height: 540,
+    },
+    {
+      src: "/timeline/growdoro/app.webp",
+      alt: "Growdoro v2: a focus timer next to the garden",
+      width: 820,
+      height: 522,
+    },
+  ],
+  "YC Mentor": [
+    {
+      src: "/timeline/yc-mentor/home.webp",
+      alt: "YC Mentor: Build The Future, over an overgrown sci-fi city",
+      width: 1200,
+      height: 587,
+    },
+    screenshot(
+      "/timeline/yc-mentor/chat.webp",
+      "YC Mentor answering how to know if you're solving a real problem, citing Paul Graham",
+    ),
+    {
+      src: "/timeline/yc-mentor/office-hours.webp",
+      alt: "YC Mentor artwork: a founder at a control room full of screens",
+      width: 1200,
+      height: 672,
+    },
+    {
+      src: "/timeline/yc-mentor/dinner.webp",
+      alt: "YC Mentor artwork: two founders talking over dinner",
+      width: 800,
+      height: 800,
+    },
+    {
+      src: "/timeline/yc-mentor/office-hours-card.webp",
+      alt: "YC Mentor: infinite YC office hours, with a YC interview to join",
+      width: 735,
+      height: 459,
+    },
+  ],
+  "Prompt Hunt": [
+    screenshot(
+      "/timeline/prompt-hunt/top-prompts.webp",
+      "Prompt Hunt: today's top prompts, with likes",
+    ),
+    screenshot(
+      "/timeline/prompt-hunt/prompt.webp",
+      "Prompt Hunt: the Cold Email Rewriter prompt with a sample input and output",
+    ),
+  ],
+  CollabGPT: [
+    screenshot(
+      "/timeline/collabgpt/chat.webp",
+      "CollabGPT: a shared product launch brainstorm between two people and ChatGPT",
+    ),
+    screenshot(
+      "/timeline/collabgpt/licence.webp",
+      "CollabGPT: a $25 one-time licence, with no login and your own API key",
+    ),
+  ],
+  "compoundname.com": [
+    screenshot(
+      "/timeline/compoundname/website.webp",
+      "compoundname.com: not getting a .com is a skill issue",
+    ),
+  ],
+  "/computer": [
+    screenshot(
+      "/timeline/computer/website.webp",
+      "/computer: turn every Slack channel into a computer",
+    ),
+  ],
+  "LLM Poker": [
+    screenshot(
+      "/timeline/llm-poker/website.webp",
+      "LLM Poker: models seated around a dark poker table",
+    ),
+  ],
+};
+
+/** A desktop screenshot of a site or app, taken at 1280×800. */
+function screenshot(src: string, alt: string): TimelineImage {
+  return { src, alt, width: 1200, height: 750 };
+}
+
+/** Logos for projects, shown above their titles like a company's. */
+/** Clips for entries that are better watched than read about. */
+const videos: Record<string, TimelineVideo> = {
+  "Mastered a niche game": {
+    youtubeId: "zJQ_1kpI99Q",
+    title: "MAG PS3 online gameplay: 256 people",
+    thumbnail: "/timeline/mag/thumbnail.webp",
+  },
+};
+
+const logos: Record<string, string> = {
+  Fammli: "/timeline/fammli/mark.webp",
+  Ballermatch: "/timeline/ballermatch/mark.webp",
+  "Open source Bear alternative": "/timeline/koala/mark.webp",
+  CollabGPT: "/timeline/collabgpt/mark.webp",
+  "Prompt Hunt": "/timeline/prompt-hunt/mark.webp",
+  "GPT Maxx": "/timeline/gpt-maxx/mark.webp",
+  "Lobster Chess": "/timeline/lobster-chess/mark.webp",
 };
 
 /** Anything not listed above is a life event, like moving country. */
@@ -277,9 +440,14 @@ function timelineEvents(
 ): TimelineEntry[] {
   return entries.map((entry) => {
     if (!("length" in entry)) {
-      return { ...entry, date: entry.date ?? dates[entry.title] };
+      return {
+        ...entry,
+        date: entry.date ?? dates[entry.title],
+        gallery: entry.gallery ?? galleries[entry.title],
+      };
     }
     const [title, description, href] = entry;
+    const logo = logos[title];
     return {
       title,
       description,
@@ -287,6 +455,8 @@ function timelineEvents(
       kinds: [kindOf(title)],
       date: dates[title],
       gallery: galleries[title],
+      video: videos[title],
+      avatar: logo ? { src: logo, initials: "" } : undefined,
     };
   });
 }
@@ -393,7 +563,7 @@ const lifeline: {
         ],
         [
           "Won my first Startup Weekend",
-          "Won my first Startup Weekend on fashion tech. Met some cool people and learned how much of a difference a good team can make. Had a great team with Sainanth, Laurence, and Jamiu. We built an app called Kloset that serves as a digital representation of your wardrobe.",
+          "Won my first Startup Weekend on fashion tech. Met some cool people and learned how much of a difference a good team can make. Had a great team with @sainanth, @laurence, and @jamiu. We built an app called Kloset that serves as a digital representation of your wardrobe.",
         ],
         [
           "Got a dog",
@@ -431,7 +601,7 @@ const lifeline: {
           role: "Co-founder",
           start: "Jun 2018",
           description:
-            "A creative agency I founded with my friend Laurence. We made websites and videos for some cool brands. Laurence now does some cool product design stuff with Light Phone in New York.",
+            "A creative agency I founded with my friend @laurence. We made websites and videos for some cool brands. Laurence now does some cool product design stuff with Light Phone in New York.",
           href: "https://www.thelightphone.com/",
         }),
         [
@@ -457,7 +627,7 @@ const lifeline: {
         }),
         [
           "Playlist Lab",
-          "A platform that allows you to improve your Spotify playlist by increasing danceability, energy, etc. Project for music engineering module in uni, built with Alan. We finished it one week and apparently this was a bad thing for our lecturers ???",
+          "A platform that allows you to improve your Spotify playlist by increasing danceability, energy, etc. Project for music engineering module in uni, built with @alan. We finished it one week and apparently this was a bad thing for our lecturers ???",
           "https://github.com/dqnamo/PlaylistLab",
         ],
       ]),
@@ -471,7 +641,7 @@ const lifeline: {
           role: "Founding Software Engineer (contract)",
           start: "Jun 2020",
           description:
-            "First engineer at a edtech startup in Ireland. Felt the first dopamine rush of user feedback for a product you are building. Learned a lot from the the two founders Dave and Podge.",
+            "First engineer at a edtech startup in Ireland. Felt the first dopamine rush of user feedback for a product you are building. Learned a lot from the the two founders @dave and @podge.",
           href: "https://gonurture.com",
         }),
         [
@@ -503,7 +673,7 @@ const lifeline: {
         ],
         [
           "ThreeDo",
-          "A todo app that only lets you do 3 things at a time. Built it to learn SwiftUI. Got inspired from a this YouTube video by Garret Flower.",
+          "A todo app that only lets you do 3 things at a time. Built it to learn SwiftUI. Got inspired from a this YouTube video by @garret.",
           "https://www.youtube.com/watch?v=D9kOyqPNW_A",
         ],
       ]),
@@ -517,7 +687,7 @@ const lifeline: {
           role: "Founder",
           start: "Feb 2022",
           description:
-            "My first startup. A web3 football management game using Sorare assets. Learned so much from this experience and honestly looking back it was the most fun I've had. We built it along with a bunch of my friends: Lydia, Alan, Angela, Jake, Akhil, Ionathan and my brother. My biggest regret is bringing my friends into an absolute shitshow of a startup lol but we had fun. Protip: don't get on a hype train or build a game as your first startup. First time I acc realised how hard building a startup is.",
+            "My first startup. A web3 football management game using Sorare assets. Learned so much from this experience and honestly looking back it was the most fun I've had. We built it along with a bunch of my friends: @lydia, @alan, @angela, @jake, @akhil, @ionathan and my brother. My biggest regret is bringing my friends into an absolute shitshow of a startup lol but we had fun. Protip: don't get on a hype train or build a game as your first startup. First time I acc realised how hard building a startup is.",
           href: "https://sorare.com",
           alsoProject: true,
         }),
@@ -550,7 +720,7 @@ const lifeline: {
           role: "AI Engineer (contract)",
           start: "May 2023",
           description:
-            "Dev work for DigitalGenius building voice customer service agents. Was a fun project but SIP is the most annoying thing I ever dealt with. If you haven't heard of SIP, just be happy. A indie hacker inside the company. Ik it sounds weird but I just fill in gaps and work with the CEO to try out random things and build prototypes. Also learn a lot from the CEO Bogdan.",
+            "Dev work for DigitalGenius building voice customer service agents. Was a fun project but SIP is the most annoying thing I ever dealt with. If you haven't heard of SIP, just be happy. A indie hacker inside the company. Ik it sounds weird but I just fill in gaps and work with the CEO to try out random things and build prototypes. Also learn a lot from the CEO @bogdan.",
           href: "https://digitalgenius.com",
         }),
         [
@@ -570,7 +740,7 @@ const lifeline: {
         ],
         [
           "Blogtopod",
-          "Convert your existing blog posts to podcast episodes. Built it with my friend Harish. Some revenue and we sold it a month later on MicroAcquire.",
+          "Convert your existing blog posts to podcast episodes. Built it with my friend @harish. Some revenue and we sold it a month later on MicroAcquire.",
         ],
         [
           "YC Mentor",
@@ -579,7 +749,7 @@ const lifeline: {
         ],
         [
           "AI employee in Slack called Wonderworker",
-          "An AI employee in Slack that can do a bunch of stuff. Was exploring this idea with my friend Marcel and my brother Daniel.",
+          "An AI employee in Slack that can do a bunch of stuff. Was exploring this idea with my friend @marcel and my brother @daniel.",
         ],
         [
           "CollabGPT",
@@ -613,7 +783,7 @@ const lifeline: {
         ],
         [
           "Tiny Dublin",
-          "Made an isometric pixel art map of metro Dublin, from Lucan to Howth. About 650 km² of land and about 6.6 billion pixels. Built with ktoya_me's London model and method, on _coenen's renderer.",
+          "Made an isometric pixel art map of metro Dublin, from Lucan to Howth. About 650 km² of land and about 6.6 billion pixels. Built with @ktoya's London model and method, on @coenen's renderer.",
           "https://github.com/dqnamo/tinydublin",
         ],
         [
@@ -740,7 +910,7 @@ const lifeline: {
         ],
         [
           "GPT Maxx",
-          "An April Fools project I done with my friend Romil. It's a little tool to trick your friends into thinking AI knows everything about them.",
+          "An April Fools project I done with my friend @romil. It's a little tool to trick your friends into thinking AI knows everything about them.",
         ],
         [
           "Selling Stoicism books on Amazon",
