@@ -26,6 +26,7 @@ import {
   useState,
 } from "react";
 import { ScrambleTextShowcase } from "@/app/experiments/scramble-text/scramble-text-showcase";
+import { BubbleWrapFace } from "@/components/BubbleWrap";
 import { DetentKnobFace } from "@/components/DetentKnob";
 import { experiments } from "@/components/experiment-catalog";
 import { IridescentFoil } from "@/components/IridescentFoil";
@@ -678,6 +679,25 @@ export function ExperimentPreview({
           litIndex={4}
           size={58}
           turnClassName="-rotate-27 transition-transform duration-500 [transition-timing-function:steps(3,end)] group-hover:rotate-54 motion-reduce:transition-none"
+        />
+      </div>
+    );
+  }
+
+  if (type === "bubble-wrap") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "flex items-center justify-center bg-grayscale-2 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+        )}
+      >
+        <BubbleWrapFace
+          className="w-[150px] -rotate-3 transition-transform duration-300 group-hover:rotate-0 group-hover:scale-105 motion-reduce:transition-none"
+          columns={5}
+          popped={[3, 6, 7]}
+          rows={3}
         />
       </div>
     );
