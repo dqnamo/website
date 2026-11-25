@@ -100,6 +100,13 @@ export const experiments = [
       "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",
     preview: "detent-knob",
   },
+  {
+    title: "Spirit Level",
+    href: "/experiments/spirit-level",
+    description:
+      "A spirit level whose bubble drifts uphill and settles between the lines.",
+    preview: "spirit-level",
+  },
 ] as const;
 
 // Scramble Text has a custom card in the grid rather than an ExperimentPreview.
