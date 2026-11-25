@@ -211,40 +211,6 @@ const galleries: Record<string, TimelineImage[]> = {
       height: 640,
     },
   ],
-  "Open source Bear alternative": [
-    screenshot(
-      "/timeline/koala/notes.webp",
-      "Koala's notes, with tags down the side",
-    ),
-    screenshot(
-      "/timeline/koala/sign-in.webp",
-      "Koala's sign-in page, next to a koala in a tree",
-    ),
-  ],
-  Zedball: [
-    {
-      src: "/timeline/zedball/match.webp",
-      alt: "Intergalactic Football: the club dashboard, with the latest result, league standings and upcoming fixtures",
-      width: 1200,
-      height: 675,
-    },
-    {
-      src: "/timeline/zedball/stats.webp",
-      alt: "Intergalactic Football: a live match, with ball possession plotted on a hexagon",
-      width: 1200,
-      height: 794,
-    },
-    {
-      src: "/timeline/zedball/leagues.webp",
-      alt: "Intergalactic Football: a division's fixtures and table",
-      width: 1200,
-      height: 901,
-    },
-    screenshot(
-      "/timeline/zedball/website.webp",
-      "The Zedball website: building virtual worlds of sport",
-    ),
-  ],
   Growdoro: [
     {
       src: "/timeline/growdoro/morning-glory.webp",
@@ -285,56 +251,6 @@ const galleries: Record<string, TimelineImage[]> = {
       height: 522,
     },
   ],
-  "YC Mentor": [
-    {
-      src: "/timeline/yc-mentor/home.webp",
-      alt: "YC Mentor: Build The Future, over an overgrown sci-fi city",
-      width: 1200,
-      height: 587,
-    },
-    screenshot(
-      "/timeline/yc-mentor/chat.webp",
-      "YC Mentor answering how to know if you're solving a real problem, citing Paul Graham",
-    ),
-    {
-      src: "/timeline/yc-mentor/office-hours.webp",
-      alt: "YC Mentor artwork: a founder at a control room full of screens",
-      width: 1200,
-      height: 672,
-    },
-    {
-      src: "/timeline/yc-mentor/dinner.webp",
-      alt: "YC Mentor artwork: two founders talking over dinner",
-      width: 800,
-      height: 800,
-    },
-    {
-      src: "/timeline/yc-mentor/office-hours-card.webp",
-      alt: "YC Mentor: infinite YC office hours, with a YC interview to join",
-      width: 735,
-      height: 459,
-    },
-  ],
-  "Prompt Hunt": [
-    screenshot(
-      "/timeline/prompt-hunt/top-prompts.webp",
-      "Prompt Hunt: today's top prompts, with likes",
-    ),
-    screenshot(
-      "/timeline/prompt-hunt/prompt.webp",
-      "Prompt Hunt: the Cold Email Rewriter prompt with a sample input and output",
-    ),
-  ],
-  CollabGPT: [
-    screenshot(
-      "/timeline/collabgpt/chat.webp",
-      "CollabGPT: a shared product launch brainstorm between two people and ChatGPT",
-    ),
-    screenshot(
-      "/timeline/collabgpt/licence.webp",
-      "CollabGPT: a $25 one-time licence, with no login and your own API key",
-    ),
-  ],
   "compoundname.com": [
     screenshot(
       "/timeline/compoundname/website.webp",
@@ -372,8 +288,6 @@ const videos: Record<string, TimelineVideo> = {
 
 const logos: Record<string, string> = {
   Fammli: "/timeline/fammli/mark.webp",
-  Ballermatch: "/timeline/ballermatch/mark.webp",
-  "Open source Bear alternative": "/timeline/koala/mark.webp",
   CollabGPT: "/timeline/collabgpt/mark.webp",
   "Prompt Hunt": "/timeline/prompt-hunt/mark.webp",
   "GPT Maxx": "/timeline/gpt-maxx/mark.webp",
