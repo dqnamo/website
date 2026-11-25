@@ -276,7 +276,7 @@ function TimelineItem({
             className={cn("mb-2", side === "left" && "sm:ml-auto")}
           />
         ) : null}
-        <h3 className="font-medium text-grayscale-12 text-sm">
+        <h3 className="font-medium text-grayscale-12 text-sm max-sm:pr-12">
           {entry.href ? (
             <a
               className="underline decoration-grayscale-6 underline-offset-2 transition-colors hover:decoration-grayscale-10"
@@ -293,10 +293,12 @@ function TimelineItem({
           )}
         </h3>
         {entry.meta ? (
-          <p className="mt-0.5 text-grayscale-9 text-xs">{entry.meta}</p>
+          <p className="mt-0.5 text-grayscale-9 text-xs max-sm:pr-12">
+            {entry.meta}
+          </p>
         ) : null}
         {entry.description ? (
-          <p className="mt-1 text-pretty text-grayscale-11 text-sm leading-5">
+          <p className="mt-1 text-pretty text-grayscale-11 text-sm leading-5 max-sm:pr-12">
             {entry.description}
           </p>
         ) : null}

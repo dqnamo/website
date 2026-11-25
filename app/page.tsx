@@ -18,7 +18,7 @@ export default function HomePage() {
         </header>
 
         <section className="mt-8">
-          <p className="max-w-xl px-3 text-balance text-grayscale-11 text-sm leading-6 sm:mx-auto sm:text-center">
+          <p className="max-w-xl px-3 text-balance max-sm:pr-12 text-grayscale-11 text-sm leading-6 sm:mx-auto sm:text-center">
             People call me{" "}
             <span className="font-medium text-grayscale-12">JP</span>. They say
             I&apos;m a design engineer. I just like making things. I freelance
