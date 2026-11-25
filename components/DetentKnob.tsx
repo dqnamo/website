@@ -292,8 +292,14 @@ function KnobBezel({
             key={position}
             style={{
               height: ledSize,
-              left: bezel / 2 + Math.sin(angle) * ledRadius - ledSize / 2,
-              top: bezel / 2 - Math.cos(angle) * ledRadius - ledSize / 2,
+              // Rounded so the server and the browser print the same number;
+              // the raw trig results differ in their last digits and break hydration.
+              left: roundPx(
+                bezel / 2 + Math.sin(angle) * ledRadius - ledSize / 2,
+              ),
+              top: roundPx(
+                bezel / 2 - Math.cos(angle) * ledRadius - ledSize / 2,
+              ),
               width: ledSize,
             }}
           >
@@ -803,4 +809,9 @@ export function DetentKnob({
       </div>
     </div>
   );
+}
+
+/** Two decimal places: well under a pixel, and stable between server and client. */
+function roundPx(value: number) {
+  return Math.round(value * 100) / 100;
 }
