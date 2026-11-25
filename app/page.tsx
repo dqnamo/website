@@ -1,7 +1,5 @@
 import Link from "next/link";
 import { experimentCount } from "@/components/experiment-catalog";
-import { ListCard } from "@/components/ListCard";
-import { featuredListItems, listCount } from "@/components/list-catalog";
 import { ExperimentPreview } from "@/components/NewExperimentCta";
 import { PikaArrowRightIcon } from "@/components/PikaDockIcons";
 import { Wordmark } from "@/components/Wordmark";
@@ -167,38 +165,6 @@ export default function HomePage() {
               </div>
               <h3 className="min-w-0 font-medium text-grayscale-12 text-sm">
                 View all components
-              </h3>
-              <PikaArrowRightIcon
-                aria-hidden="true"
-                className="ml-auto shrink-0 text-grayscale-9 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-grayscale-11"
-                size={16}
-              />
-            </Link>
-          </div>
-        </section>
-
-        <section className="mt-16">
-          <div className="p-3">
-            <h2 className="font-medium text-grayscale-12 text-sm">
-              Products and tools I recommend
-            </h2>
-            <p className="mt-px text-pretty text-grayscale-10 text-sm leading-5">
-              Software I use constantly and trust enough to pass on.
-            </p>
-          </div>
-          <div className="mt-3 grid grid-cols-1 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5 sm:grid-cols-2 lg:grid-cols-3">
-            {featuredListItems.map((item) => (
-              <ListCard item={item} key={item.href} />
-            ))}
-            <Link
-              className="group flex items-center gap-3 rounded-[13px] border border-grayscale-4 border-b-2 bg-white p-2 transition-colors hover:border-grayscale-5 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 sm:col-span-2 lg:col-span-3 dark:bg-grayscale-3 dark:hover:bg-grayscale-4"
-              href="/list"
-            >
-              <div className="flex h-6 min-w-6 shrink-0 items-center justify-center rounded-md border border-transparent bg-grayscale-12 px-1 font-medium text-[11px] text-grayscale-1 leading-none transition-colors dark:border-grayscale-5 dark:bg-grayscale-4 dark:text-grayscale-12 dark:group-hover:border-grayscale-6 dark:group-hover:bg-grayscale-5">
-                {listCount}
-              </div>
-              <h3 className="min-w-0 font-medium text-grayscale-12 text-sm">
-                View the full list
               </h3>
               <PikaArrowRightIcon
                 aria-hidden="true"
