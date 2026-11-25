@@ -10,7 +10,7 @@ const timelineYears = withExtraEntries(lifeTimeline, kitchenTimelineEntries());
 export default function HomePage() {
   return (
     <main className="mx-auto max-w-4xl">
-      <div className="p-4 sm:p-8">
+      <div className="p-4 pt-12 sm:p-8 sm:pt-20">
         <header className="flex flex-col items-start px-3 sm:items-center sm:text-center">
           <h1>
             <Wordmark />
