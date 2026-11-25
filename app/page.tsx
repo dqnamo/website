@@ -1,45 +1,43 @@
-import Link from "next/link";
-import { experimentCount } from "@/components/experiment-catalog";
-import { ExperimentPreview } from "@/components/NewExperimentCta";
-import { PikaArrowRightIcon } from "@/components/PikaDockIcons";
+import type { ReactNode } from "react";
+import { FilterableTimeline } from "@/components/FilterableTimeline";
+import { kitchenTimelineEntries } from "@/components/KitchenTimelineMonths";
 import { Wordmark } from "@/components/Wordmark";
-import { WorkWithMeCta } from "@/components/WorkWithMeCta";
+import { lifeTimeline, withExtraEntries } from "@/lib/life-timeline";
 
-const kitchenExperiments = [
-  {
-    description:
-      "A composable playing card, plus a fanned hand you can thumb through and play.",
-    href: "/experiments/playing-cards",
-    preview: "playing-cards",
-    title: "Playing Cards",
-  },
-  {
-    description:
-      "A SaaS checkout state that prints a physical receipt when payment clears.",
-    href: "/experiments/receipt-printer",
-    preview: "receipt-printer",
-    title: "Receipt Printer",
-  },
-  {
-    description: "A button that smoothly resizes as its label animates.",
-    href: "/experiments/dynamic-button",
-    preview: "dynamic-button",
-    title: "Dynamic Button",
-  },
-] as const;
+// The kitchen's components sit among everything else, by the month they were made.
+const timelineYears = withExtraEntries(lifeTimeline, kitchenTimelineEntries());
 
 export default function HomePage() {
   return (
     <main className="mx-auto max-w-4xl">
       <div className="p-4 sm:p-8">
-        <header className="px-3">
+        <header className="flex flex-col items-start px-3 sm:items-center sm:text-center">
           <h1>
             <Wordmark />
           </h1>
-          <p className="font-medium text-grayscale-10 text-xs">JP</p>
         </header>
 
-        <WorkWithMeCta className="mt-8" location="homepage" />
+        <section className="mt-8">
+          <p className="max-w-xl px-3 text-balance text-grayscale-11 text-sm leading-6 sm:mx-auto sm:text-center">
+            People call me{" "}
+            <span className="font-medium text-grayscale-12">JP</span>. They say
+            I&apos;m a design engineer. I just like making things. I freelance
+            via{" "}
+            <BrandLink
+              href="https://interface.london"
+              mark={<InterfaceMark className={brandMarkClassName} />}
+              name="The Interface Company of London"
+            />
+            . I&apos;m building my agentic development environment at{" "}
+            <BrandLink
+              href="https://sheepdog.build"
+              mark={<SheepdogMark className={brandMarkClassName} />}
+              name="Sheepdog"
+            />
+            .
+          </p>
+          <FilterableTimeline years={timelineYears} />
+        </section>
 
         {/* <div className="flex min-h-64 flex-col rounded-[13px] border border-grayscale-3 bg-grayscale-1 p-1 small-shadow dark:border-grayscale-4 dark:bg-grayscale-3 dark:shadow-none">
           <div className="flex items-center justify-center rounded-lg bg-grayscale-2 p-16">
@@ -128,53 +126,6 @@ export default function HomePage() {
           </div>
         </section> */}
 
-        <section className="mt-16">
-          <div className="p-3">
-            <h2 className="font-medium text-grayscale-12 text-sm">
-              What&apos;s cooking in the kitchen
-            </h2>
-            <p className="mt-px text-pretty text-grayscale-10 text-sm leading-5">
-              Fresh interaction patterns, component ideas, and visual
-              experiments.
-            </p>
-          </div>
-          <div className="mt-3 grid grid-cols-1 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5 sm:grid-cols-2 lg:grid-cols-3">
-            {kitchenExperiments.map((experiment) => (
-              <Link
-                className="group flex min-h-64 flex-col overflow-hidden rounded-[13px] border border-grayscale-4 border-b-2 bg-white p-1 transition-colors hover:border-grayscale-5 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 dark:bg-grayscale-3 dark:hover:bg-grayscale-4"
-                href={experiment.href}
-                key={experiment.href}
-              >
-                <ExperimentPreview type={experiment.preview} />
-                <div className="mt-auto flex flex-col px-2 pt-4 pb-2">
-                  <h3 className="font-medium text-grayscale-12 text-sm">
-                    {experiment.title}
-                  </h3>
-                  <p className="mt-2 text-pretty text-grayscale-10 text-xs leading-5">
-                    {experiment.description}
-                  </p>
-                </div>
-              </Link>
-            ))}
-            <Link
-              className="group flex items-center gap-3 rounded-[13px] border border-grayscale-4 border-b-2 bg-white p-2 transition-colors hover:border-grayscale-5 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 sm:col-span-2 lg:col-span-3 dark:bg-grayscale-3 dark:hover:bg-grayscale-4"
-              href="/kitchen"
-            >
-              <div className="flex h-6 min-w-6 shrink-0 items-center justify-center rounded-md border border-transparent bg-grayscale-12 px-1 font-medium text-[11px] text-grayscale-1 leading-none transition-colors dark:border-grayscale-5 dark:bg-grayscale-4 dark:text-grayscale-12 dark:group-hover:border-grayscale-6 dark:group-hover:bg-grayscale-5">
-                {experimentCount}
-              </div>
-              <h3 className="min-w-0 font-medium text-grayscale-12 text-sm">
-                View all components
-              </h3>
-              <PikaArrowRightIcon
-                aria-hidden="true"
-                className="ml-auto shrink-0 text-grayscale-9 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-grayscale-11"
-                size={16}
-              />
-            </Link>
-          </div>
-        </section>
-
         {/* <section className="mt-16">
           <div className="p-3">
             <h2 className="font-medium text-grayscale-12 text-sm">
@@ -224,5 +175,71 @@ export default function HomePage() {
         </section> */}
       </div>
     </main>
+  );
+}
+
+function InterfaceMark({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className={className}
+      fill="currentColor"
+      viewBox="0 0 390 390"
+    >
+      <path d="M390 260H263V390H0V0H390V260ZM390 390H268.646C274.065 362.814 284.682 331.358 305.5 312.5C338.96 282.189 375.829 267.065 390 262.002V390ZM263 78C263 78 263 169 220.5 207.5C178 246 130 260 130 260H263V78Z" />
+    </svg>
+  );
+}
+
+const brandMarkClassName = "mr-1 inline-block size-3 align-[-1px]";
+
+// Same underline as the timeline's links.
+const brandHighlightClassName =
+  "underline decoration-grayscale-6 underline-offset-2 transition-colors group-hover:decoration-grayscale-10";
+
+/**
+ * A company name with its mark in front. The mark sits outside the
+ * underline and is held to the first word, so it never wraps away from
+ * the name.
+ */
+function BrandLink({
+  href,
+  mark,
+  name,
+}: {
+  href: string;
+  mark: ReactNode;
+  name: string;
+}) {
+  const [first, ...rest] = name.split(" ");
+
+  return (
+    <a
+      className="group text-grayscale-12"
+      href={href}
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      <span className="whitespace-nowrap">
+        {mark}
+        <span className={brandHighlightClassName}>{first}</span>
+      </span>
+      {rest.length > 0 ? (
+        <span className={brandHighlightClassName}>{` ${rest.join(" ")}`}</span>
+      ) : null}
+    </a>
+  );
+}
+
+function SheepdogMark({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className={className}
+      fill="currentColor"
+      viewBox="-65.5 0 1629 1629"
+    >
+      <path d="M584 44.2139C686.102 -14.7351 811.898 -14.7357 914 44.2129L1333 286.125C1435.11 345.074 1498 454.016 1498 571.913V1056.36C1498 1174.26 1435.11 1283.2 1333 1342.15L914 1584.06C811.898 1643.01 686.102 1643.01 584 1584.06L309.407 1425.53L324.918 1383.01C363.358 1277.63 457.374 1202.5 568.635 1188.25L974.944 1136.2C1105.95 1119.42 1210.57 1018.94 1232.62 888.713L1255.12 755.797C1260.29 725.282 1236.77 697.45 1205.82 697.45H897L787.881 593.886C750.718 558.615 701.436 538.95 650.2 538.95H264.023C232.817 538.95 203.399 553.519 184.484 578.341L0 820.442V571.913C0 454.016 62.8972 345.074 164.999 286.125L584 44.2139ZM248.932 709.12C260.41 693.632 285 701.75 285 721.028V1121.95C285 1166.13 249.183 1201.95 205 1201.95H84.5C40.3172 1201.95 4.5 1166.13 4.5 1121.95V1045.554C4.5 1041.266 5.8785 1037.091 8.43164 1033.646L248.932 709.12Z" />
+    </svg>
   );
 }

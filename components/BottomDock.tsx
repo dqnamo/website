@@ -297,6 +297,8 @@ function ThemeButton() {
   );
 }
 
+// On small screens the dock is mirrored and turned a quarter left, so it rises from the right edge
+// instead of the bottom with Home at the top; the icons are turned back so they stay upright.
 export function BottomDock() {
   const { resolvedTheme } = useTheme();
   const pathname = usePathname();
@@ -306,7 +308,7 @@ export function BottomDock() {
   return (
     <div
       className={cn(
-        "dark pointer-events-none fixed inset-x-0 bottom-0 z-100 flex justify-center drop-shadow-[0_-2px_12px_rgba(0,0,0,0.14)] [--dock-active:#2a2a2a] [--dock-inner:#222222] [--dock-inner-border:#2a2a2a] [--dock-outer:#111111] [--dock-ring:#606060] [--dock-selected:#313131] [--dock-text:#b4b4b4] [--dock-text-strong:#eeeeee]",
+        "dark pointer-events-none fixed inset-x-0 bottom-0 z-100 flex justify-center max-sm:right-0 max-sm:bottom-1/2 max-sm:left-auto max-sm:w-max max-sm:origin-bottom-right max-sm:[transform:rotate(-90deg)_scaleX(-1)_translateX(50%)] drop-shadow-[0_-2px_12px_rgba(0,0,0,0.14)] [--dock-active:#2a2a2a] [--dock-inner:#222222] [--dock-inner-border:#2a2a2a] [--dock-outer:#111111] [--dock-ring:#606060] [--dock-selected:#313131] [--dock-text:#b4b4b4] [--dock-text-strong:#eeeeee]",
         isSiteDark &&
           "[--dock-active:#3a3a3a] [--dock-inner:#313131] [--dock-inner-border:#3a3a3a] [--dock-outer:#222222] [--dock-ring:#7b7b7b] [--dock-selected:#484848] [--dock-text:#eeeeee]",
       )}
@@ -320,7 +322,7 @@ export function BottomDock() {
           <TabShape bordered className="text-[var(--dock-inner)]" wing={CARD} />
           <nav
             aria-label="Primary navigation"
-            className="pointer-events-auto relative flex items-center gap-1"
+            className="pointer-events-auto relative flex items-center gap-1 max-sm:[&_svg]:[transform:scaleX(-1)_rotate(90deg)]"
             style={{ padding: CARD_PADDING }}
           >
             <DockTooltip edge="start" label="Home">
