@@ -297,31 +297,28 @@ const galleries: Record<string, TimelineGallery> = {
       height: 640,
     },
   ],
+  // One row of three, so the plants sit small side by side.
   Growdoro: [
-    {
-      src: "/timeline/growdoro/morning-glory.webp",
-      alt: "A morning glory growing on a block of grass",
-      width: 500,
-      height: 464,
-    },
-    {
-      src: "/timeline/growdoro/bird-of-paradise.webp",
-      alt: "A bird of paradise growing on a block of grass",
-      width: 341,
-      height: 500,
-    },
-    {
-      src: "/timeline/growdoro/carnation.webp",
-      alt: "Carnations growing on a block of grass",
-      width: 407,
-      height: 500,
-    },
-    {
-      src: "/timeline/growdoro/ghost-orchid.webp",
-      alt: "A ghost orchid growing on a block of grass",
-      width: 426,
-      height: 500,
-    },
+    [
+      {
+        src: "/timeline/growdoro/carnation.webp",
+        alt: "Carnations growing on a block of grass",
+        width: 407,
+        height: 500,
+      },
+      {
+        src: "/timeline/growdoro/bird-of-paradise.webp",
+        alt: "A bird of paradise growing on a block of grass",
+        width: 341,
+        height: 500,
+      },
+      {
+        src: "/timeline/growdoro/ghost-orchid.webp",
+        alt: "A ghost orchid growing on a block of grass",
+        width: 426,
+        height: 500,
+      },
+    ],
   ],
   "Launched Growdoro v2": [
     {
