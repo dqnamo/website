@@ -480,6 +480,20 @@ function Gallery({
     );
   }
 
+  // A lone picture keeps a column's width, and the tray wraps it instead of
+  // leaving the second column empty.
+  if (images.length === 1 && !link) {
+    return (
+      <div className={cn(tray, "w-fit")}>
+        <GalleryCard
+          className="w-[min(183px,42vw)]"
+          image={images[0]}
+          sizes="(min-width: 640px) 180px, 42vw"
+        />
+      </div>
+    );
+  }
+
   return (
     <div className={tray}>
       <div className="columns-2 gap-1.5">

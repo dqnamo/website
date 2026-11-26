@@ -269,6 +269,14 @@ const galleries: Record<string, TimelineGallery> = {
       },
     ],
   ],
+  "Got a dog": [
+    {
+      src: "/timeline/leo/leo.webp",
+      alt: "Leo, a yellow lab, smiling with his tongue out on the back seat of a car",
+      width: 900,
+      height: 1200,
+    },
+  ],
   "Tiny Dublin": [
     {
       src: "/timeline/tiny-dublin/poolbeg.webp",
