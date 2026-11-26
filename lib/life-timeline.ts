@@ -36,6 +36,11 @@ export interface TimelineImage {
   alt: string;
   width: number;
   height: number;
+  /**
+   * A short silent clip under /public that loops over the picture, which
+   * shows until it starts and stays for people who turn off motion.
+   */
+  loop?: string;
 }
 
 export interface TimelineVideo {
@@ -185,9 +190,16 @@ const galleries: Record<string, TimelineImage[]> = {
       "Saintdex: a growing collection of the lives, stories and witness of the Catholic saints",
     ),
     screenshot(
-      "/timeline/saintdex/saint.webp",
-      "Saint Joan of Arc's page on Saintdex: her portrait beside her feast day, patronages and story",
+      "/timeline/saintdex/michael-the-archangel.webp",
+      "Saint Michael the Archangel's page on Saintdex: his portrait beside his feast day, patronages and story",
     ),
+    {
+      src: "/timeline/saintdex/joan-of-arc.webp",
+      alt: "Saint Joan of Arc's moving portrait on Saintdex, in armour with her banner behind her",
+      width: 540,
+      height: 730,
+      loop: "/timeline/saintdex/joan-of-arc.mp4",
+    },
   ],
   "London Underground map builder": [
     {
