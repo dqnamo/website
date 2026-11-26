@@ -32,6 +32,7 @@ import { IridescentFoil } from "@/components/IridescentFoil";
 import { LogoTraceLoader } from "@/components/LogoTraceLoader";
 import { PlayingCard } from "@/components/PlayingCard";
 import { ReceiptPrinter } from "@/components/ReceiptPrinter";
+import { ServiceBellFace } from "@/components/ServiceBell";
 import { Signature } from "@/components/Signature";
 import { Stamp } from "@/components/Stamp";
 import { tactileButtonColorTokens } from "@/components/TactileButton";
@@ -679,6 +680,27 @@ export function ExperimentPreview({
           size={58}
           turnClassName="-rotate-27 transition-transform duration-500 [transition-timing-function:steps(3,end)] group-hover:rotate-54 motion-reduce:transition-none"
         />
+      </div>
+    );
+  }
+
+  if (type === "service-bell") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "flex items-center justify-center bg-grayscale-2 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+        )}
+      >
+        <ServiceBellFace
+          className="w-[118px]"
+          plungerClassName="transition-transform duration-100 ease-in group-hover:translate-y-[7px] motion-reduce:transition-none"
+          wavesClassName="opacity-0 scale-95 transition-[opacity,scale] duration-300 [transform-box:fill-box] [transform-origin:50%_100%] group-hover:opacity-100 group-hover:scale-100 motion-reduce:transition-none"
+        >
+          <path d="M 28 96 A 96 96 0 0 1 52 54" />
+          <path d="M 188 54 A 96 96 0 0 1 212 96" />
+        </ServiceBellFace>
       </div>
     );
   }
