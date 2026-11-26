@@ -3,7 +3,6 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { LifeTimeline } from "@/components/LifeTimeline";
-import { PikaArrowRightIcon } from "@/components/PikaDockIcons";
 import { cn } from "@/helpers/classname-helper";
 import type {
   TimelineEntry,
@@ -62,20 +61,7 @@ export function FilterableTimeline({ years }: { years: TimelineYear[] }) {
     <>
       <div className="mt-24 px-3 sm:text-center">
         <p className="text-grayscale-11 text-sm max-sm:pr-9">
-          Here is a timeline of my life. What do you want to see?{" "}
-          <button
-            className="group inline-flex cursor-pointer items-center gap-1 whitespace-nowrap text-grayscale-12 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7"
-            onClick={scrollToStart}
-            type="button"
-          >
-            <span className="underline decoration-grayscale-6 underline-offset-2 transition-colors group-hover:decoration-grayscale-10">
-              Take me to the start
-            </span>
-            <PikaArrowRightIcon
-              className="transition-transform duration-200 group-hover:translate-x-0.5"
-              size={14}
-            />
-          </button>
+          Here is a timeline of my life. What do you want to see?
         </p>
         <div className="mt-3 flex flex-wrap gap-1.5 max-sm:pr-9 sm:justify-center">
           {filters.map((option) => {
@@ -133,15 +119,4 @@ export function FilterableTimeline({ years }: { years: TimelineYear[] }) {
       </AnimatePresence>
     </>
   );
-}
-
-// The timeline runs newest first, so the start of it all is at the very bottom of the page.
-function scrollToStart() {
-  const reduceMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
-  window.scrollTo({
-    behavior: reduceMotion ? "auto" : "smooth",
-    top: document.documentElement.scrollHeight,
-  });
 }
