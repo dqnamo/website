@@ -218,18 +218,14 @@ const galleries: Record<string, TimelineGallery> = {
     },
   ],
   "London Underground map builder": [
-    {
-      src: "/timeline/underground-map/london-paper.webp",
-      alt: "The whole London Underground drawn in the map builder",
-      width: 1200,
-      height: 738,
-    },
-    {
-      src: "/timeline/underground-map/central-night.webp",
-      alt: "Central London on the map builder's night canvas",
-      width: 1200,
-      height: 900,
-    },
+    [
+      {
+        src: "/timeline/underground-map/london-paper.webp",
+        alt: "The whole London Underground drawn in the map builder",
+        width: 1200,
+        height: 738,
+      },
+    ],
   ],
   "Tiny Dublin": [
     {
