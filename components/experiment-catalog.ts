@@ -115,6 +115,14 @@ export const experiments = [
       "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",
     preview: "detent-knob",
   },
+  {
+    title: "Ring Pull",
+    href: "/experiments/ring-pull",
+    added: "2026-11-26",
+    description:
+      "A can's ring pull that strains against the score until it cracks with a hiss.",
+    preview: "ring-pull",
+  },
 ] as const;
 
 // Scramble Text has a custom card in the grid rather than an ExperimentPreview.
