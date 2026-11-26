@@ -697,7 +697,7 @@ const lifeline: {
         ],
         [
           "Tiny Dublin",
-          "Made an isometric pixel art map of metro Dublin, from Lucan to Howth. About 650 km² of land and about 6.6 billion pixels. Built with @ktoya's London model and method, on @coenen's renderer.",
+          "Made an isometric pixel art map of metro Dublin, from Lucan to Howth. About 650 km² of land and about 6.6 billion pixels.",
           "https://github.com/dqnamo/tinydublin",
         ],
         [

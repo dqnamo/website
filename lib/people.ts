@@ -4,7 +4,7 @@
  * somewhere to send you.
  */
 export interface Person {
-  /** How they're named in the text, like "Laurence" or "_coenen". */
+  /** How they're named in the text, like "Laurence". */
   name: string;
   /** Their full name, shown on hover. */
   fullName?: string;
@@ -124,19 +124,6 @@ export const people = {
     fullName: "Romil Depala",
     photo: "/people/romil.jpg",
     href: linkedin("romil-depala"),
-  },
-
-  // Tiny Dublin
-  ktoya: {
-    name: "ktoya_me",
-    photo: "/people/ktoya.jpg",
-    href: "https://x.com/ktoya_me",
-  },
-  coenen: {
-    name: "_coenen",
-    fullName: "Andy Coenen",
-    photo: "/people/coenen.jpg",
-    href: "https://x.com/_coenen",
   },
 } satisfies Record<string, Person>;
 
