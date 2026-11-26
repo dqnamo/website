@@ -115,6 +115,14 @@ export const experiments = [
       "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",
     preview: "detent-knob",
   },
+  {
+    title: "Toaster",
+    href: "/experiments/toaster",
+    added: "2026-11-25",
+    description:
+      "A pop-up toaster whose lever fights back until it catches, then throws the toast up when it's done.",
+    preview: "toaster",
+  },
 ] as const;
 
 // Scramble Text has a custom card in the grid rather than an ExperimentPreview.
