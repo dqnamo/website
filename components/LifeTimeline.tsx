@@ -480,16 +480,15 @@ function Gallery({
     );
   }
 
-  // A lone picture keeps a column's width, and the tray wraps it instead of
-  // leaving the second column empty.
-  if (images.length === 1 && !link) {
+  // A lone picture spans the tray's full width, with the link (if any) under it.
+  if (images.length === 1) {
     return (
-      <div className={cn(tray, "w-fit")}>
+      <div className={cn(tray, "flex flex-col gap-1.5")}>
         <GalleryCard
-          className="w-[min(183px,42vw)]"
           image={images[0]}
-          sizes="(min-width: 640px) 180px, 42vw"
+          sizes="(min-width: 640px) 372px, 84vw"
         />
+        {link}
       </div>
     );
   }
