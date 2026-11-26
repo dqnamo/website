@@ -1,7 +1,14 @@
 import type { ReactNode } from "react";
 import { writings as essays, formatPublished } from "@/lib/writings";
 
-export type TimelineKind = "project" | "job" | "essay" | "life" | "component";
+export type TimelineKind =
+  | "project"
+  | "job"
+  | "essay"
+  | "life"
+  | "component"
+  /** Something I sold; shown as a green "Sold" badge instead of a title. */
+  | "acquisition";
 
 export interface TimelineEntry {
   /** Defaults to the title; needed when titles can repeat. */
@@ -35,6 +42,11 @@ export interface TimelineEntry {
   linkIcon?: TimelineLinkIcon;
   /** Usually one; a company I founded is both a job and a project. */
   kinds: TimelineKind[];
+  /**
+   * Filters this entry also shows under without counting toward them, like
+   * a project beside the badge for its sale.
+   */
+  alsoUnder?: TimelineKind[];
 }
 
 export interface TimelineLinkIcon {
@@ -363,6 +375,9 @@ const videos: Record<string, TimelineVideo> = {
   },
 };
 
+/** Projects I sold, shown beside their "Sold" badges under micro acquisitions. */
+const sold = new Set(["Blogtopod", "CollabGPT"]);
+
 const logos: Record<string, string> = {
   Fammli: "/timeline/fammli/mark.webp",
   CollabGPT: "/timeline/collabgpt/mark.webp",
@@ -452,6 +467,7 @@ function timelineEvents(
       gallery: galleries[title],
       video: videos[title],
       avatar: logo ? { src: logo, initials: "" } : undefined,
+      alsoUnder: sold.has(title) ? ["acquisition"] : undefined,
     };
   });
 }
@@ -733,6 +749,11 @@ const lifeline: {
           "A new way to practice languages. Talk to AI bots and learn a language. They also proactively message you. Got a bunch of users. No revenue.",
           "https://chatlango.com",
         ],
+        {
+          title: "Sold Blogtopod",
+          description: "",
+          kinds: ["project", "acquisition"],
+        },
         [
           "Blogtopod",
           "Convert your existing blog posts to podcast episodes. Built it with my friend @harish. Some revenue and we sold it a month later on MicroAcquire.",
@@ -746,6 +767,11 @@ const lifeline: {
           "AI employee in Slack called Wonderworker",
           "An AI employee in Slack that can do a bunch of stuff. Was exploring this idea with my friend @marcel and my brother @daniel.",
         ],
+        {
+          title: "Sold CollabGPT",
+          description: "",
+          kinds: ["project", "acquisition"],
+        },
         [
           "CollabGPT",
           "Use ChatGPT collaboratively. Built it, got revenue and sold on MicroAcquire all in one week. Was my first taste of internet money.",

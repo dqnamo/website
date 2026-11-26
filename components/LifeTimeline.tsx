@@ -12,6 +12,7 @@ import {
 } from "react";
 import { MentionText } from "@/components/PersonMention";
 import { PikaArrowRightIcon, PikaGithubIcon } from "@/components/PikaDockIcons";
+import { SaleBadge } from "@/components/SaleBadge";
 import { cn } from "@/helpers/classname-helper";
 import type {
   TimelineAvatar,
@@ -263,6 +264,9 @@ function TimelineItem({
   entry: TimelineEntry;
   side: "left" | "right";
 }) {
+  // Things I sold show as a "Sold" badge in place of their title.
+  const sold = entry.kinds.includes("acquisition");
+
   return (
     <>
       <span
@@ -274,7 +278,7 @@ function TimelineItem({
             ? "sm:right-1/2 sm:left-auto sm:w-5"
             : "sm:left-1/2 sm:w-5",
           // Level with the middle of the avatar when there is one, else with the title.
-          entry.avatar ? "top-4" : "top-2.5",
+          entry.avatar ? "top-4" : sold ? "top-3.5" : "top-2.5",
         )}
       />
 
@@ -289,22 +293,31 @@ function TimelineItem({
             className={cn("mb-2", side === "left" && "sm:ml-auto")}
           />
         ) : null}
-        <h3 className="font-medium text-grayscale-12 text-sm max-sm:pr-12">
-          {entry.href ? (
-            <a
-              className="underline decoration-grayscale-6 underline-offset-2 transition-colors hover:decoration-grayscale-10"
-              href={entry.href}
-              // Pages on this site open in place; everything else in a new tab.
-              {...(entry.href.startsWith("/")
-                ? {}
-                : { rel: "noopener noreferrer", target: "_blank" })}
-            >
-              {entry.title}
-            </a>
-          ) : (
-            entry.title
-          )}
-        </h3>
+        {sold ? (
+          <h3 className="max-sm:pr-12">
+            <SaleBadge
+              className={cn(side === "left" && "sm:ml-auto")}
+              label={entry.title}
+            />
+          </h3>
+        ) : (
+          <h3 className="font-medium text-grayscale-12 text-sm max-sm:pr-12">
+            {entry.href ? (
+              <a
+                className="underline decoration-grayscale-6 underline-offset-2 transition-colors hover:decoration-grayscale-10"
+                href={entry.href}
+                // Pages on this site open in place; everything else in a new tab.
+                {...(entry.href.startsWith("/")
+                  ? {}
+                  : { rel: "noopener noreferrer", target: "_blank" })}
+              >
+                {entry.title}
+              </a>
+            ) : (
+              entry.title
+            )}
+          </h3>
+        )}
         {entry.meta ? (
           <p className="mt-0.5 text-grayscale-9 text-xs max-sm:pr-12">
             {entry.meta}
