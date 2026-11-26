@@ -1,6 +1,6 @@
 "use client";
 
-import { PlayIcon } from "@phosphor-icons/react";
+import { GlobeSimpleIcon, PlayIcon } from "@phosphor-icons/react";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import Image from "next/image";
 import {
@@ -11,6 +11,7 @@ import {
   useState,
 } from "react";
 import { MentionText } from "@/components/PersonMention";
+import { PikaArrowRightIcon, PikaGithubIcon } from "@/components/PikaDockIcons";
 import { cn } from "@/helpers/classname-helper";
 import type {
   TimelineAvatar,
@@ -18,6 +19,7 @@ import type {
   TimelineGallery,
   TimelineGalleryRow,
   TimelineImage,
+  TimelineLinkIcon,
   TimelineVideo,
   TimelineYear,
 } from "@/lib/life-timeline";
@@ -313,7 +315,22 @@ function TimelineItem({
             <MentionText text={entry.description} />
           </p>
         ) : null}
-        {entry.gallery ? <Gallery images={entry.gallery} side={side} /> : null}
+        {entry.gallery ? (
+          <Gallery
+            images={entry.gallery}
+            link={
+              entry.href ? (
+                <VisitLink
+                  href={entry.href}
+                  icon={entry.linkIcon}
+                  label={entry.linkLabel}
+                  title={entry.title}
+                />
+              ) : null
+            }
+            side={side}
+          />
+        ) : null}
         {entry.video ? <Video side={side} video={entry.video} /> : null}
         {entry.content ? (
           <div
@@ -379,9 +396,12 @@ function Avatar({
  */
 function Gallery({
   images,
+  link,
   side,
 }: {
   images: TimelineGallery;
+  /** A button at the foot of the tray, under the pictures. */
+  link?: ReactNode;
   side: "left" | "right";
 }) {
   // The same nested cards as the lab's months: a grey tray holding white cards. Columns drop
@@ -442,21 +462,92 @@ function Gallery({
             </div>
           );
         })}
+        {link}
       </div>
     );
   }
 
   return (
-    <div className={cn(tray, "columns-2 gap-1.5")}>
-      {images.map((image) => (
-        <GalleryCard
-          className="mb-1.5 break-inside-avoid"
-          image={image}
-          key={image.src}
-          sizes="(min-width: 640px) 180px, 42vw"
-        />
-      ))}
+    <div className={tray}>
+      <div className="columns-2 gap-1.5">
+        {images.map((image) => (
+          <GalleryCard
+            className="mb-1.5 break-inside-avoid"
+            image={image}
+            key={image.src}
+            sizes="(min-width: 640px) 180px, 42vw"
+          />
+        ))}
+      </div>
+      {link}
     </div>
+  );
+}
+
+/**
+ * The same button as the lab's "View all components", pointing at the
+ * entry's site: its address for the web, "View on GitHub" for repos.
+ */
+function VisitLink({
+  href,
+  icon,
+  label,
+  title,
+}: {
+  href: string;
+  /** A bare logo, shown without the badge. */
+  icon?: TimelineLinkIcon;
+  label?: string;
+  title: string;
+}) {
+  const internal = href.startsWith("/");
+  const host = internal ? null : new URL(href).hostname.replace(/^www\./, "");
+  const github = host === "github.com";
+  const text =
+    label ??
+    (host === null
+      ? `Open ${title}`
+      : github
+        ? "View on GitHub"
+        : `Visit ${host}`);
+
+  return (
+    <a
+      className="group flex items-center gap-2 rounded-[13px] border border-grayscale-4 border-b-2 bg-white p-2 transition-colors hover:border-grayscale-5 hover:bg-grayscale-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-grayscale-7 dark:bg-grayscale-3 dark:hover:bg-grayscale-4"
+      href={href}
+      {...(internal ? {} : { rel: "noopener noreferrer", target: "_blank" })}
+    >
+      {icon ? (
+        <span className="flex size-5 shrink-0 items-center justify-center">
+          <Image
+            alt=""
+            className={cn(
+              "size-4 object-contain",
+              icon.invertInDark && "dark:invert",
+            )}
+            height={16}
+            src={icon.src}
+            width={16}
+          />
+        </span>
+      ) : (
+        <span className="flex size-5 shrink-0 items-center justify-center rounded-md bg-grayscale-12 text-grayscale-1 dark:bg-grayscale-5 dark:text-grayscale-12">
+          {github ? (
+            <PikaGithubIcon aria-hidden="true" size={12} />
+          ) : (
+            <GlobeSimpleIcon aria-hidden="true" size={12} weight="bold" />
+          )}
+        </span>
+      )}
+      <span className="truncate font-medium text-grayscale-12 text-xs">
+        {text}
+      </span>
+      <PikaArrowRightIcon
+        aria-hidden="true"
+        className="ml-auto shrink-0 text-grayscale-9 transition-transform duration-200 group-hover:translate-x-0.5"
+        size={14}
+      />
+    </a>
   );
 }
 

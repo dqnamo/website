@@ -26,8 +26,22 @@ export interface TimelineEntry {
   /** Can be empty for entries that speak for themselves. */
   description: string;
   href?: string;
+  /**
+   * What the button under an entry's pictures says. Defaults to the site's
+   * address, or "View on GitHub" for repos.
+   */
+  linkLabel?: string;
+  /** A bare logo for that button, in place of the globe. */
+  linkIcon?: TimelineLinkIcon;
   /** Usually one; a company I founded is both a job and a project. */
   kinds: TimelineKind[];
+}
+
+export interface TimelineLinkIcon {
+  /** A path under /public, on a transparent background. */
+  src: string;
+  /** A black mark that would vanish on a dark background, so it flips to white. */
+  invertInDark?: boolean;
 }
 
 export interface TimelineImage {
@@ -323,6 +337,17 @@ const galleries: Record<string, TimelineGallery> = {
   ],
 };
 
+/** Button text for entries whose link isn't best described by its address. */
+const linkLabels: Record<string, string> = {
+  "London Underground map builder": "Open the map builder",
+};
+
+/** Logos for the button under an entry's pictures. */
+const linkIcons: Record<string, TimelineLinkIcon> = {
+  Sheepdog: { src: "/timeline/sheepdog/mark.svg", invertInDark: true },
+  Saintdex: { src: "/timeline/saintdex/mark.svg" },
+};
+
 /** A desktop screenshot of a site or app, taken at 1280×800. */
 function screenshot(src: string, alt: string): TimelineImage {
   return { src, alt, width: 1200, height: 750 };
@@ -410,6 +435,8 @@ function timelineEvents(
         ...entry,
         date: entry.date ?? dates[entry.title],
         gallery: entry.gallery ?? galleries[entry.title],
+        linkLabel: entry.linkLabel ?? linkLabels[entry.title],
+        linkIcon: entry.linkIcon ?? linkIcons[entry.title],
       };
     }
     const [title, description, href] = entry;
@@ -418,6 +445,8 @@ function timelineEvents(
       title,
       description,
       href,
+      linkLabel: linkLabels[title],
+      linkIcon: linkIcons[title],
       kinds: [kindOf(title)],
       date: dates[title],
       gallery: galleries[title],
@@ -750,7 +779,7 @@ const lifeline: {
         [
           "Tiny Dublin",
           "Made an isometric pixel art map of metro Dublin, from Lucan to Howth. About 650 km² of land and about 6.6 billion pixels.",
-          "https://github.com/dqnamo/tinydublin",
+          "https://tinydublin.com",
         ],
         [
           "designengineer.world",
