@@ -52,12 +52,12 @@ export function labTimelineEntries(): TimelineEntry[] {
     const count = month.items.length;
     return {
       id: `lab-${month.key}`,
-      title: `${count} new component${count === 1 ? "" : "s"}`,
+      title: `${count} new experiment${count === 1 ? "" : "s"}`,
       meta: month.label,
       description: "",
       href: "/lab",
       date: month.items[0].added,
-      kinds: ["component"],
+      kinds: ["experiment"],
       count,
       content: (
         <LabMonthCard month={month} showViewAll={index === months.length - 1} />
@@ -113,7 +113,7 @@ function LabMonthCard({
               {experimentCount}
             </span>
             <span className="font-medium text-grayscale-12 text-xs">
-              View all components
+              View all experiments
             </span>
             <PikaArrowRightIcon
               aria-hidden="true"

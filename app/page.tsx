@@ -4,7 +4,7 @@ import { labTimelineEntries } from "@/components/LabTimelineMonths";
 import { Wordmark } from "@/components/Wordmark";
 import { lifeTimeline, withExtraEntries } from "@/lib/life-timeline";
 
-// The lab's components sit among everything else, by the month they were made.
+// The lab's experiments sit among everything else, by the month they were made.
 const timelineYears = withExtraEntries(lifeTimeline, labTimelineEntries());
 
 export default function HomePage() {

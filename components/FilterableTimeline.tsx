@@ -16,14 +16,14 @@ type Filter =
   | "projects"
   | "exits"
   | "jobs"
-  | "components"
+  | "experiments"
   | "essays";
 
 const filters: { id: Filter; label: string }[] = [
   { id: "everything", label: "Everything" },
   { id: "projects", label: "Projects" },
   { id: "jobs", label: "Jobs" },
-  { id: "components", label: "Components" },
+  { id: "experiments", label: "Experiments" },
   { id: "essays", label: "Essays" },
   { id: "exits", label: "Micro exits" },
 ];
@@ -32,7 +32,7 @@ const kindFor: Partial<Record<Filter, TimelineKind>> = {
   projects: "project",
   exits: "exit",
   jobs: "job",
-  components: "component",
+  experiments: "experiment",
   essays: "essay",
 };
 
@@ -51,7 +51,7 @@ export function FilterableTimeline({ years }: { years: TimelineYear[] }) {
       : true;
   const isEmpty = !years.some((year) => year.entries.some(isVisible));
 
-  // How many things each kind has, e.g. every component rather than every month of them.
+  // How many things each kind has, e.g. every experiment rather than every month of them.
   const countOf = (filterKind: TimelineKind) =>
     years
       .flatMap((year) => year.entries)

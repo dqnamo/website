@@ -6,7 +6,7 @@ export type TimelineKind =
   | "job"
   | "essay"
   | "life"
-  | "component"
+  | "experiment"
   /** Something I sold; shown as a green "Sold" badge instead of a title. */
   | "exit";
 

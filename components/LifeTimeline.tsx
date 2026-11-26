@@ -498,7 +498,7 @@ function Gallery({
 }
 
 /**
- * The same button as the lab's "View all components", pointing at the
+ * The same button as the lab's "View all experiments", pointing at the
  * entry's site: its address for the web, "View on GitHub" for repos.
  */
 function VisitLink({
