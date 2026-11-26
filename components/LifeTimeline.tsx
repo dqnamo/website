@@ -383,7 +383,7 @@ function Gallery({
   images: TimelineGallery;
   side: "left" | "right";
 }) {
-  // The same nested cards as the kitchen's months: a grey tray holding white cards. Columns drop
+  // The same nested cards as the lab's months: a grey tray holding white cards. Columns drop
   // a card's bottom margin at the end of a column, so the tray pads its own bottom.
   const tray = cn(
     "mt-3 max-w-sm rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5 text-left",

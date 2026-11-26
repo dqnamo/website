@@ -1,7 +1,7 @@
 export const experiments = [
   {
     title: "Tactile Button",
-    href: "/experiments/tactile-button",
+    href: "/lab/tactile-button",
     added: "2026-08-13",
     description:
       "A physical button study built from a shaped face, firm edge, and compressible depth.",
@@ -9,7 +9,7 @@ export const experiments = [
   },
   {
     title: "Receipt Printer",
-    href: "/experiments/receipt-printer",
+    href: "/lab/receipt-printer",
     added: "2026-08-13",
     description:
       "A SaaS checkout state that prints a physical receipt when payment clears.",
@@ -17,7 +17,7 @@ export const experiments = [
   },
   {
     title: "Cassette Audio Player",
-    href: "/experiments/cassette-player",
+    href: "/lab/cassette-player",
     added: "2026-08-05",
     description:
       "A tactile audio player with turning reels and a compact-cassette control surface.",
@@ -25,7 +25,7 @@ export const experiments = [
   },
   {
     title: "Hold to Confirm",
-    href: "/experiments/hold-to-confirm",
+    href: "/lab/hold-to-confirm",
     added: "2026-07-15",
     description:
       "A deliberate action that fills while held, then offers a timed undo.",
@@ -33,7 +33,7 @@ export const experiments = [
   },
   {
     title: "Magnetic Drop Zone",
-    href: "/experiments/magnetic-drop-zone",
+    href: "/lab/magnetic-drop-zone",
     added: "2026-07-15",
     description:
       "A file target that pulls toward an incoming drag before the file lands.",
@@ -41,14 +41,14 @@ export const experiments = [
   },
   {
     title: "Dynamic Button",
-    href: "/experiments/dynamic-button",
+    href: "/lab/dynamic-button",
     added: "2026-06-21",
     description: "A button that smoothly resizes as its label animates.",
     preview: "dynamic-button",
   },
   {
     title: "Playing Cards",
-    href: "/experiments/playing-cards",
+    href: "/lab/playing-cards",
     added: "2026-07-06",
     description:
       "A composable playing card, plus a fanned hand you can thumb through and play.",
@@ -56,7 +56,7 @@ export const experiments = [
   },
   {
     title: "Ticket",
-    href: "/experiments/ticket",
+    href: "/lab/ticket",
     added: "2026-07-27",
     description:
       "A perforated ticket silhouette with composable sections and subtle parallax depth.",
@@ -64,7 +64,7 @@ export const experiments = [
   },
   {
     title: "Stamp",
-    href: "/experiments/stamp",
+    href: "/lab/stamp",
     added: "2026-07-27",
     description:
       "A reusable postage stamp frame for images, text, and custom React content.",
@@ -72,21 +72,21 @@ export const experiments = [
   },
   {
     title: "Scroll Fade List",
-    href: "/experiments/scroll-fade-list",
+    href: "/lab/scroll-fade-list",
     added: "2026-06-29",
     description: "A compact list surface with a soft overflow fade.",
     preview: "scroll-fade-list",
   },
   {
     title: "Advanced Model Selector",
-    href: "/experiments/model-selector",
+    href: "/lab/model-selector",
     added: "2026-06-29",
     description: "A benchmark-informed picker with model configuration.",
     preview: "model-selector",
   },
   {
     title: "Animated Signature",
-    href: "/experiments/signature",
+    href: "/lab/signature",
     added: "2026-06-23",
     description:
       "A reusable SVG signature component that draws itself on mount.",
@@ -94,14 +94,14 @@ export const experiments = [
   },
   {
     title: "Logo Trace Loader",
-    href: "/experiments/logo-trace-loader",
+    href: "/lab/logo-trace-loader",
     added: "2026-06-23",
     description: "A traced logo loader that resolves into a filled mark.",
     preview: "logo-loader",
   },
   {
     title: "Iridescent Foil",
-    href: "/experiments/iridescent-foil",
+    href: "/lab/iridescent-foil",
     added: "2026-06-18",
     description:
       "A layered CSS foil treatment that reacts to scroll and pointer.",
@@ -109,7 +109,7 @@ export const experiments = [
   },
   {
     title: "Detent Knob",
-    href: "/experiments/detent-knob",
+    href: "/lab/detent-knob",
     added: "2026-11-23",
     description:
       "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",

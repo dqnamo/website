@@ -16,7 +16,7 @@ type Filter =
   | "projects"
   | "jobs"
   | "components"
-  | "writings"
+  | "essays"
   | "life";
 
 const filters: { id: Filter; label: string }[] = [
@@ -24,7 +24,7 @@ const filters: { id: Filter; label: string }[] = [
   { id: "projects", label: "Projects" },
   { id: "jobs", label: "Jobs" },
   { id: "components", label: "Components" },
-  { id: "writings", label: "Writings" },
+  { id: "essays", label: "Essays" },
   { id: "life", label: "Life events" },
 ];
 
@@ -32,7 +32,7 @@ const kindFor: Partial<Record<Filter, TimelineKind>> = {
   projects: "project",
   jobs: "job",
   components: "component",
-  writings: "writing",
+  essays: "essay",
   life: "life",
 };
 

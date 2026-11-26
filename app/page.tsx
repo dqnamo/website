@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
 import { FilterableTimeline } from "@/components/FilterableTimeline";
-import { kitchenTimelineEntries } from "@/components/KitchenTimelineMonths";
+import { labTimelineEntries } from "@/components/LabTimelineMonths";
 import { Wordmark } from "@/components/Wordmark";
 import { lifeTimeline, withExtraEntries } from "@/lib/life-timeline";
 
-// The kitchen's components sit among everything else, by the month they were made.
-const timelineYears = withExtraEntries(lifeTimeline, kitchenTimelineEntries());
+// The lab's components sit among everything else, by the month they were made.
+const timelineYears = withExtraEntries(lifeTimeline, labTimelineEntries());
 
 export default function HomePage() {
   return (

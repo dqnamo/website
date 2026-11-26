@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { writings as essays, formatPublished } from "@/lib/writings";
 
-export type TimelineKind = "project" | "job" | "writing" | "life" | "component";
+export type TimelineKind = "project" | "job" | "essay" | "life" | "component";
 
 export interface TimelineEntry {
   /** Defaults to the title; needed when titles can repeat. */
@@ -337,7 +337,7 @@ const logos: Record<string, string> = {
 /** Anything not listed above is a life event, like moving country. */
 function kindOf(title: string): TimelineKind {
   if (projects.has(title)) return "project";
-  if (writings.has(title)) return "writing";
+  if (writings.has(title)) return "essay";
   return "life";
 }
 
@@ -819,8 +819,8 @@ const lifeline: {
             title: essay.title,
             meta: formatPublished(essay.published),
             description: "",
-            href: `/writing/${essay.slug}`,
-            kinds: ["writing"],
+            href: `/essays/${essay.slug}`,
+            kinds: ["essay"],
           }),
         ),
         [
@@ -895,7 +895,7 @@ export const lifeTimeline: TimelineYear[] = Object.entries(lifeline.milestones)
   .sort((a, b) => b.year - a.year);
 
 /**
- * Mixes extra entries (like the kitchen's monthly components) into the
+ * Mixes extra entries (like the lab's monthly components) into the
  * years they belong to. Years that get extras are re-sorted by date,
  * newest first; entries without a date keep their place at the end.
  */

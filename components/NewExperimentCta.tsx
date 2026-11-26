@@ -25,7 +25,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { ScrambleTextShowcase } from "@/app/experiments/scramble-text/scramble-text-showcase";
+import { ScrambleTextShowcase } from "@/app/lab/scramble-text/scramble-text-showcase";
 import { DetentKnobFace } from "@/components/DetentKnob";
 import { experiments } from "@/components/experiment-catalog";
 import { IridescentFoil } from "@/components/IridescentFoil";
@@ -705,7 +705,7 @@ export function ExperimentPreview({
             className="object-cover [image-rendering:pixelated]"
             fill
             sizes="68px"
-            src="/experiments/stamp/retro-landscape.png"
+            src="/lab/stamp/retro-landscape.png"
           />
         </Stamp>
       </div>
@@ -891,11 +891,11 @@ export function NewExperimentCta({ className }: NewExperimentCtaProps) {
         <Link
           className={experimentCardClassName}
           data-experiment-card=""
-          href="/experiments/scramble-text"
+          href="/lab/scramble-text"
           onClick={() =>
             posthog.capture("experiment_card_clicked", {
               experiment: "Scramble Text",
-              href: "/experiments/scramble-text",
+              href: "/lab/scramble-text",
             })
           }
         >

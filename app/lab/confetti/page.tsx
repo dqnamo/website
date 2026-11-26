@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ExperimentPage } from "@/app/experiments/_components/ExperimentPage";
+import { ExperimentPage } from "@/app/lab/_components/ExperimentPage";
 import ConfettiLab from "./confetti-lab";
 
 const title = "Confetti | dqnamo";
