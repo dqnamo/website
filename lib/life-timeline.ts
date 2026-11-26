@@ -13,8 +13,8 @@ export interface TimelineEntry {
   terminal?: boolean;
   /** How many things this entry stands for in filter counts. Defaults to 1. */
   count?: number;
-  /** A few pictures under the description, laid out as a small masonry grid. */
-  gallery?: TimelineImage[];
+  /** A few pictures under the description. */
+  gallery?: TimelineGallery;
   /** A YouTube clip, played in place when its thumbnail is clicked. */
   video?: TimelineVideo;
   /** A round picture above the title, like a company's logo. */
@@ -42,6 +42,13 @@ export interface TimelineImage {
    */
   loop?: string;
 }
+
+/**
+ * A flat list packs into a two-column masonry grid. A list of rows sets each
+ * row at one shared height, so a picture's width follows its shape and the
+ * rows you put it in: alone it fills the width, beside others it shrinks.
+ */
+export type TimelineGallery = TimelineImage[] | TimelineImage[][];
 
 export interface TimelineVideo {
   youtubeId: string;
@@ -149,26 +156,35 @@ const dates: Record<string, string> = {
 };
 
 /** Pictures for entries that are better seen than read about. */
-const galleries: Record<string, TimelineImage[]> = {
+const galleries: Record<string, TimelineGallery> = {
+  // Rows, so the logo can sit small beside the hero and the app gets room.
   Sheepdog: [
-    {
-      src: "/timeline/sheepdog/logo.svg",
-      alt: "The Sheepdog logo",
-      width: 400,
-      height: 400,
-    },
-    {
-      src: "/timeline/sheepdog/sheepdog.webp",
-      alt: "Sheepdog: fast and beautiful workspace for cloud coding agents. A border collie watches a flock of sheep.",
-      width: 1200,
-      height: 630,
-    },
-    {
-      src: "/timeline/sheepdog/collie-goggles-white.webp",
-      alt: "Sheepdog's border collie in rainbow ski goggles, dissolving into pixel blocks",
-      width: 600,
-      height: 803,
-    },
+    [
+      {
+        src: "/timeline/sheepdog/logo.svg",
+        alt: "The Sheepdog logo",
+        width: 400,
+        height: 400,
+      },
+      {
+        src: "/timeline/sheepdog/hero.webp",
+        alt: "Sheepdog's home page: tend, manage and drive your cloud coding agents. A border collie watches a flock of sheep.",
+        width: 1200,
+        height: 575,
+      },
+    ],
+    [
+      screenshot(
+        "/timeline/sheepdog/ui.webp",
+        "Sheepdog's app: a task list, an agent adding a Deploy to Cloudflare button, and the site open in Previews",
+      ),
+      {
+        src: "/timeline/sheepdog/collie-goggles-white.webp",
+        alt: "Sheepdog's border collie in rainbow ski goggles, dissolving into pixel blocks",
+        width: 600,
+        height: 803,
+      },
+    ],
   ],
   "designengineer.world": [
     {
@@ -721,7 +737,7 @@ const lifeline: {
         ],
         [
           "Tiny Dublin",
-          "Made an isometric pixel art map of metro Dublin, from Lucan to Howth. About 650 km² of land and about 6.6 billion pixels. Built with @ktoya's London model and method, on @coenen's renderer.",
+          "Made an isometric pixel art map of metro Dublin, from Lucan to Howth. About 650 km² of land and about 6.6 billion pixels.",
           "https://github.com/dqnamo/tinydublin",
         ],
         [
