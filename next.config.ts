@@ -22,6 +22,28 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      // Essays used to live under /writing; keep old links working.
+      {
+        source: "/writing/:slug",
+        destination: "/essays/:slug",
+        permanent: true,
+      },
+      // The lab used to be called the kitchen.
+      {
+        source: "/kitchen",
+        destination: "/lab",
+        permanent: true,
+      },
+      // Its pages and their images used to live under /experiments.
+      {
+        source: "/experiments/:path*",
+        destination: "/lab/:path*",
+        permanent: true,
+      },
+    ];
+  },
   async rewrites() {
     return [
       {

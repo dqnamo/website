@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ExperimentPage } from "@/app/experiments/_components/ExperimentPage";
+import { ExperimentPage } from "@/app/lab/_components/ExperimentPage";
 import MosaicsLab from "./mosaics-lab";
 
 const title = "Mosaics | dqnamo";

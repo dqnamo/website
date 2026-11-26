@@ -12,7 +12,7 @@ export interface Writing {
   blocks: WritingBlock[];
 }
 
-/** Essays, each served at /writing/[slug] and listed on the timeline under Writings. */
+/** Essays, each served at /essays/[slug] and listed on the timeline under Essays. */
 export const writings: Writing[] = [
   {
     slug: "why-i-stopped-playing-video-games",

@@ -202,7 +202,7 @@ export function PlayingCard({
             // Crosshatch gradients sit underneath the PNG pattern as a
             // fallback while the image loads.
             backgroundImage:
-              "url('/experiments/card-back.png'), repeating-linear-gradient(45deg, rgba(255,255,255,0.16) 0, rgba(255,255,255,0.16) 1.5px, transparent 1.5px, transparent 7px), repeating-linear-gradient(-45deg, rgba(255,255,255,0.16) 0, rgba(255,255,255,0.16) 1.5px, transparent 1.5px, transparent 7px)",
+              "url('/lab/card-back.png'), repeating-linear-gradient(45deg, rgba(255,255,255,0.16) 0, rgba(255,255,255,0.16) 1.5px, transparent 1.5px, transparent 7px), repeating-linear-gradient(-45deg, rgba(255,255,255,0.16) 0, rgba(255,255,255,0.16) 1.5px, transparent 1.5px, transparent 7px)",
             backgroundPosition: "center",
             backgroundSize: "cover, auto, auto",
           }}
@@ -227,7 +227,7 @@ export function PlayingCard({
                 draggable={false}
                 fill
                 sizes={`${Math.round(width * 0.52)}px`}
-                src={`/experiments/courts/${rank}${courtSuitCode[suit]}.png`}
+                src={`/lab/courts/${rank}${courtSuitCode[suit]}.png`}
               />
             </div>
           ) : null}
