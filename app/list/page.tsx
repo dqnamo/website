@@ -16,10 +16,10 @@ export default function ListPage() {
           <h1>
             <Wordmark possessive />
           </h1>
-          <p className="font-medium font-sans text-sm text-grayscale-10">
+          <p className="font-medium font-sans text-sm text-grayscale-11">
             List
           </p>
-          <p className="mt-8 max-w-md text-pretty text-grayscale-10 text-sm leading-5">
+          <p className="mt-8 max-w-md text-pretty text-grayscale-11 text-sm leading-5">
             Products and tools I use constantly and trust enough to pass on.
           </p>
         </header>

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { experimentCount, experiments } from "@/components/experiment-catalog";
-import { ExperimentPreview } from "@/components/NewExperimentCta";
+import { LazyExperimentPreview } from "@/components/LazyExperimentPreview";
 import { PikaArrowRightIcon } from "@/components/PikaDockIcons";
 import { cn } from "@/helpers/classname-helper";
 import type { TimelineEntry } from "@/lib/life-timeline";
@@ -94,7 +94,7 @@ function LabMonthCard({
             href={experiment.href}
             key={experiment.href}
           >
-            <ExperimentPreview type={experiment.preview} />
+            <LazyExperimentPreview type={experiment.preview} />
             <h4 className="truncate px-1.5 pt-2.5 pb-1 font-medium text-grayscale-12 text-xs">
               {experiment.title}
             </h4>
