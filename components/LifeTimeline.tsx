@@ -3,7 +3,13 @@
 import { PlayIcon } from "@phosphor-icons/react";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import Image from "next/image";
-import { type CSSProperties, type ReactNode, useState } from "react";
+import {
+  type CSSProperties,
+  type ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { MentionText } from "@/components/PersonMention";
 import { cn } from "@/helpers/classname-helper";
 import type {
@@ -444,14 +450,17 @@ function GalleryCard({
       )}
       style={style}
     >
-      <Image
-        alt={image.alt}
-        className="block h-auto w-full rounded-[9px]"
-        height={image.height}
-        sizes={sizes}
-        src={image.src}
-        width={image.width}
-      />
+      <div className="relative overflow-hidden rounded-[9px]">
+        <Image
+          alt={image.alt}
+          className="block h-auto w-full"
+          height={image.height}
+          sizes={sizes}
+          src={image.src}
+          width={image.width}
+        />
+        {image.loop ? <GalleryLoop src={image.loop} /> : null}
+      </div>
     </div>
   );
 }
@@ -462,6 +471,46 @@ function isRows(images: TimelineGallery): images is TimelineImage[][] {
 
 function aspect(image: TimelineImage) {
   return image.width / image.height;
+}
+
+/**
+ * A silent clip looping over a gallery picture. The picture shows until the
+ * clip's first frame, then the clip fades in over it; people who turn off
+ * motion keep the still. Playback starts after hydration rather than through
+ * autoPlay, so the fade can't miss a "playing" event fired before React listened.
+ */
+function GalleryLoop({ src }: { src: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+      return;
+    // Browsers that block autoplay reject this, and the still simply stays.
+    video.play().catch(() => {});
+  }, []);
+
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        "absolute inset-0 transition-opacity duration-700",
+        playing ? "opacity-100" : "opacity-0",
+      )}
+    >
+      <video
+        className="size-full object-cover"
+        loop
+        muted
+        onPlaying={() => setPlaying(true)}
+        playsInline
+        preload="metadata"
+        ref={videoRef}
+        src={src}
+      />
+    </div>
+  );
 }
 
 /**
