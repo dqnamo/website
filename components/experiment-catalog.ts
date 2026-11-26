@@ -115,6 +115,13 @@ export const experiments = [
       "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",
     preview: "detent-knob",
   },
+  {
+    title: "Envelope",
+    href: "/experiments/envelope",
+    description:
+      "A sealed envelope whose wax cracks along the flap, then lets the letter slide out.",
+    preview: "envelope",
+  },
 ] as const;
 
 // Scramble Text has a custom card in the grid rather than an ExperimentPreview.
