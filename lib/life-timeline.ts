@@ -692,7 +692,7 @@ const lifeline: {
         ],
         [
           "ThreeDo",
-          "A todo app that only lets you do 3 things at a time. Built it to learn SwiftUI. Got inspired from a this YouTube video by @garret.",
+          "A todo app that only lets you do 3 things at a time. Built it to learn SwiftUI.",
           "https://www.youtube.com/watch?v=D9kOyqPNW_A",
         ],
       ]),

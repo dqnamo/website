@@ -105,7 +105,7 @@ const statusLabels: Record<ReceiptPrinterStage, ReactNode> = {
 };
 
 const machineClassName =
-  "relative isolate w-full overflow-hidden rounded-[var(--printer-radius)] border border-grayscale-12 bg-[color-mix(in_oklab,var(--color-grayscale-11)_30%,var(--color-grayscale-12))] p-[var(--printer-inset)] pb-8 shadow-[0_20px_36px_-20px_color-mix(in_oklab,var(--color-grayscale-12)_55%,transparent),0_6px_14px_-8px_color-mix(in_oklab,var(--color-grayscale-12)_24%,transparent),inset_0_1px_0_color-mix(in_oklab,var(--color-grayscale-1)_14%,transparent),inset_0_-1px_0_color-mix(in_oklab,var(--color-grayscale-12)_55%,transparent)] [--printer-inner-radius:calc(var(--printer-radius)_-_var(--printer-inset))] [--printer-inset:0.75rem] [--printer-radius:1.5rem] before:pointer-events-none before:absolute before:inset-0 before:z-0 before:rounded-[inherit] before:bg-[url('/textures/plastic-noise.svg')] before:bg-[length:180px_180px] before:bg-repeat before:opacity-30 before:mix-blend-multiply before:content-[''] dark:border-grayscale-3 dark:bg-grayscale-4 dark:shadow-[0_20px_36px_-20px_color-mix(in_oklab,var(--color-grayscale-3)_55%,transparent),0_6px_14px_-8px_color-mix(in_oklab,var(--color-grayscale-3)_24%,transparent),inset_0_1px_0_color-mix(in_oklab,var(--color-grayscale-12)_14%,transparent),inset_0_-1px_0_color-mix(in_oklab,var(--color-grayscale-3)_55%,transparent)]";
+  "relative isolate w-full overflow-hidden rounded-[var(--printer-radius)] border border-grayscale-12 bg-[color-mix(in_oklab,var(--color-grayscale-11)_30%,var(--color-grayscale-12))] p-[var(--printer-inset)] pb-8 shadow-[0_20px_36px_-20px_color-mix(in_oklab,var(--color-grayscale-12)_55%,transparent),0_6px_14px_-8px_color-mix(in_oklab,var(--color-grayscale-12)_24%,transparent),inset_0_1px_0_color-mix(in_oklab,var(--color-grayscale-1)_14%,transparent),inset_0_-1px_0_color-mix(in_oklab,var(--color-grayscale-12)_55%,transparent)] [--printer-inner-radius:calc(var(--printer-radius)_-_var(--printer-inset))] [--printer-inset:0.75rem] [--printer-radius:1.5rem] before:pointer-events-none before:absolute before:inset-0 before:z-0 before:rounded-[inherit] before:bg-[url('/textures/plastic-noise.webp')] before:bg-[length:180px_180px] before:bg-repeat before:opacity-30 before:mix-blend-multiply before:content-[''] dark:border-grayscale-3 dark:bg-grayscale-4 dark:shadow-[0_20px_36px_-20px_color-mix(in_oklab,var(--color-grayscale-3)_55%,transparent),0_6px_14px_-8px_color-mix(in_oklab,var(--color-grayscale-3)_24%,transparent),inset_0_1px_0_color-mix(in_oklab,var(--color-grayscale-12)_14%,transparent),inset_0_-1px_0_color-mix(in_oklab,var(--color-grayscale-3)_55%,transparent)]";
 
 function useReceiptPrinter(component: string) {
   const context = useContext(ReceiptPrinterContext);
@@ -318,7 +318,7 @@ function ReceiptPrinterPaper({
   return (
     <article
       className={cn(
-        "relative z-10 min-h-80 bg-grayscale-1 bg-[url('/textures/receipt-paper.svg')] bg-cover px-6 pt-7 pb-8 font-mono text-grayscale-12 bg-blend-soft-light dark:bg-grayscale-12 dark:text-grayscale-1",
+        "relative z-10 min-h-80 bg-grayscale-1 bg-[url('/textures/receipt-paper.webp')] bg-cover px-6 pt-7 pb-8 font-mono text-grayscale-12 bg-blend-soft-light dark:bg-grayscale-12 dark:text-grayscale-1",
         className,
       )}
       style={{ clipPath: receiptClipPath, ...style }}

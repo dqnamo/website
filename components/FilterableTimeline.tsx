@@ -100,7 +100,7 @@ export function FilterableTimeline({ years }: { years: TimelineYear[] }) {
                       aria-hidden="true"
                       className="-my-0.5 w-px self-stretch bg-current opacity-20"
                     />
-                    <span className="tabular-nums opacity-60">
+                    <span className="font-normal tabular-nums">
                       {countOf(kindFor[option.id] as TimelineKind)}
                     </span>
                   </>
@@ -122,7 +122,7 @@ export function FilterableTimeline({ years }: { years: TimelineYear[] }) {
         {isEmpty ? (
           <motion.p
             animate={{ opacity: 1, transition: { delay: 0.15, duration: 0.3 } }}
-            className="py-16 text-center text-grayscale-10 text-sm"
+            className="py-16 text-center text-grayscale-11 text-sm"
             exit={{ opacity: 0, transition: { duration: 0.15 } }}
             initial={{ opacity: 0 }}
             key="empty"

@@ -74,8 +74,8 @@ export function ListCard({ item }: { item: ListItem }) {
         <ListLogoMark logo={item.logo} size="preview" />
       </div>
       <div className="flex flex-1 flex-col px-2 pt-3 pb-2">
-        <h3 className="font-medium text-grayscale-12 text-sm">{item.title}</h3>
-        <p className="mt-2 text-pretty text-grayscale-10 text-xs leading-5">
+        <h2 className="font-medium text-grayscale-12 text-sm">{item.title}</h2>
+        <p className="mt-2 text-pretty text-grayscale-11 text-xs leading-5">
           {item.description}
         </p>
         <div className="mt-auto flex flex-wrap gap-1 pt-3">
@@ -84,8 +84,8 @@ export function ListCard({ item }: { item: ListItem }) {
               className={cn(
                 "rounded-md px-1.5 py-1 font-medium text-[11px] leading-none",
                 tag === "Free"
-                  ? "bg-green-3 text-green-11 dark:bg-green-4 dark:text-green-11"
-                  : "bg-grayscale-3 text-grayscale-10 dark:bg-grayscale-4 dark:text-grayscale-11",
+                  ? "bg-green-3 text-green-12 dark:bg-green-4 dark:text-green-11"
+                  : "bg-grayscale-3 text-grayscale-11 dark:bg-grayscale-4 dark:text-grayscale-11",
               )}
               key={tag}
             >

@@ -91,9 +91,9 @@ export function LifeTimeline({
                     layout="position"
                     {...fade}
                   >
-                    <span className="pointer-events-auto rounded-full border border-grayscale-4 border-b-2 bg-white px-2.5 py-0.5 font-medium text-grayscale-12 text-xs tabular-nums dark:bg-grayscale-3">
+                    <h2 className="pointer-events-auto rounded-full border border-grayscale-4 border-b-2 bg-white px-2.5 py-0.5 font-medium text-grayscale-12 text-xs tabular-nums dark:bg-grayscale-3">
                       {row.year}
-                    </span>
+                    </h2>
                   </motion.li>
                 );
               }
@@ -319,7 +319,7 @@ function TimelineItem({
           </h3>
         )}
         {entry.meta ? (
-          <p className="mt-0.5 text-grayscale-9 text-xs max-sm:pr-12">
+          <p className="mt-0.5 text-grayscale-11 text-xs max-sm:pr-12">
             {entry.meta}
           </p>
         ) : null}

@@ -27,6 +27,7 @@ import {
 } from "react";
 import { ScrambleTextShowcase } from "@/app/lab/scramble-text/scramble-text-showcase";
 import { DetentKnobFace } from "@/components/DetentKnob";
+import { ExperimentPreviewSlot } from "@/components/ExperimentPreviewSlot";
 import { experiments } from "@/components/experiment-catalog";
 import { IridescentFoil } from "@/components/IridescentFoil";
 import { LogoTraceLoader } from "@/components/LogoTraceLoader";
@@ -325,7 +326,7 @@ function MagneticDropZonePreview({ featured = false }: { featured?: boolean }) {
           size={19}
           weight="fill"
         />
-        <span className="mt-1.5 font-medium text-[10px] text-grayscale-10">
+        <span className="mt-1.5 font-medium text-[10px] text-grayscale-11">
           Drop a file here
         </span>
       </div>
@@ -494,7 +495,7 @@ function CassettePlayerPreview({ featured = false }: { featured?: boolean }) {
         )}
       >
         <div className="pointer-events-none absolute inset-1.5 rounded-[13px] border border-white/[0.12] shadow-[inset_0_0_0_1px_rgba(0,0,0,0.62)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[url('/textures/plastic-noise.svg')] bg-[length:180px_180px] bg-repeat opacity-35 mix-blend-multiply" />
+        <div className="pointer-events-none absolute inset-0 bg-[url('/textures/plastic-noise.webp')] bg-[length:180px_180px] bg-repeat opacity-35 mix-blend-multiply" />
 
         <CassettePreviewScrew className="top-[4%] left-[2.53%]" />
         <CassettePreviewScrew className="top-[4%] right-[2.53%]" />
@@ -849,7 +850,9 @@ function ExperimentCard({
         })
       }
     >
-      <ExperimentPreview featured={featured} type={experiment.preview} />
+      <ExperimentPreviewSlot featured={featured}>
+        <ExperimentPreview featured={featured} type={experiment.preview} />
+      </ExperimentPreviewSlot>
 
       <div className="mt-auto flex flex-col px-2 pt-4 pb-2">
         <div className="flex items-start justify-between gap-3">
@@ -863,7 +866,7 @@ function ExperimentCard({
             weight="bold"
           />
         </div>
-        <p className="mt-2 text-pretty text-grayscale-10 text-xs leading-5">
+        <p className="mt-2 text-pretty text-grayscale-11 text-xs leading-5">
           {experiment.description}
         </p>
       </div>
@@ -876,7 +879,7 @@ export function NewExperimentCta({ className }: NewExperimentCtaProps) {
     <section className={cn("flex flex-col gap-3", className)} id="experiments">
       <div className="flex flex-col gap-px p-2">
         <h2 className="font-medium text-grayscale-11 text-sm">Experiments</h2>
-        <p className="max-w-xl text-balance text-grayscale-10 text-sm">
+        <p className="max-w-xl text-balance text-grayscale-11 text-sm">
           Small interface studies, animation patterns, and component demos.
         </p>
       </div>
@@ -917,7 +920,7 @@ export function NewExperimentCta({ className }: NewExperimentCtaProps) {
                 weight="bold"
               />
             </div>
-            <p className="mt-2 max-w-xl text-pretty text-grayscale-10 text-xs leading-5">
+            <p className="mt-2 max-w-xl text-pretty text-grayscale-11 text-xs leading-5">
               A compact text component that reveals changed text through an
               encrypted scramble.
             </p>

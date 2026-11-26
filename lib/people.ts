@@ -89,9 +89,6 @@ export const people = {
     href: linkedin("padraichogan"),
   },
 
-  // ThreeDo
-  garret: { name: "Garret Flower" },
-
   // DigitalGenius
   bogdan: {
     name: "Bogdan",

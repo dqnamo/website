@@ -91,9 +91,7 @@ export function SaleBadge({
       </span>
       {label}
       <span aria-hidden="true" className="h-3 w-px bg-white/30" />
-      <span className="font-normal text-[11px] text-white/70">
-        micro exit
-      </span>
+      <span className="font-normal text-[11px]">micro exit</span>
     </span>
   );
 }
