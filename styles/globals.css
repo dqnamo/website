@@ -15,6 +15,16 @@ html[data-recording] nextjs-portal {
   display: none;
 }
 
+/* The Metronome thumbnail's pendulum, swinging end to end on hover. */
+@keyframes metronome-swing {
+  from {
+    transform: rotate(-21deg);
+  }
+  to {
+    transform: rotate(21deg);
+  }
+}
+
 @keyframes logo-trace-loader-loop {
   to {
     stroke-dashoffset: -1;

@@ -31,6 +31,7 @@ import { ExperimentPreviewSlot } from "@/components/ExperimentPreviewSlot";
 import { experiments } from "@/components/experiment-catalog";
 import { IridescentFoil } from "@/components/IridescentFoil";
 import { LogoTraceLoader } from "@/components/LogoTraceLoader";
+import { MetronomeFace } from "@/components/Metronome";
 import { PlayingCard } from "@/components/PlayingCard";
 import { ReceiptPrinter } from "@/components/ReceiptPrinter";
 import { Signature } from "@/components/Signature";
@@ -679,6 +680,24 @@ export function ExperimentPreview({
           litIndex={4}
           size={58}
           turnClassName="-rotate-27 transition-transform duration-500 [transition-timing-function:steps(3,end)] group-hover:rotate-54 motion-reduce:transition-none"
+        />
+      </div>
+    );
+  }
+
+  if (type === "metronome") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "flex items-center justify-center bg-grayscale-2 pt-2 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+        )}
+      >
+        <MetronomeFace
+          bpm={120}
+          className="w-[76px]"
+          pendulumClassName="group-hover:animate-[metronome-swing_0.5s_ease-in-out_infinite_alternate] motion-reduce:group-hover:animate-none [animation-delay:-0.25s]"
         />
       </div>
     );
