@@ -3,12 +3,13 @@
 import { PlayIcon } from "@phosphor-icons/react";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import Image from "next/image";
-import { type ReactNode, useState } from "react";
+import { type CSSProperties, type ReactNode, useState } from "react";
 import { MentionText } from "@/components/PersonMention";
 import { cn } from "@/helpers/classname-helper";
 import type {
   TimelineAvatar,
   TimelineEntry,
+  TimelineGallery,
   TimelineImage,
   TimelineVideo,
   TimelineYear,
@@ -366,41 +367,101 @@ function Avatar({
 
 /**
  * A small masonry grid: two columns that each fill top to bottom, so
- * pictures of different shapes pack together without cropping.
+ * pictures of different shapes pack together without cropping. Given rows
+ * instead, each row's pictures share one height and split its width by shape.
  */
 function Gallery({
   images,
   side,
 }: {
-  images: TimelineImage[];
+  images: TimelineGallery;
   side: "left" | "right";
 }) {
   // The same nested cards as the kitchen's months: a grey tray holding white cards. Columns drop
   // a card's bottom margin at the end of a column, so the tray pads its own bottom.
+  const tray = cn(
+    "mt-3 max-w-sm rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5 text-left",
+    side === "left" && "sm:ml-auto",
+  );
+
+  if (isRows(images)) {
+    return (
+      <div className={cn(tray, "flex flex-col gap-1.5")}>
+        {images.map((row) => {
+          const rowAspect = row.reduce((sum, image) => sum + aspect(image), 0);
+          return (
+            <div className="flex gap-1.5" key={row.map((i) => i.src).join()}>
+              {row.map((image) => {
+                const share = aspect(image) / rowAspect;
+                return (
+                  <GalleryCard
+                    image={image}
+                    key={image.src}
+                    sizes={`(min-width: 640px) ${Math.round(372 * share)}px, ${Math.round(84 * share)}vw`}
+                    // Grow by shape from a base of the card's own padding and border (10px), so
+                    // every picture in the row ends up the same height.
+                    style={{ flex: `${aspect(image)} 1 10px` }}
+                  />
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
   return (
-    <div
-      className={cn(
-        "mt-3 max-w-sm columns-2 gap-1.5 rounded-[16px] border border-grayscale-3 bg-grayscale-2 p-1.5 text-left",
-        side === "left" && "sm:ml-auto",
-      )}
-    >
+    <div className={cn(tray, "columns-2 gap-1.5")}>
       {images.map((image) => (
-        <div
-          className="mb-1.5 break-inside-avoid rounded-[13px] border border-grayscale-4 border-b-2 bg-white p-1 dark:bg-grayscale-3"
+        <GalleryCard
+          className="mb-1.5 break-inside-avoid"
+          image={image}
           key={image.src}
-        >
-          <Image
-            alt={image.alt}
-            className="block h-auto w-full rounded-[9px]"
-            height={image.height}
-            sizes="(min-width: 640px) 180px, 42vw"
-            src={image.src}
-            width={image.width}
-          />
-        </div>
+          sizes="(min-width: 640px) 180px, 42vw"
+        />
       ))}
     </div>
   );
+}
+
+function GalleryCard({
+  image,
+  sizes,
+  className,
+  style,
+}: {
+  image: TimelineImage;
+  sizes: string;
+  className?: string;
+  style?: CSSProperties;
+}) {
+  return (
+    <div
+      className={cn(
+        "min-w-0 rounded-[13px] border border-grayscale-4 border-b-2 bg-white p-1 dark:bg-grayscale-3",
+        className,
+      )}
+      style={style}
+    >
+      <Image
+        alt={image.alt}
+        className="block h-auto w-full rounded-[9px]"
+        height={image.height}
+        sizes={sizes}
+        src={image.src}
+        width={image.width}
+      />
+    </div>
+  );
+}
+
+function isRows(images: TimelineGallery): images is TimelineImage[][] {
+  return Array.isArray(images[0]);
+}
+
+function aspect(image: TimelineImage) {
+  return image.width / image.height;
 }
 
 /**
