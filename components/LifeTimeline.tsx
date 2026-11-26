@@ -265,7 +265,7 @@ function TimelineItem({
   side: "left" | "right";
 }) {
   // Things I sold show as a "Sold" badge in place of their title.
-  const sold = entry.kinds.includes("acquisition");
+  const sold = entry.kinds.includes("exit");
 
   return (
     <>

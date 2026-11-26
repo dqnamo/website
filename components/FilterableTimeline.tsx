@@ -14,11 +14,10 @@ import type {
 type Filter =
   | "everything"
   | "projects"
-  | "acquisitions"
+  | "exits"
   | "jobs"
   | "components"
-  | "essays"
-  | "life";
+  | "essays";
 
 const filters: { id: Filter; label: string }[] = [
   { id: "everything", label: "Everything" },
@@ -26,17 +25,15 @@ const filters: { id: Filter; label: string }[] = [
   { id: "jobs", label: "Jobs" },
   { id: "components", label: "Components" },
   { id: "essays", label: "Essays" },
-  { id: "acquisitions", label: "Micro acquisitions" },
-  { id: "life", label: "Life events" },
+  { id: "exits", label: "Micro exits" },
 ];
 
 const kindFor: Partial<Record<Filter, TimelineKind>> = {
   projects: "project",
-  acquisitions: "acquisition",
+  exits: "exit",
   jobs: "job",
   components: "component",
   essays: "essay",
-  life: "life",
 };
 
 /**

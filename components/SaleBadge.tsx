@@ -92,7 +92,7 @@ export function SaleBadge({
       {label}
       <span aria-hidden="true" className="h-3 w-px bg-white/30" />
       <span className="font-normal text-[11px] text-white/70">
-        micro acquisition
+        micro exit
       </span>
     </span>
   );

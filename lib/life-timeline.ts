@@ -8,7 +8,7 @@ export type TimelineKind =
   | "life"
   | "component"
   /** Something I sold; shown as a green "Sold" badge instead of a title. */
-  | "acquisition";
+  | "exit";
 
 export interface TimelineEntry {
   /** Defaults to the title; needed when titles can repeat. */
@@ -375,7 +375,7 @@ const videos: Record<string, TimelineVideo> = {
   },
 };
 
-/** Projects I sold, shown beside their "Sold" badges under micro acquisitions. */
+/** Projects I sold, shown beside their "Sold" badges under micro exits. */
 const sold = new Set(["Blogtopod", "CollabGPT"]);
 
 const logos: Record<string, string> = {
@@ -467,7 +467,7 @@ function timelineEvents(
       gallery: galleries[title],
       video: videos[title],
       avatar: logo ? { src: logo, initials: "" } : undefined,
-      alsoUnder: sold.has(title) ? ["acquisition"] : undefined,
+      alsoUnder: sold.has(title) ? ["exit"] : undefined,
     };
   });
 }
@@ -752,7 +752,7 @@ const lifeline: {
         {
           title: "Sold Blogtopod",
           description: "",
-          kinds: ["project", "acquisition"],
+          kinds: ["project", "exit"],
         },
         [
           "Blogtopod",
@@ -770,7 +770,7 @@ const lifeline: {
         {
           title: "Sold CollabGPT",
           description: "",
-          kinds: ["project", "acquisition"],
+          kinds: ["project", "exit"],
         },
         [
           "CollabGPT",
