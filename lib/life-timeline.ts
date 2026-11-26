@@ -71,6 +71,7 @@ const projects = new Set([
   "Sheepdog",
   "Tiny Dublin",
   "designengineer.world",
+  "Saintdex",
   "London Underground map builder",
   "Superlayer",
   "compoundname.com",
@@ -128,6 +129,7 @@ const dates: Record<string, string> = {
   Sheepdog: "2026-11-15",
   "Tiny Dublin": "2026-11-12",
   "designengineer.world": "2026-11-03",
+  Saintdex: "2026-11-01",
   "London Underground map builder": "2026-10-27",
   "Launched Growdoro v2": "2026-10-26",
   Superlayer: "2026-09-30",
@@ -176,6 +178,16 @@ const galleries: Record<string, TimelineImage[]> = {
       width: 900,
       height: 893,
     },
+  ],
+  Saintdex: [
+    screenshot(
+      "/timeline/saintdex/website.webp",
+      "Saintdex: a growing collection of the lives, stories and witness of the Catholic saints",
+    ),
+    screenshot(
+      "/timeline/saintdex/saint.webp",
+      "Saint Joan of Arc's page on Saintdex: her portrait beside her feast day, patronages and story",
+    ),
   ],
   "London Underground map builder": [
     {
@@ -704,6 +716,11 @@ const lifeline: {
           "designengineer.world",
           "Made a lil something to discover design engineers that I quite like from around the world :) Now has jobs too.",
           "https://designengineer.world",
+        ],
+        [
+          "Saintdex",
+          "An index of the Catholic saints and the lives they lived. Every saint in the Roman Martyrology and every canonization through 2025, nearly 3,700 of them, each slowly getting a portrait and their story.",
+          "https://saintdex.com",
         ],
         [
           "London Underground map builder",
