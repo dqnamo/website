@@ -190,8 +190,8 @@ const galleries: Record<string, TimelineImage[]> = {
       "Saintdex: a growing collection of the lives, stories and witness of the Catholic saints",
     ),
     screenshot(
-      "/timeline/saintdex/michael-the-archangel.webp",
-      "Saint Michael the Archangel's page on Saintdex: his portrait beside his feast day, patronages and story",
+      "/timeline/saintdex/george.webp",
+      "Saint George's page on Saintdex: his portrait beside his feast day, patronages and story",
     ),
     {
       src: "/timeline/saintdex/joan-of-arc.webp",
