@@ -47,8 +47,13 @@ export interface TimelineImage {
  * A flat list packs into a two-column masonry grid. A list of rows sets each
  * row at one shared height, so a picture's width follows its shape and the
  * rows you put it in: alone it fills the width, beside others it shrinks.
+ * A list inside a row stacks its pictures in one column, which takes the
+ * width that lets it end level with the rest of the row. A stack needs a
+ * single picture beside it to set the row's height.
  */
-export type TimelineGallery = TimelineImage[] | TimelineImage[][];
+export type TimelineGallery = TimelineImage[] | TimelineGalleryRow[];
+
+export type TimelineGalleryRow = (TimelineImage | TimelineImage[])[];
 
 export interface TimelineVideo {
   youtubeId: string;
@@ -186,19 +191,30 @@ const galleries: Record<string, TimelineGallery> = {
       },
     ],
   ],
+  // The logo and the jobs list stack square in a third; the globe gets the other two.
   "designengineer.world": [
-    {
-      src: "/timeline/designengineer-world/logo.webp",
-      alt: "The designengineer.world logo: a globe ringed with its name",
-      width: 600,
-      height: 600,
-    },
-    {
-      src: "/timeline/designengineer-world/globe.webp",
-      alt: "designengineer.world: a globe with design engineers pinned where they live",
-      width: 900,
-      height: 893,
-    },
+    [
+      [
+        {
+          src: "/timeline/designengineer-world/logo.webp",
+          alt: "The designengineer.world logo: a globe ringed with its name",
+          width: 600,
+          height: 600,
+        },
+        {
+          src: "/timeline/designengineer-world/jobs.webp",
+          alt: "designengineer.world's jobs list: design engineer roles at Granola and tldraw in London",
+          width: 600,
+          height: 600,
+        },
+      ],
+      {
+        src: "/timeline/designengineer-world/globe.webp",
+        alt: "designengineer.world: a globe with design engineers pinned where they live",
+        width: 900,
+        height: 893,
+      },
+    ],
   ],
   Saintdex: [
     screenshot(

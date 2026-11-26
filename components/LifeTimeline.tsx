@@ -16,6 +16,7 @@ import type {
   TimelineAvatar,
   TimelineEntry,
   TimelineGallery,
+  TimelineGalleryRow,
   TimelineImage,
   TimelineVideo,
   TimelineYear,
@@ -394,22 +395,50 @@ function Gallery({
     return (
       <div className={cn(tray, "flex flex-col gap-1.5")}>
         {images.map((row) => {
-          const rowAspect = row.reduce((sum, image) => sum + aspect(image), 0);
+          const rowAspect = row.reduce((sum, item) => sum + aspect(item), 0);
+          const sizes = (item: TimelineImage | TimelineImage[]) => {
+            const share = aspect(item) / rowAspect;
+            return `(min-width: 640px) ${Math.round(372 * share)}px, ${Math.round(84 * share)}vw`;
+          };
           return (
-            <div className="flex gap-1.5" key={row.map((i) => i.src).join()}>
-              {row.map((image) => {
-                const share = aspect(image) / rowAspect;
-                return (
+            <div className="flex gap-1.5" key={rowKey(row)}>
+              {row.map((item) =>
+                Array.isArray(item) ? (
+                  // Out of the flow, so the pictures beside it set the row's height and the stack
+                  // splits it. Its basis takes off the room its extra cards and gaps need, so at
+                  // that width each picture fits its share uncropped.
+                  <div
+                    className="relative min-w-0"
+                    key={item.map((i) => i.src).join()}
+                    style={{
+                      flex: `${aspect(item)} 1 ${10 - (item.length - 1) * 17 * aspect(item)}px`,
+                    }}
+                  >
+                    <div className="absolute inset-0 flex flex-col gap-1.5">
+                      {item.map((image) => (
+                        <GalleryCard
+                          className="min-h-0"
+                          fill
+                          image={image}
+                          key={image.src}
+                          sizes={sizes(item)}
+                          // Tall by shape from a base of the card's padding and borders (11px).
+                          style={{ flex: `${1 / aspect(image)} 1 11px` }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ) : (
                   <GalleryCard
-                    image={image}
-                    key={image.src}
-                    sizes={`(min-width: 640px) ${Math.round(372 * share)}px, ${Math.round(84 * share)}vw`}
+                    image={item}
+                    key={item.src}
+                    sizes={sizes(item)}
                     // Grow by shape from a base of the card's own padding and border (10px), so
                     // every picture in the row ends up the same height.
-                    style={{ flex: `${aspect(image)} 1 10px` }}
+                    style={{ flex: `${aspect(item)} 1 10px` }}
                   />
-                );
-              })}
+                ),
+              )}
             </div>
           );
         })}
@@ -431,29 +460,41 @@ function Gallery({
   );
 }
 
+/** `fill` stretches the picture to whatever height the card is given, cropping to cover it. */
 function GalleryCard({
   image,
   sizes,
   className,
   style,
+  fill = false,
 }: {
   image: TimelineImage;
   sizes: string;
   className?: string;
   style?: CSSProperties;
+  fill?: boolean;
 }) {
   return (
     <div
       className={cn(
         "min-w-0 rounded-[13px] border border-grayscale-4 border-b-2 bg-white p-1 dark:bg-grayscale-3",
+        fill && "flex flex-col",
         className,
       )}
       style={style}
     >
-      <div className="relative overflow-hidden rounded-[9px]">
+      <div
+        className={cn(
+          "relative overflow-hidden rounded-[9px]",
+          fill && "min-h-0 flex-1",
+        )}
+      >
         <Image
           alt={image.alt}
-          className="block h-auto w-full"
+          className={cn(
+            "block w-full",
+            fill ? "h-full object-cover" : "h-auto",
+          )}
           height={image.height}
           sizes={sizes}
           src={image.src}
@@ -465,12 +506,23 @@ function GalleryCard({
   );
 }
 
-function isRows(images: TimelineGallery): images is TimelineImage[][] {
+function isRows(images: TimelineGallery): images is TimelineGalleryRow[] {
   return Array.isArray(images[0]);
 }
 
-function aspect(image: TimelineImage) {
-  return image.width / image.height;
+function rowKey(row: TimelineGalleryRow) {
+  return row
+    .flat()
+    .map((i) => i.src)
+    .join();
+}
+
+/** A stack's pictures share one width, so their heights add up. */
+function aspect(item: TimelineImage | TimelineImage[]): number {
+  if (Array.isArray(item)) {
+    return 1 / item.reduce((sum, image) => sum + 1 / aspect(image), 0);
+  }
+  return item.width / item.height;
 }
 
 /**
