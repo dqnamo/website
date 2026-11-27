@@ -34,6 +34,7 @@ import { LogoTraceLoader } from "@/components/LogoTraceLoader";
 import { PlayingCard } from "@/components/PlayingCard";
 import { ReceiptPrinter } from "@/components/ReceiptPrinter";
 import { Signature } from "@/components/Signature";
+import { SplitFlap } from "@/components/SplitFlap";
 import { Stamp } from "@/components/Stamp";
 import { tactileButtonColorTokens } from "@/components/TactileButton";
 import { Ticket } from "@/components/Ticket";
@@ -83,6 +84,43 @@ const dynamicButtonPreviewStates = [
 ] as const;
 
 type HoldPreviewPhase = "holding" | "idle" | "undo";
+
+const splitFlapPreviewWords = ["LONDON", "PARIS", "BERLIN", "OSLO"] as const;
+
+function SplitFlapPreview({ featured = false }: { featured?: boolean }) {
+  const shouldReduceMotion = useReducedMotion();
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    if (shouldReduceMotion) {
+      return;
+    }
+    const timer = window.setInterval(() => {
+      setIndex((current) => (current + 1) % splitFlapPreviewWords.length);
+    }, 3200);
+    return () => window.clearInterval(timer);
+  }, [shouldReduceMotion]);
+
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        featured ? featuredPreviewSurfaceClassName : previewSurfaceClassName,
+        "flex items-center justify-center bg-grayscale-2 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+      )}
+    >
+      <div className="rounded-[10px] bg-[linear-gradient(to_bottom,#232321,#151514)] p-2 shadow-[0_1px_0_rgb(255_255_255_/_8%)_inset,0_0_0_1px_rgb(0_0_0_/_75%),0_14px_28px_-12px_rgb(0_0_0_/_40%)] transition-transform duration-300 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] [@media(hover:hover)_and_(pointer:fine)]:group-hover:-translate-y-0.5 motion-reduce:transform-none motion-reduce:transition-none">
+        <SplitFlap
+          aria-hidden
+          className={featured ? "text-[34px]" : "text-[26px]"}
+          flipDuration={56}
+          length={6}
+          value={splitFlapPreviewWords[index]}
+        />
+      </div>
+    </div>
+  );
+}
 
 function TactileButtonPreview({ featured = false }: { featured?: boolean }) {
   return (
@@ -566,6 +604,10 @@ export function ExperimentPreview({
   featured?: boolean;
   type: (typeof experiments)[number]["preview"];
 }) {
+  if (type === "split-flap") {
+    return <SplitFlapPreview featured={featured} />;
+  }
+
   if (type === "tactile-button") {
     return <TactileButtonPreview featured={featured} />;
   }
