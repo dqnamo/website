@@ -8,6 +8,13 @@ export const experiments = [
     preview: "tactile-button",
   },
   {
+    title: "Pricing Configurator",
+    href: "/experiments/pricing-configurator",
+    description:
+      "A seat slider with magnetic tier detents, a rolling price, and features that unlock per plan.",
+    preview: "pricing-configurator",
+  },
+  {
     title: "Receipt Printer",
     href: "/lab/receipt-printer",
     added: "2026-08-13",
