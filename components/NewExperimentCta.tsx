@@ -33,6 +33,7 @@ import { IridescentFoil } from "@/components/IridescentFoil";
 import { LogoTraceLoader } from "@/components/LogoTraceLoader";
 import { PlayingCard } from "@/components/PlayingCard";
 import { ReceiptPrinter } from "@/components/ReceiptPrinter";
+import { RotaryDialFace } from "@/components/RotaryDial";
 import { Signature } from "@/components/Signature";
 import { Stamp } from "@/components/Stamp";
 import { tactileButtonColorTokens } from "@/components/TactileButton";
@@ -679,6 +680,26 @@ export function ExperimentPreview({
           litIndex={4}
           size={58}
           turnClassName="-rotate-27 transition-transform duration-500 [transition-timing-function:steps(3,end)] group-hover:rotate-54 motion-reduce:transition-none"
+        />
+      </div>
+    );
+  }
+
+  if (type === "rotary-dial") {
+    // Winds a 4 round to the stop on hover, then runs home at governor speed.
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "flex items-center justify-center bg-grayscale-2 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+        )}
+      >
+        <RotaryDialFace
+          activeDigit={4}
+          lightClassName="transition-[rotate] duration-[460ms] ease-linear group-hover:-rotate-[138deg] group-hover:duration-500 group-hover:ease-[cubic-bezier(0.45,0,0.3,1)] motion-reduce:transition-none"
+          plateClassName="transition-[rotate] duration-[460ms] ease-linear group-hover:rotate-[138deg] group-hover:duration-500 group-hover:ease-[cubic-bezier(0.45,0,0.3,1)] motion-reduce:transition-none"
+          size={100}
         />
       </div>
     );
