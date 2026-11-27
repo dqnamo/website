@@ -1,0 +1,111 @@
+.colorField {
+  touch-action: none;
+}
+
+.range {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+  appearance: none;
+  background: transparent;
+}
+
+.range:focus-visible {
+  outline: none;
+}
+
+.range::-webkit-slider-runnable-track {
+  height: 100%;
+  background: transparent;
+}
+
+.range::-webkit-slider-thumb {
+  width: 18px;
+  height: 18px;
+  margin-top: -2px;
+  appearance: none;
+  border: 0;
+  background: transparent;
+  opacity: 0;
+}
+
+.range::-moz-range-track {
+  height: 100%;
+  border: 0;
+  background: transparent;
+}
+
+.range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: 0;
+  background: transparent;
+  opacity: 0;
+}
+
+.sliderThumb {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  border: 2px solid white;
+  border-radius: 999px;
+  outline: 1px solid rgb(0 0 0 / 35%);
+  transform: translate(-50%, -50%);
+  transition: left 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.slider:has(.range:active) .sliderThumb {
+  transition-duration: 0ms;
+}
+
+.range:focus-visible + .sliderThumb {
+  outline: 2px solid var(--grayscale-8);
+  outline-offset: 2px;
+}
+
+.spinner {
+  border: 1.5px solid currentColor;
+  border-right-color: transparent;
+  animation: spin 650ms linear infinite;
+}
+
+.shimmer {
+  background: linear-gradient(
+    105deg,
+    var(--grayscale-3) 25%,
+    var(--grayscale-4) 42%,
+    var(--grayscale-3) 58%
+  );
+  background-size: 220% 100%;
+  animation: shimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmer {
+  to {
+    background-position-x: -220%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sliderThumb {
+    transition: none;
+  }
+
+  .spinner,
+  .shimmer {
+    animation: none;
+  }
+}
