@@ -36,6 +36,7 @@ import { ReceiptPrinter } from "@/components/ReceiptPrinter";
 import { Signature } from "@/components/Signature";
 import { Stamp } from "@/components/Stamp";
 import { tactileButtonColorTokens } from "@/components/TactileButton";
+import { TearOffCalendarStill } from "@/components/TearOffCalendar";
 import { Ticket } from "@/components/Ticket";
 import { cn } from "@/helpers/classname-helper";
 
@@ -43,6 +44,7 @@ type NewExperimentCtaProps = {
   className?: string;
 };
 
+const tearOffPreviewDate = new Date(2026, 10, 24);
 const previewSurfaceClassName = "h-32 shrink-0 overflow-hidden rounded-lg";
 const featuredPreviewSurfaceClassName =
   "h-40 shrink-0 overflow-hidden rounded-lg";
@@ -680,6 +682,26 @@ export function ExperimentPreview({
           size={58}
           turnClassName="-rotate-27 transition-transform duration-500 [transition-timing-function:steps(3,end)] group-hover:rotate-54 motion-reduce:transition-none"
         />
+      </div>
+    );
+  }
+
+  if (type === "tear-off-calendar") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "flex items-center justify-center bg-grayscale-2 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+        )}
+      >
+        <div className="h-[106px] w-[86px]">
+          <TearOffCalendarStill
+            className="origin-top-left scale-[0.36]"
+            date={tearOffPreviewDate}
+            sheetClassName="transition-transform duration-500 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] group-hover:rotate-[7deg] motion-reduce:transition-none"
+          />
+        </div>
       </div>
     );
   }

@@ -115,6 +115,13 @@ export const experiments = [
       "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",
     preview: "detent-knob",
   },
+  {
+    title: "Tear-Off Calendar",
+    href: "/experiments/tear-off-calendar",
+    description:
+      "A desk calendar whose pages tear along the perforations, hole by hole.",
+    preview: "tear-off-calendar",
+  },
 ] as const;
 
 // Scramble Text has a custom card in the grid rather than an ExperimentPreview.
