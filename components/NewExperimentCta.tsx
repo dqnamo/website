@@ -31,6 +31,7 @@ import { ExperimentPreviewSlot } from "@/components/ExperimentPreviewSlot";
 import { experiments } from "@/components/experiment-catalog";
 import { IridescentFoil } from "@/components/IridescentFoil";
 import { LogoTraceLoader } from "@/components/LogoTraceLoader";
+import { NewtonsCradleFace } from "@/components/NewtonsCradle";
 import { PlayingCard } from "@/components/PlayingCard";
 import { ReceiptPrinter } from "@/components/ReceiptPrinter";
 import { Signature } from "@/components/Signature";
@@ -80,6 +81,23 @@ const dynamicButtonPreviewStates = [
     label: "Copy invite link",
     stateKey: "copy",
   },
+] as const;
+
+/** The first ball waits pulled back; on hover it drops and knocks the last one out. */
+const newtonsCradlePreviewBalls = [
+  "rotate-[32deg] transition-transform duration-300 ease-in group-hover:rotate-0 motion-reduce:transition-none",
+  undefined,
+  undefined,
+  undefined,
+  "transition-transform duration-300 ease-out group-hover:-rotate-[32deg] group-hover:delay-300 motion-reduce:transition-none",
+] as const;
+/** Each ball's shading turns back against its swing, so the light stays put. */
+const newtonsCradlePreviewShades = [
+  "origin-[0px_132px] -rotate-[32deg] transition-transform duration-300 ease-in group-hover:rotate-0 motion-reduce:transition-none",
+  undefined,
+  undefined,
+  undefined,
+  "origin-[0px_132px] transition-transform duration-300 ease-out group-hover:rotate-[32deg] group-hover:delay-300 motion-reduce:transition-none",
 ] as const;
 
 type HoldPreviewPhase = "holding" | "idle" | "undo";
@@ -679,6 +697,24 @@ export function ExperimentPreview({
           litIndex={4}
           size={58}
           turnClassName="-rotate-27 transition-transform duration-500 [transition-timing-function:steps(3,end)] group-hover:rotate-54 motion-reduce:transition-none"
+        />
+      </div>
+    );
+  }
+
+  if (type === "newtons-cradle") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "flex items-center justify-center bg-grayscale-2 px-6 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+        )}
+      >
+        <NewtonsCradleFace
+          ballClassNames={newtonsCradlePreviewBalls}
+          className="w-44"
+          shadeClassNames={newtonsCradlePreviewShades}
         />
       </div>
     );
