@@ -115,6 +115,14 @@ export const experiments = [
       "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",
     preview: "detent-knob",
   },
+  {
+    title: "Metronome",
+    href: "/lab/metronome",
+    added: "2026-11-26",
+    description:
+      "A wind-up metronome whose weight clicks into each notch on the rod.",
+    preview: "metronome",
+  },
 ] as const;
 
 // Scramble Text has a custom card in the grid rather than an ExperimentPreview.
