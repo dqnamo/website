@@ -37,6 +37,7 @@ import { Signature } from "@/components/Signature";
 import { Stamp } from "@/components/Stamp";
 import { tactileButtonColorTokens } from "@/components/TactileButton";
 import { Ticket } from "@/components/Ticket";
+import { ToasterFace } from "@/components/Toaster";
 import { cn } from "@/helpers/classname-helper";
 
 type NewExperimentCtaProps = {
@@ -679,6 +680,25 @@ export function ExperimentPreview({
           litIndex={4}
           size={58}
           turnClassName="-rotate-27 transition-transform duration-500 [transition-timing-function:steps(3,end)] group-hover:rotate-54 motion-reduce:transition-none"
+        />
+      </div>
+    );
+  }
+
+  if (type === "toaster") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "flex items-end justify-center bg-grayscale-2 pb-1 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+        )}
+      >
+        <ToasterFace
+          breadClassName="transition-transform duration-300 ease-in group-hover:translate-y-[52px] motion-reduce:transition-none"
+          className="w-[148px]"
+          glowClassName="opacity-0 transition-opacity duration-700 group-hover:opacity-100 group-hover:delay-300 motion-reduce:transition-none"
+          leverClassName="transition-transform duration-300 ease-in group-hover:translate-y-[73px] motion-reduce:transition-none"
         />
       </div>
     );
