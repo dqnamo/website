@@ -26,6 +26,11 @@ import {
   useState,
 } from "react";
 import { ScrambleTextShowcase } from "@/app/lab/scramble-text/scramble-text-showcase";
+import {
+  abacusBeadBackground,
+  abacusBeadClipPath,
+  abacusFrameBackground,
+} from "@/components/Abacus";
 import { DetentKnobFace } from "@/components/DetentKnob";
 import { ExperimentPreviewSlot } from "@/components/ExperimentPreviewSlot";
 import { experiments } from "@/components/experiment-catalog";
@@ -559,6 +564,86 @@ function CassettePlayerPreview({ featured = false }: { featured?: boolean }) {
   );
 }
 
+/** Rods' digits in the preview: the middle rod's stack rises on hover. */
+const ABACUS_PREVIEW_RODS = [
+  { fives: true, ones: 1 },
+  { fives: false, ones: 0, hover: true },
+  { fives: false, ones: 2 },
+  { fives: true, ones: 0 },
+] as const;
+
+function AbacusPreview() {
+  const bead = 9;
+  const travel = 8;
+
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        previewSurfaceClassName,
+        "flex items-center justify-center bg-grayscale-2 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+      )}
+    >
+      <div
+        className="rounded-[5px] p-[6px] shadow-[0_6px_14px_-6px_rgb(0_0_0_/_0.5)]"
+        style={{ background: abacusFrameBackground }}
+      >
+        <div className="relative flex bg-[#110d0c] shadow-[inset_0_1px_3px_rgb(0_0_0_/_0.6)]">
+          <span
+            className="absolute inset-x-0 h-[5px] bg-[#2f2622]"
+            style={{ top: bead + travel }}
+          />
+          {ABACUS_PREVIEW_RODS.map((rod, index) => (
+            <div
+              className="relative flex w-[22px] flex-col items-center"
+              // biome-ignore lint/suspicious/noArrayIndexKey: a fixed picture.
+              key={index}
+            >
+              <span className="absolute inset-y-0 w-px bg-[#c9b07a]" />
+              <div className="relative" style={{ height: bead + travel }}>
+                <span
+                  className="block w-[19px]"
+                  style={{
+                    background: abacusBeadBackground,
+                    clipPath: abacusBeadClipPath,
+                    height: bead,
+                    transform: `translateY(${rod.fives ? travel : 0}px)`,
+                  }}
+                />
+              </div>
+              <div
+                className="relative mt-[5px]"
+                style={{ height: bead * 4 + travel }}
+              >
+                {[0, 1, 2, 3].map((earth) => {
+                  const counted = earth < rod.ones;
+                  const rises = "hover" in rod && earth < 2;
+
+                  return (
+                    <span
+                      className={cn(
+                        "block w-[19px] transition-transform duration-300 [transition-timing-function:cubic-bezier(0.34,1.4,0.64,1)] motion-reduce:transition-none",
+                        rises && "group-hover:!translate-y-0",
+                      )}
+                      key={earth}
+                      style={{
+                        background: abacusBeadBackground,
+                        clipPath: abacusBeadClipPath,
+                        height: bead,
+                        transform: `translateY(${counted ? 0 : travel}px)`,
+                      }}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function ExperimentPreview({
   featured = false,
   type,
@@ -682,6 +767,10 @@ export function ExperimentPreview({
         />
       </div>
     );
+  }
+
+  if (type === "abacus") {
+    return <AbacusPreview />;
   }
 
   if (type === "stamp") {
