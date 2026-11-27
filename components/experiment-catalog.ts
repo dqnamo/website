@@ -40,6 +40,13 @@ export const experiments = [
     preview: "magnetic-drop-zone",
   },
   {
+    title: "Invite Field",
+    href: "/experiments/invite-field",
+    description:
+      "An invite input whose email chips fold into the team's avatar stack.",
+    preview: "invite-field",
+  },
+  {
     title: "Dynamic Button",
     href: "/lab/dynamic-button",
     added: "2026-06-21",
