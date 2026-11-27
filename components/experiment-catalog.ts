@@ -115,6 +115,13 @@ export const experiments = [
       "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",
     preview: "detent-knob",
   },
+  {
+    title: "Service Bell",
+    href: "/experiments/service-bell",
+    added: "2026-11-26",
+    description: "A desk bell that rings on until you rest a hand on the dome.",
+    preview: "service-bell",
+  },
 ] as const;
 
 // Scramble Text has a custom card in the grid rather than an ExperimentPreview.
