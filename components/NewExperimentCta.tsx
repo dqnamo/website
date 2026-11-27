@@ -37,6 +37,7 @@ import { Signature } from "@/components/Signature";
 import { Stamp } from "@/components/Stamp";
 import { tactileButtonColorTokens } from "@/components/TactileButton";
 import { Ticket } from "@/components/Ticket";
+import { ZipperFace } from "@/components/Zipper";
 import { cn } from "@/helpers/classname-helper";
 
 type NewExperimentCtaProps = {
@@ -83,6 +84,79 @@ const dynamicButtonPreviewStates = [
 ] as const;
 
 type HoldPreviewPhase = "holding" | "idle" | "undo";
+
+/** Unzips part way while the card is hovered, and zips back up after. */
+function ZipperPreview() {
+  const shouldReduceMotion = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const card = ref.current?.closest("[data-experiment-card]");
+
+    if (!card) {
+      return;
+    }
+
+    let frame = 0;
+    let current = 0;
+
+    const run = (to: number) => {
+      cancelAnimationFrame(frame);
+
+      if (shouldReduceMotion) {
+        current = to;
+        setProgress(to);
+        return;
+      }
+
+      const from = current;
+      const start = performance.now();
+      const duration = 160 + 620 * Math.abs(to - from);
+
+      const step = (now: number) => {
+        const t = Math.min(1, (now - start) / duration);
+        const eased = t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
+        current = from + (to - from) * eased;
+        setProgress(current);
+
+        if (t < 1) {
+          frame = requestAnimationFrame(step);
+        }
+      };
+
+      frame = requestAnimationFrame(step);
+    };
+
+    const open = () => run(0.78);
+    const close = () => run(0);
+    card.addEventListener("pointerenter", open);
+    card.addEventListener("pointerleave", close);
+    card.addEventListener("focusin", open);
+    card.addEventListener("focusout", close);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      card.removeEventListener("pointerenter", open);
+      card.removeEventListener("pointerleave", close);
+      card.removeEventListener("focusin", open);
+      card.removeEventListener("focusout", close);
+    };
+  }, [shouldReduceMotion]);
+
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        previewSurfaceClassName,
+        "flex items-center justify-center bg-grayscale-2 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+      )}
+      ref={ref}
+    >
+      <ZipperFace className="-mt-2 w-[78px]" progress={progress} />
+    </div>
+  );
+}
 
 function TactileButtonPreview({ featured = false }: { featured?: boolean }) {
   return (
@@ -682,6 +756,10 @@ export function ExperimentPreview({
         />
       </div>
     );
+  }
+
+  if (type === "zipper") {
+    return <ZipperPreview />;
   }
 
   if (type === "stamp") {
