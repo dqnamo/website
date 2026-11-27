@@ -115,6 +115,13 @@ export const experiments = [
       "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",
     preview: "detent-knob",
   },
+  {
+    title: "Hourglass",
+    href: "/experiments/hourglass",
+    description:
+      "A sand timer you turn over, whose sand slumps, funnels and heaps grain by grain.",
+    preview: "hourglass",
+  },
 ] as const;
 
 // Scramble Text has a custom card in the grid rather than an ExperimentPreview.
