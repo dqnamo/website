@@ -115,6 +115,14 @@ export const experiments = [
       "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",
     preview: "detent-knob",
   },
+  {
+    title: "Abacus",
+    href: "/lab/abacus",
+    added: "2026-11-27",
+    description:
+      "A boxwood soroban whose beads shove their neighbours along the rod and clack against the bar.",
+    preview: "abacus",
+  },
 ] as const;
 
 // Scramble Text has a custom card in the grid rather than an ExperimentPreview.
