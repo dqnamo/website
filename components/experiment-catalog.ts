@@ -115,6 +115,14 @@ export const experiments = [
       "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",
     preview: "detent-knob",
   },
+  {
+    title: "Snow Globe",
+    href: "/lab/snow-globe",
+    added: "2026-11-27",
+    description:
+      "A snow globe you pick up and shake, whose snow swirls, then settles on the roofs.",
+    preview: "snow-globe",
+  },
 ] as const;
 
 // Scramble Text has a custom card in the grid rather than an ExperimentPreview.

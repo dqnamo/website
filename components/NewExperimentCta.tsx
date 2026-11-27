@@ -34,6 +34,7 @@ import { LogoTraceLoader } from "@/components/LogoTraceLoader";
 import { PlayingCard } from "@/components/PlayingCard";
 import { ReceiptPrinter } from "@/components/ReceiptPrinter";
 import { Signature } from "@/components/Signature";
+import { SnowGlobeFace } from "@/components/SnowGlobe";
 import { Stamp } from "@/components/Stamp";
 import { tactileButtonColorTokens } from "@/components/TactileButton";
 import { Ticket } from "@/components/Ticket";
@@ -83,6 +84,78 @@ const dynamicButtonPreviewStates = [
 ] as const;
 
 type HoldPreviewPhase = "holding" | "idle" | "undo";
+
+/** Gives the globe a shake while the card is hovered, and the snow a lift. */
+function SnowGlobePreview() {
+  const shouldReduceMotion = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const globe = ref.current;
+    const card = globe?.closest("[data-experiment-card]");
+    const flakes = globe?.querySelector<SVGGElement>("[data-flakes]");
+
+    if (!globe || !card || !flakes || shouldReduceMotion) {
+      return;
+    }
+
+    let animations: Animation[] = [];
+
+    const shake = () => {
+      for (const animation of animations) {
+        animation.cancel();
+      }
+
+      animations = [
+        globe.animate(
+          [
+            { transform: "translate(0, 0) rotate(0deg)" },
+            { transform: "translate(-5px, -6px) rotate(-7deg)" },
+            { transform: "translate(5px, -4px) rotate(6deg)" },
+            { transform: "translate(-3px, -5px) rotate(-4deg)" },
+            { transform: "translate(2px, -2px) rotate(2deg)" },
+            { transform: "translate(0, 0) rotate(0deg)" },
+          ],
+          { duration: 640, easing: "ease-in-out" },
+        ),
+        flakes.animate(
+          [
+            { transform: "translateY(0)" },
+            { transform: "translateY(-14px)", offset: 0.25 },
+            { transform: "translateY(0)" },
+          ],
+          { duration: 2200, easing: "cubic-bezier(0.2, 0.7, 0.3, 1)" },
+        ),
+      ];
+    };
+
+    card.addEventListener("pointerenter", shake);
+    card.addEventListener("focusin", shake);
+
+    return () => {
+      for (const animation of animations) {
+        animation.cancel();
+      }
+
+      card.removeEventListener("pointerenter", shake);
+      card.removeEventListener("focusin", shake);
+    };
+  }, [shouldReduceMotion]);
+
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        previewSurfaceClassName,
+        "flex items-center justify-center bg-grayscale-2 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+      )}
+    >
+      <div className="mt-3 origin-bottom" ref={ref}>
+        <SnowGlobeFace className="w-[88px]" />
+      </div>
+    </div>
+  );
+}
 
 function TactileButtonPreview({ featured = false }: { featured?: boolean }) {
   return (
@@ -682,6 +755,10 @@ export function ExperimentPreview({
         />
       </div>
     );
+  }
+
+  if (type === "snow-globe") {
+    return <SnowGlobePreview />;
   }
 
   if (type === "stamp") {
