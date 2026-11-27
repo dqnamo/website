@@ -484,10 +484,7 @@ function Gallery({
   if (images.length === 1) {
     return (
       <div className={cn(tray, "flex flex-col gap-1.5")}>
-        <GalleryCard
-          image={images[0]}
-          sizes="(min-width: 640px) 372px, 84vw"
-        />
+        <GalleryCard image={images[0]} sizes="(min-width: 640px) 372px, 84vw" />
         {link}
       </div>
     );
@@ -512,7 +509,7 @@ function Gallery({
 
 /**
  * The same button as the lab's "View all experiments", pointing at the
- * entry's site: its address for the web, "View on GitHub" for repos.
+ * entry's site: "Visit" and the project's name, "View on GitHub" for repos.
  */
 function VisitLink({
   href,
@@ -527,15 +524,10 @@ function VisitLink({
   title: string;
 }) {
   const internal = href.startsWith("/");
-  const host = internal ? null : new URL(href).hostname.replace(/^www\./, "");
-  const github = host === "github.com";
+  const github = !internal && new URL(href).hostname === "github.com";
   const text =
     label ??
-    (host === null
-      ? `Open ${title}`
-      : github
-        ? "View on GitHub"
-        : `Visit ${host}`);
+    (internal ? `Open ${title}` : github ? "View on GitHub" : `Visit ${title}`);
 
   return (
     <a

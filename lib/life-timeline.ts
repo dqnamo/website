@@ -34,8 +34,8 @@ export interface TimelineEntry {
   description: string;
   href?: string;
   /**
-   * What the button under an entry's pictures says. Defaults to the site's
-   * address, or "View on GitHub" for repos.
+   * What the button under an entry's pictures says. Defaults to "Visit" and
+   * the title, or "View on GitHub" for repos.
    */
   linkLabel?: string;
   /** A bare logo for that button, in place of the globe. */
@@ -357,6 +357,7 @@ const galleries: Record<string, TimelineGallery> = {
 /** Button text for entries whose link isn't best described by its address. */
 const linkLabels: Record<string, string> = {
   "London Underground map builder": "Open the map builder",
+  "Launched Growdoro v2": "Visit Growdoro",
 };
 
 /** Logos for the button under an entry's pictures. */
