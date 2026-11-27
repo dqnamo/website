@@ -31,6 +31,7 @@ import { ExperimentPreviewSlot } from "@/components/ExperimentPreviewSlot";
 import { experiments } from "@/components/experiment-catalog";
 import { IridescentFoil } from "@/components/IridescentFoil";
 import { LogoTraceLoader } from "@/components/LogoTraceLoader";
+import { PeelStickerFace } from "@/components/PeelSticker";
 import { PlayingCard } from "@/components/PlayingCard";
 import { ReceiptPrinter } from "@/components/ReceiptPrinter";
 import { Signature } from "@/components/Signature";
@@ -680,6 +681,38 @@ export function ExperimentPreview({
           size={58}
           turnClassName="-rotate-27 transition-transform duration-500 [transition-timing-function:steps(3,end)] group-hover:rotate-54 motion-reduce:transition-none"
         />
+      </div>
+    );
+  }
+
+  if (type === "peel-sticker") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "flex items-center justify-center bg-grayscale-2 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+        )}
+      >
+        <div className="relative h-[46px] w-[124px] rounded-[12px] border border-grayscale-6 border-dashed bg-grayscale-1 dark:bg-grayscale-3">
+          <PeelStickerFace
+            className="absolute -inset-px"
+            height={46}
+            hoverLift={44}
+            lift={12}
+            radius={12}
+            width={124}
+          >
+            <div className="absolute inset-0 rounded-[12px] bg-white p-[2.5px]">
+              <div className="flex h-full items-center gap-1.5 rounded-[9.5px] bg-[linear-gradient(135deg,#ff7a2f_0%,#ff5b24_45%,#f2385a_100%)] px-2.5 text-white">
+                <span className="text-[15px] leading-none">✦</span>
+                <span className="font-semibold text-[11px] leading-none tracking-[-0.01em]">
+                  Invite inside
+                </span>
+              </div>
+            </div>
+          </PeelStickerFace>
+        </div>
       </div>
     );
   }

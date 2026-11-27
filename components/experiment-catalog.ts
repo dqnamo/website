@@ -115,6 +115,13 @@ export const experiments = [
       "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",
     preview: "detent-knob",
   },
+  {
+    title: "Peel Sticker",
+    href: "/experiments/peel-sticker",
+    description:
+      "A seal you peel back by any corner, folding over its crease to show the code underneath.",
+    preview: "peel-sticker",
+  },
 ] as const;
 
 // Scramble Text has a custom card in the grid rather than an ExperimentPreview.
