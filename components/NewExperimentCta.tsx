@@ -33,6 +33,7 @@ import { IridescentFoil } from "@/components/IridescentFoil";
 import { LogoTraceLoader } from "@/components/LogoTraceLoader";
 import { PlayingCard } from "@/components/PlayingCard";
 import { ReceiptPrinter } from "@/components/ReceiptPrinter";
+import { RolodexFace } from "@/components/Rolodex";
 import { Signature } from "@/components/Signature";
 import { Stamp } from "@/components/Stamp";
 import { tactileButtonColorTokens } from "@/components/TactileButton";
@@ -680,6 +681,20 @@ export function ExperimentPreview({
           size={58}
           turnClassName="-rotate-27 transition-transform duration-500 [transition-timing-function:steps(3,end)] group-hover:rotate-54 motion-reduce:transition-none"
         />
+      </div>
+    );
+  }
+
+  if (type === "rolodex") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn(
+          previewSurfaceClassName,
+          "relative bg-grayscale-2 transition-colors group-hover:bg-grayscale-3 dark:bg-grayscale-2 dark:group-hover:bg-grayscale-3",
+        )}
+      >
+        <RolodexFace className="-translate-x-1/2 -translate-y-1/2 absolute top-[56%] left-1/2 scale-[0.33]" />
       </div>
     );
   }

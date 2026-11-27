@@ -115,6 +115,14 @@ export const experiments = [
       "A hi-fi volume knob that hangs on to each notch, then clicks into the next.",
     preview: "detent-knob",
   },
+  {
+    title: "Rolodex",
+    href: "/lab/rolodex",
+    added: "2026-11-26",
+    description:
+      "A spinning card file whose cards tip over the top and flop onto the stack.",
+    preview: "rolodex",
+  },
 ] as const;
 
 // Scramble Text has a custom card in the grid rather than an ExperimentPreview.
